@@ -7,10 +7,49 @@ import 'package:google_search_diff/model/search_results.dart';
 
 typedef SearchResultCallback = void Function(SearchResults searchResult);
 
-class SearchBarWidget extends StatefulWidget {
-  final SearchResultCallback searchCallback;
+class QueryChange extends ChangeNotifier {
+  String _query = '';
+  String get query => _query;
+  void initialQuery(String query) {
+    _query = query;
+    notifyListeners();
+  }
+}
 
-  const SearchBarWidget({super.key, required this.searchCallback});
+class SearchResultsChange extends ChangeNotifier {
+  SearchResults _searchResults = NoSearchResults();
+  SearchResults get searchResults => _searchResults;
+  void inform(SearchResults searchResults) {
+    _searchResults = searchResults;
+    notifyListeners();
+  }
+}
+
+class SearchBarController {
+  final QueryChange _queryChange = QueryChange();
+  final SearchResultsChange _searchResultsChange = SearchResultsChange();
+
+  get query => _queryChange.query;
+  void addQueryListener(void Function(String) listener) =>
+      _queryChange.addListener(() => listener(_queryChange.query));
+
+  void informResults(SearchResults searchResults) =>
+      _searchResultsChange.inform(searchResults);
+
+  void initialQuery(String query) => _queryChange.initialQuery(query);
+
+  void addSearchResultsListener(
+          void Function(SearchResults results) listener) =>
+      _searchResultsChange
+          .addListener(() => listener(_searchResultsChange.searchResults));
+}
+
+class SearchBarWidget extends StatefulWidget {
+  final SearchBarController searchBarController;
+
+  const SearchBarWidget(
+      {super.key,
+      required this.searchBarController});
 
   @override
   State<StatefulWidget> createState() => _SearchBarWidgetState();
@@ -18,13 +57,20 @@ class SearchBarWidget extends StatefulWidget {
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   final logger = FimberLog('search');
-  late SearchResultCallback searchCallback;
-  String query = '';
+  late SearchBarController searchBarController;
+
+  final TextEditingController searchFieldController = TextEditingController();
+
+  _SearchBarWidgetState();
 
   @override
   void initState() {
     super.initState();
-    searchCallback = widget.searchCallback;
+    searchBarController = widget.searchBarController;
+    searchBarController.addQueryListener((query) {
+      logger.d('setting query to: $query');
+      searchFieldController.text = query;
+    });
   }
 
   @override
@@ -55,14 +101,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   padding: const EdgeInsets.only(
                       left: 16, right: 16, top: 4, bottom: 4),
                   child: TextField(
-                    onChanged: (String txt) {
-                      if (kDebugMode) {
-                        logger.d('setting query to: $txt');
-                      }
-                      setState(() {
-                        query = txt;
-                      });
-                    },
+                    controller: searchFieldController,
                     style: const TextStyle(
                       fontSize: 18,
                     ),
@@ -99,7 +138,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                   if (kDebugMode) {
-                    logger.d('search for: $query');
+                    logger.d('search for: ${searchFieldController.text}');
                     _doSearch();
                   }
                 },
@@ -120,17 +159,18 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   }
 
   void _doSearch() {
-    var searchResults = SearchResults(query: 'Agile Coach', timestamp: DateTime.now());
-    searchResults.results.add(SearchResult(
+    var searchResults = SearchResults(
+        query: searchFieldController.text, timestamp: DateTime.now());
+    searchResults.add(SearchResult(
         title: 'Agile Coach Jobs und Stellenangebote - 2024',
         source: 'Stepstone',
         link: 'https://www.stepstone.de/jobs/agile-coach',
         snippet:
             '... Systeme mbH · Scrum Master (m/w/d) / Agile Coach (m/w/d). GWS Gesellschaft für Warenwirtschafts-Systeme mbH. Münster. Teilweise Home-Office. Gehalt anzeigen.'));
-    searchResults.results.add(SearchResult(
+    searchResults.add(SearchResult(
         title: 'Result 2',
         source: 'Other Test',
         link: 'http://example-other.com'));
-    searchCallback(searchResults);
+    searchBarController.informResults(searchResults);
   }
 }

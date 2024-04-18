@@ -40,6 +40,9 @@ dependencies:
   flutter_expandable_fab: ^2.0.0
   localstore: ^1.4.0
   fimber: ^0.7.0
+  badges: ^3.1.2
+  relative_time: ^5.0.0
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:

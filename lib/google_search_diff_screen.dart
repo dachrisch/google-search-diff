@@ -2,12 +2,13 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/search_bar_widget.dart';
 import 'package:google_search_diff/search_result_list_tile.dart';
 import 'package:localstore/localstore.dart';
+import 'package:relative_time/relative_time.dart';
 
 class GoogleSearchDiffScreen extends StatefulWidget {
   const GoogleSearchDiffScreen({super.key});
@@ -17,26 +18,38 @@ class GoogleSearchDiffScreen extends StatefulWidget {
 }
 
 class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
-  SearchResults searchResults = NoSearchResults();
+  SearchResults currentSearchResults = NoSearchResults();
+  SearchResultsStore storedSearchResults = SearchResultsStore();
+
+  final SearchBarController _controller = SearchBarController();
+
   final _db = Localstore.getInstance(useSupportDir: true);
   final logger = FimberLog('screen');
 
   @override
   void initState() {
-    _db
-        .collection('searches')
-        .get()
-        .then((value) => logger.d('Reading database: $value'));
-    super.initState();
-  }
-
-  void _processData(SearchResults searchResult) {
-    if (kDebugMode) {
-      logger.d('processing search results: $searchResult');
-    }
-    setState(() {
-      searchResults = searchResult;
+    _db.collection('searches').get().then((allSearches) {
+      logger.d('Reading existing searches: $allSearches');
+      setState(() {
+        allSearches?.entries
+            .forEach((search) => storedSearchResults.addFromMap(search.value));
+      });
     });
+    _db.collection('searches').stream.listen((event) {
+      logger.d('New db event: $event');
+      setState(() {
+        storedSearchResults.addFromMap(event);
+      });
+    });
+
+    _controller.addSearchResultsListener((results) {
+      logger.d('Got new search results: $results');
+      setState(() {
+        currentSearchResults = results;
+      });
+    });
+
+    super.initState();
   }
 
   @override
@@ -68,7 +81,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                               return Column(
                                 children: <Widget>[
                                   SearchBarWidget(
-                                    searchCallback: _processData,
+                                    searchBarController: _controller,
                                   ),
                                 ],
                               );
@@ -81,16 +94,12 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                             .colorScheme
                             .background,
                         child: ListView.builder(
-                          itemCount: searchResults.count(),
+                          itemCount: currentSearchResults.count(),
                           padding: const EdgeInsets.only(top: 8),
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (kDebugMode) {
-                              logger.d('index: $index');
-                            }
-                            return SearchResultListTile(
-                                searchResult: searchResults.results[index]);
-                          },
+                          itemBuilder: (BuildContext context, int index) =>
+                              SearchResultListTile(
+                                  searchResult: currentSearchResults[index]),
                         ),
                       ),
                     ),
@@ -109,13 +118,13 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
           distance: 50,
           children: [
             Visibility(
-              visible: searchResults.count()>0,
+                visible: currentSearchResults.count() > 0,
                 child: FloatingActionButton.small(
                     onPressed: () {
                       if (kDebugMode) {
-                        logger.d('saving $searchResults');
+                        logger.d('saving $currentSearchResults');
                       }
-                      searchResults.save();
+                      currentSearchResults.save();
                     },
                     child: const Icon(Icons.save)))
           ],
@@ -180,32 +189,25 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(32.0),
-                      ),
-                      onTap: () {},
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.favorite_border),
-                      ),
-                    ),
-                  ),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(32.0),
-                      ),
-                      onTap: () {},
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(FontAwesomeIcons.locationDot),
-                      ),
-                    ),
-                  ),
+                  Badge(
+                      label: Text(storedSearchResults.count().toString()),
+                      child: PopupMenuButton(
+                          onSelected: (String value) {
+                            logger.d('selected $value');
+                            setState(() {
+                              var result = storedSearchResults.getByUuid(value);
+                              currentSearchResults = result;
+                              _controller.initialQuery(result.query);
+                            });
+                          },
+                          icon: const Icon(Icons.favorite_border),
+                          itemBuilder: (BuildContext context) => storedSearchResults
+                              .map((stored) => PopupMenuItem(
+                                  value: stored.id,
+                                  child: Text(
+                                      '${RelativeTime(context).format(stored.timestamp)} - ${stored.query} (${stored.count()})')))
+                              .toList())),
+                  const SizedBox(width: 8),
                 ],
               ),
             )

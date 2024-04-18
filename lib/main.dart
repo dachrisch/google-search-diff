@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_search_diff/google_search_diff_screen.dart';
-
+import 'package:relative_time/relative_time.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,11 +40,12 @@ class MyApp extends StatelessWidget {
         platform: TargetPlatform.iOS,
       ),
       home: const GoogleSearchDiffScreen(),
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        RelativeTimeLocalizations.delegate,
+      ],
     );
   }
 }
-
-
 
 class APIKeyScreen extends StatefulWidget {
   const APIKeyScreen({super.key});
