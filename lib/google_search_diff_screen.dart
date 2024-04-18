@@ -1,8 +1,13 @@
+import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_search_diff/main.dart';
+import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/search_bar_widget.dart';
+import 'package:google_search_diff/search_result_list_tile.dart';
+import 'package:localstore/localstore.dart';
 
 class GoogleSearchDiffScreen extends StatefulWidget {
   const GoogleSearchDiffScreen({super.key});
@@ -12,13 +17,25 @@ class GoogleSearchDiffScreen extends StatefulWidget {
 }
 
 class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
-   SearchResults searchResult=SearchResults();
+  SearchResults searchResults = NoSearchResults();
+  final _db = Localstore.getInstance(useSupportDir: true);
+  final logger = FimberLog('screen');
+
+  @override
+  void initState() {
+    _db
+        .collection('searches')
+        .get()
+        .then((value) => logger.d('Reading database: $value'));
+    super.initState();
+  }
+
   void _processData(SearchResults searchResult) {
     if (kDebugMode) {
-      print('processing search results: $searchResult');
+      logger.d('processing search results: $searchResult');
     }
     setState(() {
-      this.searchResult = searchResult;
+      searchResults = searchResult;
     });
   }
 
@@ -64,17 +81,15 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                             .colorScheme
                             .background,
                         child: ListView.builder(
-                          itemCount: searchResult.count(),
+                          itemCount: searchResults.count(),
                           padding: const EdgeInsets.only(top: 8),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (BuildContext context, int index) {
                             if (kDebugMode) {
-                              print('index: $index');
+                              logger.d('index: $index');
                             }
-                            return ListTile(
-                              title: Text(searchResult.result[index].title),
-                              subtitle: Text(searchResult.result[index].snippet),
-                            );
+                            return SearchResultListTile(
+                                searchResult: searchResults.results[index]);
                           },
                         ),
                       ),
@@ -83,6 +98,26 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                 ],
               ),
             ),
+          ],
+        ),
+        floatingActionButtonLocation: ExpandableFab.location,
+        floatingActionButton: ExpandableFab(
+          openButtonBuilder: RotateFloatingActionButtonBuilder(
+            child: const Icon(Icons.menu),
+            fabSize: ExpandableFabSize.small,
+          ),
+          distance: 50,
+          children: [
+            Visibility(
+              visible: searchResults.count()>0,
+                child: FloatingActionButton.small(
+                    onPressed: () {
+                      if (kDebugMode) {
+                        logger.d('saving $searchResults');
+                      }
+                      searchResults.save();
+                    },
+                    child: const Icon(Icons.save)))
           ],
         ),
       ),

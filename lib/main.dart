@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,8 @@ import 'package:google_search_diff/google_search_diff_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Fimber.plantTree(DebugTree());
+
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown

@@ -1,31 +1,11 @@
-import 'dart:html';
-
+import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_search_diff/main.dart';
+import 'package:google_search_diff/model/search_results.dart';
 
 typedef SearchResultCallback = void Function(SearchResults searchResult);
-
-class Result {
-  final String title;
-  final String source;
-  final String link;
-  final String snippet;
-
-  Result(
-      {required this.title,
-      required this.source,
-      required this.link,
-      String? snippet})
-      : snippet = (snippet == null || snippet.isEmpty) ? title : snippet;
-}
-
-class SearchResults {
-  final List<Result> result = [];
-
-  count() => result.length;
-}
 
 class SearchBarWidget extends StatefulWidget {
   final SearchResultCallback searchCallback;
@@ -37,6 +17,7 @@ class SearchBarWidget extends StatefulWidget {
 }
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
+  final logger = FimberLog('search');
   late SearchResultCallback searchCallback;
   String query = '';
 
@@ -76,7 +57,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   child: TextField(
                     onChanged: (String txt) {
                       if (kDebugMode) {
-                        print('setting query to: $txt');
+                        logger.d('setting query to: $txt');
                       }
                       setState(() {
                         query = txt;
@@ -118,7 +99,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                   if (kDebugMode) {
-                    print('search for: $query');
+                    logger.d('search for: $query');
                     _doSearch();
                   }
                 },
@@ -139,9 +120,17 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   }
 
   void _doSearch() {
-    var searchResults = SearchResults();
-    searchResults.result.add(Result(title: 'Result 1', source: 'Test', link: 'http://example.com'));
-    searchResults.result.add(Result(title: 'Result 2', source: 'Other Test', link:'http://example-other.com'));
+    var searchResults = SearchResults(query: 'Agile Coach', timestamp: DateTime.now());
+    searchResults.results.add(SearchResult(
+        title: 'Agile Coach Jobs und Stellenangebote - 2024',
+        source: 'Stepstone',
+        link: 'https://www.stepstone.de/jobs/agile-coach',
+        snippet:
+            '... Systeme mbH · Scrum Master (m/w/d) / Agile Coach (m/w/d). GWS Gesellschaft für Warenwirtschafts-Systeme mbH. Münster. Teilweise Home-Office. Gehalt anzeigen.'));
+    searchResults.results.add(SearchResult(
+        title: 'Result 2',
+        source: 'Other Test',
+        link: 'http://example-other.com'));
     searchCallback(searchResults);
   }
 }
