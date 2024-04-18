@@ -118,7 +118,8 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
           distance: 50,
           children: [
             Visibility(
-                visible: currentSearchResults.count() > 0,
+                visible: currentSearchResults.count() > 0 &&
+                    !storedSearchResults.has(currentSearchResults),
                 child: FloatingActionButton.small(
                     onPressed: () {
                       if (kDebugMode) {
@@ -126,7 +127,21 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                       }
                       currentSearchResults.save();
                     },
-                    child: const Icon(Icons.save)))
+                    child: const Icon(Icons.save))),
+            Visibility(
+                visible: storedSearchResults.has(currentSearchResults),
+                child: FloatingActionButton.small(
+                    onPressed: () {
+                      if (kDebugMode) {
+                        logger.d('deleting $currentSearchResults');
+                      }
+                      setState(() {
+                        storedSearchResults.delete(currentSearchResults);
+                        storedSearchResults = storedSearchResults;
+                      });
+                      setState(() => currentSearchResults = NoSearchResults());
+                    },
+                    child: const Icon(Icons.delete)))
           ],
         ),
       ),
