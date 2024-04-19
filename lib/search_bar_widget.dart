@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/main.dart';
-import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 
 class SearchBarWidget extends StatefulWidget {
@@ -25,8 +24,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   late SearchBarController searchBarController;
   late SearchProvider searchProvider;
 
-
-  _SearchBarWidgetState();
 
   @override
   void initState() {

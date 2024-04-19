@@ -22,7 +22,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
   SearchResults currentSearchResults = NoSearchResults();
   SearchResultsStore storedSearchResults = SearchResultsStore();
 
-  final SearchBarController _controller = SearchBarController();
+  final SearchBarController _searchBarController = SearchBarController();
 
   final _db = Localstore.getInstance(useSupportDir: true);
   final logger = FimberLog('screen');
@@ -43,7 +43,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
       });
     });
 
-    _controller.addSearchResultsListener((results) {
+    _searchBarController.addSearchResultsListener((results) {
       logger.d('Got new search results: $results');
       setState(() {
         currentSearchResults = results.compareto(currentSearchResults);
@@ -82,7 +82,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                               return Column(
                                 children: <Widget>[
                                   SearchBarWidget(
-                                    searchBarController: _controller,
+                                    searchBarController: _searchBarController,
                                   ),
                                 ],
                               );
@@ -102,6 +102,15 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                           itemBuilder: (BuildContext context, int index) =>
                               SearchResultListTile(
                                   key: Key('search-result-tile-$index'),
+                                  doDelete: (searchResult) {
+                                    logger
+                                        .d('Removing $searchResult from list');
+                                    setState(() {
+                                      currentSearchResults =
+                                          currentSearchResults
+                                              .remove(searchResult);
+                                    });
+                                  },
                                   searchResult: currentSearchResults[index]),
                         ),
                       ),
@@ -130,7 +139,13 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                       if (kDebugMode) {
                         logger.d('saving $currentSearchResults');
                       }
-                      currentSearchResults.save();
+                      setState(() {
+                        currentSearchResults = currentSearchResults.filter([
+                          SearchResultsStatus.added,
+                          SearchResultsStatus.existing
+                        ]);
+                        currentSearchResults.save();
+                      });
                     },
                     child: const Icon(Icons.save))),
             Visibility(
@@ -219,7 +234,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                             setState(() {
                               var result = storedSearchResults.getByUuid(value);
                               currentSearchResults = result;
-                              _controller.initialQuery(result.query);
+                              _searchBarController.initialQuery(result.query);
                             });
                           },
                           icon: const Icon(Icons.favorite_border),

@@ -31,6 +31,8 @@ class SearchResult {
         status: SearchResultsStatus.existing,
         snippet: result['snippet']);
   }
+
+  bool isSame(SearchResult other) => other.title==title && other.link==link;
 }
 
 class NoSearchResults extends SearchResults {
@@ -42,7 +44,7 @@ class NoSearchResults extends SearchResults {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool onlyNew = true}) {
     throw StateError("No Search Result - can't create json");
   }
 }
@@ -100,20 +102,39 @@ class SearchResults {
           status: status));
     }
     for (var previous in previousSearchResults._results) {
-      if(!searchResults.has(previous)) {
-      searchResults.add(SearchResult(
-          title: previous.title,
-          source: previous.source,
-          link: previous.link,
-          snippet: previous.snippet,
-          status: SearchResultsStatus.removed));
+      if (!searchResults.has(previous)) {
+        searchResults.add(SearchResult(
+            title: previous.title,
+            source: previous.source,
+            link: previous.link,
+            snippet: previous.snippet,
+            status: SearchResultsStatus.removed));
       }
     }
     return searchResults;
   }
 
   has(SearchResult result) => _results.any((element) =>
-      element.title == result.title && element.link == result.link);
+      result.isSame(element));
+
+  SearchResults filter(List<SearchResultsStatus> filterList) {
+    var searchResults =
+        SearchResults(query: query, timestamp: timestamp, id: id);
+    _results
+        .where((element) => filterList.contains(element.status))
+        .forEach((element) => searchResults.add(element));
+    return searchResults;
+  }
+
+  SearchResults remove(SearchResult searchResult) {
+        var searchResults =
+        SearchResults(query: query, timestamp: timestamp);
+    _results
+        .where((element) => !searchResult.isSame(element))
+        .forEach((element) => searchResults.add(element));
+    return searchResults;
+
+  }
 }
 
 class SearchResultsStore {
@@ -136,7 +157,9 @@ class SearchResultsStore {
 
   bool has(SearchResults searchResults) =>
       _searchResults.any((element) => element.id == searchResults.id);
+}
 
+extension StorableSearchResultsStore on SearchResultsStore {
   void delete(SearchResults currentSearchResults) {
     currentSearchResults.delete();
     _searchResults.remove(currentSearchResults);

@@ -3,20 +3,32 @@ import 'package:google_search_diff/model/search_results.dart';
 
 class SearchResultListTile extends StatelessWidget {
   final SearchResult searchResult;
-  const SearchResultListTile({super.key, required this.searchResult});
+
+  final void Function(dynamic e) doDelete;
+  const SearchResultListTile(
+      {super.key, required this.searchResult, required this.doDelete});
 
   @override
   Widget build(BuildContext context) {
     Icon icon = const Icon(Icons.circle);
     switch (searchResult.status) {
       case SearchResultsStatus.added:
-        icon = Icon(Icons.keyboard_double_arrow_right_outlined, color: Colors.green[400],);
+        icon = Icon(
+          Icons.keyboard_double_arrow_right_outlined,
+          color: Colors.green[400],
+        );
         break;
       case SearchResultsStatus.existing:
-        icon = Icon(Icons.compare_arrows_outlined, color: Colors.grey[600],);
+        icon = Icon(
+          Icons.compare_arrows_outlined,
+          color: Colors.grey[600],
+        );
         break;
       case SearchResultsStatus.removed:
-        icon = Icon(Icons.keyboard_double_arrow_left_outlined, color: Colors.red[400],);
+        icon = Icon(
+          Icons.keyboard_double_arrow_left_outlined,
+          color: Colors.red[400],
+        );
         break;
       default:
     }
@@ -44,7 +56,7 @@ class SearchResultListTile extends StatelessWidget {
                 children: <Widget>[
                   TextButton(
                     child: const Text('Remove'),
-                    onPressed: () {/* ... */},
+                    onPressed: () => doDelete(searchResult),
                   ),
                   const SizedBox(width: 8),
                   TextButton(
