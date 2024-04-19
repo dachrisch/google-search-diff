@@ -101,12 +101,13 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 borderRadius: const BorderRadius.all(
                   Radius.circular(32.0),
                 ),
-                onTap: () async {
+                onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                   if (kDebugMode) {
                     logger.d('search for: ${searchFieldController.text}');
                   }
-                  await searchProvider.doSearch(searchFieldController.text);
+                  searchBarController.startSearch();
+                  searchProvider.doSearch(searchFieldController.text);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

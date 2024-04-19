@@ -68,6 +68,7 @@ class SearchProvider {
       searchResults.add(element);
     }
     searchBarController.informResults(searchResults);
+    searchBarController.stopSearch();
   }
 }
 
