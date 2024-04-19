@@ -54,7 +54,7 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
       - name: Build APK
-        run: flutter build apk --release -v
+        run: flutter build --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} apk --release -v
       - name: Archive APK
         uses: actions/upload-artifact@v4
         with:
@@ -81,9 +81,9 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
       - name: Build AppBundle
-        run: flutter build appbundle --debug -v
+        run: flutter build --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} appbundle --release -v
       - name: Archive AppBundle
         uses: actions/upload-artifact@v4
         with:
-          name: unustasis-appbundle
-          path: build/app/outputs/bundle/release/app-debug.aab
+          name: google_search_diff-appbundle
+          path: build/app/outputs/bundle/release/app-release.aab
