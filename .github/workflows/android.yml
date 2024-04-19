@@ -54,7 +54,7 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
       - name: Build APK
-        run: flutter build --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} apk --release -v
+        run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v
       - name: Archive APK
         uses: actions/upload-artifact@v4
         with:
@@ -81,7 +81,7 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
       - name: Build AppBundle
-        run: flutter build --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} appbundle --release -v
+        run: flutter build appbundle --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v
       - name: Archive AppBundle
         uses: actions/upload-artifact@v4
         with:
