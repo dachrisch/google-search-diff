@@ -32,7 +32,7 @@ class SearchResult {
         snippet: result['snippet']);
   }
 
-  bool isSame(SearchResult other) => other.title==title && other.link==link;
+  bool isSame(SearchResult other) => other.title == title && other.link == link;
 }
 
 class NoSearchResults extends SearchResults {
@@ -114,8 +114,7 @@ class SearchResults {
     return searchResults;
   }
 
-  has(SearchResult result) => _results.any((element) =>
-      result.isSame(element));
+  has(SearchResult result) => _results.any((element) => result.isSame(element));
 
   SearchResults filter(List<SearchResultsStatus> filterList) {
     var searchResults =
@@ -127,13 +126,11 @@ class SearchResults {
   }
 
   SearchResults remove(SearchResult searchResult) {
-        var searchResults =
-        SearchResults(query: query, timestamp: timestamp);
+    var searchResults = SearchResults(query: query, timestamp: timestamp);
     _results
         .where((element) => !searchResult.isSame(element))
         .forEach((element) => searchResults.add(element));
     return searchResults;
-
   }
 }
 

@@ -87,36 +87,33 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                       ),
                       SliverFillRemaining(
                           child: Container(
-                              color:
-                                  GoogleSearchDiffScreenTheme.buildLightTheme()
-                                      .colorScheme
-                                      .background,
-                              child: isSearching
-                                  ? const Center(
-                                      child: CircularProgressIndicator())
-                                  : ListView.builder(
-                                      key: const Key('search-results'),
-                                      itemCount: currentSearchResults.count(),
-                                      padding: const EdgeInsets.only(top: 8),
-                                      scrollDirection: Axis.vertical,
-                                      itemBuilder: (BuildContext context,
-                                              int index) =>
-                                          SearchResultListTile(
-                                              key: Key(
-                                                  'search-result-tile-$index'),
-                                              doDelete: (searchResult) {
-                                                logger.d(
-                                                    'Removing $searchResult from list');
-                                                setState(() {
-                                                  currentSearchResults =
-                                                      currentSearchResults
-                                                          .remove(searchResult);
-                                                });
-                                              },
-                                              searchResult:
-                                                  currentSearchResults[index]),
-                                    ),
-                          ))
+                        color: GoogleSearchDiffScreenTheme.buildLightTheme()
+                            .colorScheme
+                            .background,
+                        child: isSearching
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView.builder(
+                                key: const Key('search-results'),
+                                itemCount: currentSearchResults.count(),
+                                padding: const EdgeInsets.only(top: 8),
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (BuildContext context,
+                                        int index) =>
+                                    SearchResultListTile(
+                                        key: Key('search-result-tile-$index'),
+                                        doDelete: (searchResult) {
+                                          logger.d(
+                                              'Removing $searchResult from list');
+                                          setState(() {
+                                            currentSearchResults =
+                                                currentSearchResults
+                                                    .remove(searchResult);
+                                          });
+                                        },
+                                        searchResult:
+                                            currentSearchResults[index]),
+                              ),
+                      ))
                     ]),
                   )
                 ],

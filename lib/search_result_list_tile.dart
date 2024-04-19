@@ -5,6 +5,7 @@ class SearchResultListTile extends StatelessWidget {
   final SearchResult searchResult;
 
   final void Function(dynamic e) doDelete;
+
   const SearchResultListTile(
       {super.key, required this.searchResult, required this.doDelete});
 
@@ -61,7 +62,9 @@ class SearchResultListTile extends StatelessWidget {
                   const SizedBox(width: 8),
                   TextButton(
                     child: const Text('Visit'),
-                    onPressed: () {/* ... */},
+                    onPressed: () {
+                      /* ... */
+                    },
                   ),
                   const SizedBox(width: 8),
                 ],

@@ -25,7 +25,9 @@ class SearchResultsChange extends ChangeNotifier {
 
 class SearchChange extends ChangeNotifier {
   bool _isSearching = false;
+
   bool get isSearching => _isSearching;
+
   void informSearch(bool isSearching) {
     _isSearching = isSearching;
     notifyListeners();
