@@ -1,4 +1,4 @@
-name: Google Search Diff
+name: google_search_diff
 description: "An app to perform google searches with diff."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
