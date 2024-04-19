@@ -43,11 +43,12 @@ dependencies:
   badges: ^3.1.2
   relative_time: ^5.0.0
   uuid: ^4.4.0
-  lorem_ipsum: ^0.0.3
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  lorem_ipsum: ^0.0.3
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

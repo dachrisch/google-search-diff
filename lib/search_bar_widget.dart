@@ -9,9 +9,7 @@ import 'package:google_search_diff/service/search_provider.dart';
 class SearchBarWidget extends StatefulWidget {
   final SearchBarController searchBarController;
 
-  const SearchBarWidget(
-      {super.key,
-      required this.searchBarController});
+  const SearchBarWidget({super.key, required this.searchBarController});
 
   @override
   State<StatefulWidget> createState() => _SearchBarWidgetState();
@@ -20,10 +18,9 @@ class SearchBarWidget extends StatefulWidget {
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   final logger = FimberLog('search');
   final TextEditingController searchFieldController = TextEditingController();
-  
+
   late SearchBarController searchBarController;
   late SearchProvider searchProvider;
-
 
   @override
   void initState() {
@@ -33,7 +30,11 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       logger.d('setting query to: $query');
       searchFieldController.text = query;
     });
-    searchProvider = SearchProvider(searchBarController);
+    //searchProvider = SearchProvider(searchBarController, StaticRetriever());
+    searchProvider = SearchProvider(
+        searchBarController,
+        SerapiRetriever(
+            apiKey: const String.fromEnvironment('GOOGLE_API_KEY')));
   }
 
   @override
@@ -100,12 +101,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 borderRadius: const BorderRadius.all(
                   Radius.circular(32.0),
                 ),
-                onTap: () {
+                onTap: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
                   if (kDebugMode) {
                     logger.d('search for: ${searchFieldController.text}');
-                    searchProvider.doSearch(searchFieldController.text);
                   }
+                  await searchProvider.doSearch(searchFieldController.text);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
