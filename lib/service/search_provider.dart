@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:fimber/fimber.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/model/search_results.dart';
-import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:http/http.dart' as http;
+import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 abstract class QueryRetriever {
   Future<List<SearchResult>> query(String query);

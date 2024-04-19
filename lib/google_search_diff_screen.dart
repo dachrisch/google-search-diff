@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:google_search_diff/controller/query_change.dart';
-
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/search_bar_widget.dart';
@@ -80,53 +79,45 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                 children: <Widget>[
                   getAppBarUI(),
                   Expanded(
-                    child: NestedScrollView(
-                      headerSliverBuilder:
-                          (BuildContext context, bool innerBoxIsScrolled) {
-                        return <Widget>[
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                              return Column(
-                                children: <Widget>[
-                                  SearchBarWidget(
-                                    searchBarController: _searchBarController,
-                                  ),
-                                ],
-                              );
-                            }, childCount: 1),
-                          ),
-                        ];
-                      },
-                      body: Container(
-                        color: GoogleSearchDiffScreenTheme.buildLightTheme()
-                            .colorScheme
-                            .background,
-                        child: isSearching
-                            ? const Center(child: CircularProgressIndicator())
-                            : ListView.builder(
-                                key: const Key('search-results'),
-                                itemCount: currentSearchResults.count(),
-                                padding: const EdgeInsets.only(top: 8),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (BuildContext context,
-                                        int index) =>
-                                    SearchResultListTile(
-                                        key: Key('search-result-tile-$index'),
-                                        doDelete: (searchResult) {
-                                          logger.d(
-                                              'Removing $searchResult from list');
-                                          setState(() {
-                                            currentSearchResults =
-                                                currentSearchResults
-                                                    .remove(searchResult);
-                                          });
-                                        },
-                                        searchResult:
-                                            currentSearchResults[index]),
-                              ),
+                    child: CustomScrollView(slivers: [
+                      SliverAppBar(
+                        flexibleSpace: SearchBarWidget(
+                          searchBarController: _searchBarController,
+                        ),
                       ),
-                    ),
+                      SliverFillRemaining(
+                          child: Container(
+                              color:
+                                  GoogleSearchDiffScreenTheme.buildLightTheme()
+                                      .colorScheme
+                                      .background,
+                              child: isSearching
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
+                                  : ListView.builder(
+                                      key: const Key('search-results'),
+                                      itemCount: currentSearchResults.count(),
+                                      padding: const EdgeInsets.only(top: 8),
+                                      scrollDirection: Axis.vertical,
+                                      itemBuilder: (BuildContext context,
+                                              int index) =>
+                                          SearchResultListTile(
+                                              key: Key(
+                                                  'search-result-tile-$index'),
+                                              doDelete: (searchResult) {
+                                                logger.d(
+                                                    'Removing $searchResult from list');
+                                                setState(() {
+                                                  currentSearchResults =
+                                                      currentSearchResults
+                                                          .remove(searchResult);
+                                                });
+                                              },
+                                              searchResult:
+                                                  currentSearchResults[index]),
+                                    ),
+                          ))
+                    ]),
                   )
                 ],
               ),
@@ -199,26 +190,6 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
             top: MediaQuery.of(context).padding.top, left: 8, right: 8),
         child: Row(
           children: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32.0),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_back),
-                  ),
-                ),
-              ),
-            ),
             const Expanded(
               child: Center(
                 child: Text(
