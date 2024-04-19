@@ -2,6 +2,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:google_search_diff/controller/query_change.dart';
 
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
@@ -45,7 +46,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
     _controller.addSearchResultsListener((results) {
       logger.d('Got new search results: $results');
       setState(() {
-        currentSearchResults = results;
+        currentSearchResults = results.compareto(currentSearchResults);
       });
     });
 
@@ -94,11 +95,13 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                             .colorScheme
                             .background,
                         child: ListView.builder(
+                          key: const Key('search-results'),
                           itemCount: currentSearchResults.count(),
                           padding: const EdgeInsets.only(top: 8),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (BuildContext context, int index) =>
                               SearchResultListTile(
+                                  key: Key('search-result-tile-$index'),
                                   searchResult: currentSearchResults[index]),
                         ),
                       ),
@@ -111,6 +114,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
         ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ExpandableFab(
+          key: const Key('fab-menu'),
           openButtonBuilder: RotateFloatingActionButtonBuilder(
             child: const Icon(Icons.menu),
             fabSize: ExpandableFabSize.small,
@@ -118,6 +122,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
           distance: 50,
           children: [
             Visibility(
+                key: const Key('save-search-button'),
                 visible: currentSearchResults.count() > 0 &&
                     !storedSearchResults.has(currentSearchResults),
                 child: FloatingActionButton.small(
@@ -129,6 +134,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                     },
                     child: const Icon(Icons.save))),
             Visibility(
+                key: const Key('delete-search-button'),
                 visible: storedSearchResults.has(currentSearchResults),
                 child: FloatingActionButton.small(
                     onPressed: () {
@@ -205,6 +211,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Badge(
+                      key: const Key('saved-searches-badge'),
                       label: Text(storedSearchResults.count().toString()),
                       child: PopupMenuButton(
                           onSelected: (String value) {

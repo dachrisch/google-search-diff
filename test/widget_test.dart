@@ -7,24 +7,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:google_search_diff/main.dart';
+import 'package:google_search_diff/search_result_list_tile.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Perfoming a simple search with 2 results',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.byType(SearchResultListTile), findsNWidgets(0));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await performSearch(tester, 'Test Search');
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(SearchResultListTile), findsNWidgets(2));
   });
+}
+
+Future<void> performSearch(WidgetTester tester, String query) async {
+  expect(find.byKey(const Key('search-query-field')), findsOneWidget);
+  await tester.enterText(find.byKey(const Key('search-query-field')), query);
+  await tester.tap(find.byKey(const Key('do-search-button')));
+  await tester.pump();
 }

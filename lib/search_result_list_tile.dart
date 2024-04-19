@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/search_results.dart';
-import 'package:google_search_diff/search_bar_widget.dart';
 
 class SearchResultListTile extends StatelessWidget {
   final SearchResult searchResult;
@@ -8,6 +7,19 @@ class SearchResultListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    IconData icon = Icons.circle;
+    switch (searchResult.status) {
+      case SearchResultsStatus.added:
+        icon = Icons.arrow_right_outlined;
+        break;
+      case SearchResultsStatus.existing:
+        icon = Icons.circle;
+        break;
+      case SearchResultsStatus.removed:
+        icon = Icons.arrow_left_outlined;
+        break;
+      default:
+    }
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Card(
@@ -15,7 +27,7 @@ class SearchResultListTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: const Icon(Icons.link),
+                leading: Icon(icon),
                 title: Text(searchResult.title),
                 subtitle: Text(searchResult.source),
               ),

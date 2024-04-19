@@ -2,47 +2,9 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
-
-typedef SearchResultCallback = void Function(SearchResults searchResult);
-
-class QueryChange extends ChangeNotifier {
-  String _query = '';
-  String get query => _query;
-  void initialQuery(String query) {
-    _query = query;
-    notifyListeners();
-  }
-}
-
-class SearchResultsChange extends ChangeNotifier {
-  SearchResults _searchResults = NoSearchResults();
-  SearchResults get searchResults => _searchResults;
-  void inform(SearchResults searchResults) {
-    _searchResults = searchResults;
-    notifyListeners();
-  }
-}
-
-class SearchBarController {
-  final QueryChange _queryChange = QueryChange();
-  final SearchResultsChange _searchResultsChange = SearchResultsChange();
-
-  get query => _queryChange.query;
-  void addQueryListener(void Function(String) listener) =>
-      _queryChange.addListener(() => listener(_queryChange.query));
-
-  void informResults(SearchResults searchResults) =>
-      _searchResultsChange.inform(searchResults);
-
-  void initialQuery(String query) => _queryChange.initialQuery(query);
-
-  void addSearchResultsListener(
-          void Function(SearchResults results) listener) =>
-      _searchResultsChange
-          .addListener(() => listener(_searchResultsChange.searchResults));
-}
 
 class SearchBarWidget extends StatefulWidget {
   final SearchBarController searchBarController;
@@ -101,6 +63,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   padding: const EdgeInsets.only(
                       left: 16, right: 16, top: 4, bottom: 4),
                   child: TextField(
+                    key: const Key('search-query-field'),
                     controller: searchFieldController,
                     style: const TextStyle(
                       fontSize: 18,
@@ -130,6 +93,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               ],
             ),
             child: Material(
+              key: const Key('do-search-button'),
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: const BorderRadius.all(

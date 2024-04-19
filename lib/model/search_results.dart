@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:fimber/fimber.dart';
-import 'package:flutter/src/material/popup_menu.dart';
 import 'package:localstore/localstore.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,14 +8,17 @@ class SearchResult {
   final String title;
   final String source;
   final String link;
+  final SearchResultsStatus status;
   final String snippet;
 
   SearchResult(
       {required this.title,
       required this.source,
       required this.link,
+      SearchResultsStatus? status,
       String? snippet})
-      : snippet = (snippet == null || snippet.isEmpty) ? title : snippet;
+      : snippet = (snippet == null || snippet.isEmpty) ? title : snippet,
+        status = status ?? SearchResultsStatus.added;
 
   Map<String, dynamic> toJson() =>
       {'title': title, 'source': source, 'link': link, 'snippet': snippet};
@@ -26,6 +28,7 @@ class SearchResult {
         title: result['title'],
         source: result['source'],
         link: result['link'],
+        status: SearchResultsStatus.existing,
         snippet: result['snippet']);
   }
 }
@@ -42,6 +45,12 @@ class NoSearchResults extends SearchResults {
   Map<String, dynamic> toJson() {
     throw StateError("No Search Result - can't create json");
   }
+}
+
+enum SearchResultsStatus {
+  existing,
+  removed,
+  added;
 }
 
 class SearchResults {
@@ -75,6 +84,25 @@ class SearchResults {
         .forEach((r) => searchResults.add(SearchResult.fromMap(r)));
     return searchResults;
   }
+
+  SearchResults compareto(SearchResults previousSearchResults) {
+    var searchResults =
+        SearchResults(query: query, timestamp: timestamp, id: id);
+    for (var result in _results) {
+      var status = previousSearchResults.has(result)
+          ? SearchResultsStatus.existing
+          : SearchResultsStatus.added;
+      searchResults.add(SearchResult(
+          title: result.title,
+          source: result.source,
+          link: result.link,
+          status: status));
+    }
+    return searchResults;
+  }
+
+  has(SearchResult result) => _results.any((element) =>
+      element.title == result.title && element.link == result.link);
 }
 
 class SearchResultsStore {
@@ -99,7 +127,6 @@ class SearchResultsStore {
       _searchResults.any((element) => element.id == searchResults.id);
 
   void delete(SearchResults currentSearchResults) {
-    print('deleting ${currentSearchResults.id}');
     currentSearchResults.delete();
     _searchResults.remove(currentSearchResults);
   }
