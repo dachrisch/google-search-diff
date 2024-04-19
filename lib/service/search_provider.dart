@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fimber/fimber.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
@@ -10,6 +11,7 @@ abstract class QueryRetriever {
 }
 
 class SerapiRetriever implements QueryRetriever {
+  final logger = FimberLog('serapi');
   final String endpoint = 'serpapi.com';
   final String path = 'search';
   final String apiKey;
@@ -34,10 +36,11 @@ class SerapiRetriever implements QueryRetriever {
       'output': 'json',
       'q': query
     };
-    return http
-        .get(Uri.https(endpoint, path, queryParameter), headers: headers)
-        .then((response) {
-      assert(response.statusCode == 200);
+    var uri = Uri.https(endpoint, path, queryParameter);
+    logger.d('Performing search: $uri');
+    return http.get(uri, headers: headers).then((response) {
+      logger.d('Got response: ${response.body}');
+      assert(response.statusCode == 200, response.statusCode);
       return jsonDecode(response.body);
     }).then((json) {
       List<SearchResult> sr = [];
@@ -56,6 +59,7 @@ class SerapiRetriever implements QueryRetriever {
 class SearchProvider {
   final SearchBarController searchBarController;
   final QueryRetriever queryRetriever;
+
   SearchProvider(this.searchBarController, this.queryRetriever);
 
   Future<void> doSearch(String query) async {

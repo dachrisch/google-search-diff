@@ -10,7 +10,6 @@ import 'package:relative_time/relative_time.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Fimber.plantTree(DebugTree());
-
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
