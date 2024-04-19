@@ -30,11 +30,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       logger.d('setting query to: $query');
       searchFieldController.text = query;
     });
-    //searchProvider = SearchProvider(searchBarController, StaticRetriever());
-    searchProvider = SearchProvider(
-        searchBarController,
-        SerapiRetriever(
-            apiKey: const String.fromEnvironment('GOOGLE_API_KEY')));
+    var apiKey = const String.fromEnvironment('GOOGLE_API_KEY');
+    QueryRetriever retriever =
+        apiKey == "" ? StaticRetriever() : SerapiRetriever(apiKey: apiKey);
+    searchProvider = SearchProvider(searchBarController, retriever);
   }
 
   @override

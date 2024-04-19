@@ -19,7 +19,7 @@ void main() {
 
     await performSearch(tester, 'Test Search');
 
-    expect(find.byType(SearchResultListTile), findsNWidgets(2));
+    expect(find.byType(SearchResultListTile), findsNWidgets(3));
   });
 }
 
