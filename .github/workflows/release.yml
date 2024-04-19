@@ -35,7 +35,7 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
       - name: Build APK
-        run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v
+        run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
