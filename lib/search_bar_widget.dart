@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
+import 'package:google_search_diff/service/search_provider.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final SearchBarController searchBarController;
@@ -19,9 +20,11 @@ class SearchBarWidget extends StatefulWidget {
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   final logger = FimberLog('search');
-  late SearchBarController searchBarController;
-
   final TextEditingController searchFieldController = TextEditingController();
+  
+  late SearchBarController searchBarController;
+  late SearchProvider searchProvider;
+
 
   _SearchBarWidgetState();
 
@@ -33,6 +36,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       logger.d('setting query to: $query');
       searchFieldController.text = query;
     });
+    searchProvider = SearchProvider(searchBarController);
   }
 
   @override
@@ -103,7 +107,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   FocusScope.of(context).requestFocus(FocusNode());
                   if (kDebugMode) {
                     logger.d('search for: ${searchFieldController.text}');
-                    _doSearch();
+                    searchProvider.doSearch(searchFieldController.text);
                   }
                 },
                 child: Padding(
@@ -120,21 +124,5 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         ],
       ),
     );
-  }
-
-  void _doSearch() {
-    var searchResults = SearchResults(
-        query: searchFieldController.text, timestamp: DateTime.now());
-    searchResults.add(SearchResult(
-        title: 'Agile Coach Jobs und Stellenangebote - 2024',
-        source: 'Stepstone',
-        link: 'https://www.stepstone.de/jobs/agile-coach',
-        snippet:
-            '... Systeme mbH · Scrum Master (m/w/d) / Agile Coach (m/w/d). GWS Gesellschaft für Warenwirtschafts-Systeme mbH. Münster. Teilweise Home-Office. Gehalt anzeigen.'));
-    searchResults.add(SearchResult(
-        title: 'Result 2',
-        source: 'Other Test',
-        link: 'http://example-other.com'));
-    searchBarController.informResults(searchResults);
   }
 }

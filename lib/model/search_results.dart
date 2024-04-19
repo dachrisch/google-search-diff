@@ -96,7 +96,18 @@ class SearchResults {
           title: result.title,
           source: result.source,
           link: result.link,
+          snippet: result.snippet,
           status: status));
+    }
+    for (var previous in previousSearchResults._results) {
+      if(!searchResults.has(previous)) {
+      searchResults.add(SearchResult(
+          title: previous.title,
+          source: previous.source,
+          link: previous.link,
+          snippet: previous.snippet,
+          status: SearchResultsStatus.removed));
+      }
     }
     return searchResults;
   }

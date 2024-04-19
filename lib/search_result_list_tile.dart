@@ -7,16 +7,16 @@ class SearchResultListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    IconData icon = Icons.circle;
+    Icon icon = const Icon(Icons.circle);
     switch (searchResult.status) {
       case SearchResultsStatus.added:
-        icon = Icons.arrow_right_outlined;
+        icon = Icon(Icons.keyboard_double_arrow_right_outlined, color: Colors.green[400],);
         break;
       case SearchResultsStatus.existing:
-        icon = Icons.circle;
+        icon = Icon(Icons.compare_arrows_outlined, color: Colors.grey[600],);
         break;
       case SearchResultsStatus.removed:
-        icon = Icons.arrow_left_outlined;
+        icon = Icon(Icons.keyboard_double_arrow_left_outlined, color: Colors.red[400],);
         break;
       default:
     }
@@ -27,7 +27,7 @@ class SearchResultListTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Icon(icon),
+                leading: icon,
                 title: Text(searchResult.title),
                 subtitle: Text(searchResult.source),
               ),
