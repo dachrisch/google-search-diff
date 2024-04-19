@@ -206,6 +206,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Badge(
+                      isLabelVisible: storedSearchResults.count() > 0,
                       key: const Key('saved-searches-badge'),
                       label: Text(storedSearchResults.count().toString()),
                       child: PopupMenuButton(
