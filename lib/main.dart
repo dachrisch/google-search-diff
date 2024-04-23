@@ -4,20 +4,27 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_search_diff/google_search_diff_screen.dart';
+import 'package:google_search_diff/service/search_provider.dart';
+import 'package:google_search_diff/view/google_search_diff_screen.dart';
 import 'package:relative_time/relative_time.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Fimber.plantTree(DebugTree());
+  var apiKey = const String.fromEnvironment('GOOGLE_API_KEY');
+  QueryRetriever retriever =
+        apiKey == "" ? StaticRetriever() : SerapiRetriever(apiKey: apiKey);
+
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
-  ]).then((_) => runApp(const MyApp()));
+  ]).then((_) => runApp(MyApp(retriever: retriever,)));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final QueryRetriever retriever;
+
+  const MyApp({super.key, required this. retriever});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleSearchDiffScreenTheme.buildLightTheme().textTheme,
         platform: TargetPlatform.iOS,
       ),
-      home: const GoogleSearchDiffScreen(),
+      home: GoogleSearchDiffScreen(retriever: retriever),
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         RelativeTimeLocalizations.delegate,
       ],
@@ -46,99 +53,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class APIKeyScreen extends StatefulWidget {
-  const APIKeyScreen({super.key});
-
-  @override
-  State<APIKeyScreen> createState() => _APIKeyScreenState();
-}
-
-class _APIKeyScreenState extends State<APIKeyScreen> {
-  final TextEditingController _apiKeyController = TextEditingController();
-  bool _isValid = false; // Simulate API key validation
-
-  void _validateAPIKey() {
-    setState(() {
-      _isValid = _apiKeyController.text == "123456"; // Example condition
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Enter API Key'),
-      ),
-      body: Column(
-        children: <Widget>[
-          TextField(
-            controller: _apiKeyController,
-            decoration: const InputDecoration(
-              labelText: 'API Key',
-            ),
-          ),
-          ElevatedButton(
-            onPressed: _validateAPIKey,
-            child: const Text('Validate'),
-          ),
-          if (_isValid)
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SearchPage()));
-                  },
-                  child: const Text('Search'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ComparePage()));
-                  },
-                  child: const Text('Compare'),
-                ),
-              ],
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search'),
-      ),
-      body: const Center(
-        child: Text('Search Functionality Here'),
-      ),
-    );
-  }
-}
-
-class ComparePage extends StatelessWidget {
-  const ComparePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Compare'),
-      ),
-      body: const Center(
-        child: Text('Comparison Table Here'),
-      ),
-    );
-  }
-}
 
 class GoogleSearchDiffScreenTheme {
   static ThemeData buildLightTheme() {
@@ -195,7 +109,7 @@ class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll('#', '');
     if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
+      hexColor = 'FF$hexColor';
     }
     return int.parse(hexColor, radix: 16);
   }

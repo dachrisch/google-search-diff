@@ -102,14 +102,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_expandable_fab:
-    dependency: "direct main"
-    description:
-      name: flutter_expandable_fab
-      sha256: "2aa5735bebcdbc49f43bcb32a29f9f03a9b7029212b8cd9837ae332ab2edf647"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_linkify:
     dependency: "direct main"
     description:
@@ -217,7 +209,7 @@ packages:
     source: hosted
     version: "1.4.0"
   lorem_ipsum:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: lorem_ipsum
       sha256: b018535db8525a45bbcd7a44e151480e2618e2111c5305725e3713ce7c6ba677

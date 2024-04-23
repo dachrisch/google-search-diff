@@ -1,7 +1,6 @@
 import 'dart:collection';
 
-import 'package:fimber/fimber.dart';
-import 'package:localstore/localstore.dart';
+import 'package:google_search_diff/service/searches_store.dart';
 import 'package:uuid/uuid.dart';
 
 class SearchResult {
@@ -55,6 +54,8 @@ enum SearchResultsStatus {
   added;
 }
 
+typedef SearchResultsMapType = Map<String, dynamic>;
+
 class SearchResults {
   final String query;
   final DateTime timestamp;
@@ -70,14 +71,14 @@ class SearchResults {
 
   SearchResult operator [](int index) => _results[index];
 
-  Map<String, dynamic> toJson() => {
+  SearchResultsMapType toJson() => {
         'query': query,
         'timestamp': timestamp.toIso8601String(),
         'results': _results.map((r) => r.toJson()).toList(),
         'id': id
       };
 
-  static SearchResults fromMap(Map<String, dynamic> search) {
+  static SearchResults fromMap(SearchResultsMapType search) {
     var searchResults = SearchResults(
         query: search['query'],
         timestamp: DateTime.parse(search['timestamp']),
@@ -140,7 +141,7 @@ class SearchResultsStore {
     equals: (p0, p1) => p0.id.compareTo(p1.id) == 0,
   );
 
-  void addFromMap(Map<String, dynamic> map) {
+  void addFromMap(SearchResultsMapType map) {
     _searchResults.add(SearchResults.fromMap(map));
   }
 
@@ -165,27 +166,12 @@ extension StorableSearchResultsStore on SearchResultsStore {
 
 extension StorableSearchResults on SearchResults {
   Future save() async {
-    final logger = FimberLog('store');
-    final db = Localstore.instance;
-    final id = db.collection('searches').doc().id;
-    var json = toJson();
-    logger.d('Storing $this with [$id]: $json');
-    return db.collection('searches').doc(id).set(json);
+    final SearchesStore searchesStore = SearchesStore();
+    return searchesStore.insert(toJson());
   }
 
   void delete() async {
-    final logger = FimberLog('store');
-    final db = Localstore.instance;
-
-    logger.d('Deleting $this with [$id]');
-    // `where is not implemented`
-    // https://pub.dev/documentation/localstore/latest/localstore/CollectionRefImpl/where.html
-    await db
-        .collection('searches')
-        .get()
-        .then((allDocuments) => allDocuments?.entries
-            .firstWhere((element) => element.value['id'] == id))
-        .then(
-            (element) => db.collection('searches').doc(element?.key).delete());
+    final SearchesStore searchesStore = SearchesStore();
+    return searchesStore.deleteById(id);
   }
 }
