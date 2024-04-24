@@ -62,28 +62,37 @@ class _GoogleSearchAppBarState extends State<GoogleSearchAppBar> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Badge(
-                      isLabelVisible: widget.searchResultsStore.count() > 0,
-                      key: const Key('saved-searches-badge'),
-                      label: Text(widget.searchResultsStore.count().toString()),
-                      child: PopupMenuButton(
-                          onSelected: (String value) {
-                            logger.d('selected $value');
-                            var result =
-                                widget.searchResultsStore.getByUuid(value);
-                            widget.searchResultsController
-                                .informNewResults(result);
-                            widget.searchBarController
-                                .initialQuery(result.query);
-                          },
-                          icon: const Icon(Icons.favorite_border),
-                          itemBuilder: (BuildContext context) => widget
-                              .searchResultsStore
-                              .map((stored) => PopupMenuItem(
-                                  value: stored.id,
-                                  child: Text(
-                                      '${RelativeTime(context).format(stored.timestamp)} - ${stored.query} (${stored.count()})')))
-                              .toList())),
+                  MenuAnchor(
+                      menuChildren: widget.searchResultsStore
+                          .map((stored) => MenuItemButton(
+                              onPressed: () {
+                                logger.d('selected $stored');
+                                widget.searchResultsController
+                                    .informNewResults(stored);
+                                widget.searchBarController
+                                    .initialQuery(stored.query);
+                              },
+                              child: Text(
+                                  '${RelativeTime(context).format(stored.timestamp)} - ${stored.query} (${stored.count()})')))
+                          .toList(),
+                      builder: (context, controller, child) => Badge(
+                          isLabelVisible: widget.searchResultsStore.count() > 0,
+                          key: const Key('saved-searches-badge'),
+                          label: Text(
+                              widget.searchResultsStore.count().toString()),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.favorite_border,
+                            ),
+                            tooltip: 'Choose display filter',
+                            onPressed: () {
+                              if (controller.isOpen) {
+                                controller.close();
+                              } else {
+                                controller.open();
+                              }
+                            },
+                          ))),
                   const SizedBox(width: 8),
                 ],
               ),

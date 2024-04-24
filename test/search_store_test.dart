@@ -97,4 +97,21 @@ void main() {
     await tester.tap(find.byType(PopupMenuItem<String>).first);
     expectSearchField('Test Search Stored');
   });
+
+  testWidgets('Removing an item from the search', (tester) async {
+    cleanupBefore();
+
+    await tester.pumpWidget(MyApp(retriever: StaticRetriever()));
+
+    expectBadgeVisible(false);
+    await tester.performSearch('Test Search Stored');
+    expect(find.byType(SearchResultListTile), findsNWidgets(3));
+
+    expect(find.widgetWithText(TextButton, 'Remove').first, findsOne);
+    await tester.tap(find.widgetWithText(TextButton, 'Remove').first);
+    await tester.pumpAndSettle();
+    
+    expect(find.byType(SearchResultListTile), findsNWidgets(2));
+
+  });
 }

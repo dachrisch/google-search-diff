@@ -6,6 +6,7 @@ import 'package:google_search_diff/actions/manager.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
 import 'package:google_search_diff/main.dart';
+import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 import 'package:google_search_diff/view/search_bar_widget.dart';
 import 'package:google_search_diff/view/search_results_view.dart';
@@ -81,16 +82,35 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
                   icon: const Icon(
                     Icons.search,
                   ),
+                  tooltip: 'Perform google search with query',
                   onPressed: () {
                     QueryAction(widget.searchBarController)
                         .invoke(const QueryIntent());
                   },
                 ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.filter_list,
+                MenuAnchor(
+                  menuChildren: List<MenuItemButton>.generate(SearchResultsStatus.values.length, (index) => 
+                    MenuItemButton(
+                      child: ChoiceChip(
+                        avatar: const Icon(Icons.fork_left),
+                        label: Text(SearchResultsStatus.values[index].name),
+                        onSelected: (bool value) {}, selected: true,
+                      ),
+                    )
                   ),
-                  onPressed: () {},
+                  builder: (context, controller, child) => IconButton(
+                    icon: const Icon(
+                      Icons.filter_list,
+                    ),
+                    tooltip: 'Choose display filter',
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                  ),
                 )
               ],
               flexibleSpace: SearchBarWidget(
