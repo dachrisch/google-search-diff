@@ -62,8 +62,8 @@ void main() {
     expectBadgeLabel('2');
 
     await tester.tapButton('saved-searches-badge');
-    expect(find.byType(PopupMenuItem<String>), findsNWidgets(2));
-    await tester.tap(find.byType(PopupMenuItem<String>).first);
+    expect(find.byType(MenuItemButton), findsNWidgets(2));
+    await tester.tap(find.byType(MenuItemButton).first);
     await tester.pumpAndSettle();
     expect(find.byType(SearchResultListTile), findsNWidgets(3));
     expect(
@@ -93,8 +93,9 @@ void main() {
     await tester.performSearch('Test Search Volatile');
     expectSearchField('Test Search Volatile');
     await tester.tapButton('saved-searches-badge');
-    expect(find.byType(PopupMenuItem<String>), findsNWidgets(1));
-    await tester.tap(find.byType(PopupMenuItem<String>).first);
+    expect(find.byType(MenuItemButton), findsNWidgets(1));
+    await tester.tap(find.byType(MenuItemButton).first);
+    await tester.pumpAndSettle();
     expectSearchField('Test Search Stored');
   });
 
