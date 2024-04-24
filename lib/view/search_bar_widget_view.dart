@@ -89,15 +89,21 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
                   },
                 ),
                 MenuAnchor(
-                  menuChildren: List<MenuItemButton>.generate(SearchResultsStatus.values.length, (index) => 
-                    MenuItemButton(
-                      child: ChoiceChip(
-                        avatar: const Icon(Icons.fork_left),
-                        label: Text(SearchResultsStatus.values[index].name),
-                        onSelected: (bool value) {}, selected: true,
-                      ),
-                    )
-                  ),
+                  menuChildren: List<MenuItemButton>.generate(
+                      SearchResultsStatus.values.length,
+                      (index) => MenuItemButton(
+                            child: ChoiceChip(
+                              avatar: Icon(
+                                SearchResultsStatus.values[index].icon,
+                                color: SearchResultsStatus
+                                    .values[index].color[400],
+                              ),
+                              label:
+                                  Text(SearchResultsStatus.values[index].name),
+                              onSelected: (bool value) {},
+                              selected: true,
+                            ),
+                          )),
                   builder: (context, controller, child) => IconButton(
                     icon: const Icon(
                       Icons.filter_list,

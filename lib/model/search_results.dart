@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
 import 'package:google_search_diff/service/searches_store.dart';
 import 'package:uuid/uuid.dart';
 
@@ -50,9 +51,14 @@ class NoSearchResults extends SearchResults {
 }
 
 enum SearchResultsStatus {
-  existing,
-  removed,
-  added;
+  existing('Existing', Icons.compare_arrows_outlined, Colors.grey),
+  removed('Removed', Icons.keyboard_double_arrow_left_outlined, Colors.red),
+  added('Added', Icons.keyboard_double_arrow_right_outlined, Colors.green);
+
+  final String name;
+  final IconData icon;
+  final MaterialColor color;
+  const  SearchResultsStatus(this.name, this.icon, this.color);
 }
 
 typedef SearchResultsMapType = Map<String, dynamic>;

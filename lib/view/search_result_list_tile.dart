@@ -14,28 +14,6 @@ class SearchResultListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Icon icon = const Icon(Icons.circle);
-    switch (searchResult.status) {
-      case SearchResultsStatus.added:
-        icon = Icon(
-          Icons.keyboard_double_arrow_right_outlined,
-          color: Colors.green[400],
-        );
-        break;
-      case SearchResultsStatus.existing:
-        icon = Icon(
-          Icons.compare_arrows_outlined,
-          color: Colors.grey[600],
-        );
-        break;
-      case SearchResultsStatus.removed:
-        icon = Icon(
-          Icons.keyboard_double_arrow_left_outlined,
-          color: Colors.red[400],
-        );
-        break;
-      default:
-    }
     logger.d('Drawing tile $key');
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -44,7 +22,7 @@ class SearchResultListTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: icon,
+                leading: Icon(searchResult.status.icon, color: searchResult.status.color[400]),
                 title: Text(searchResult.title),
                 subtitle: Text(searchResult.source),
               ),
