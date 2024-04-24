@@ -5,14 +5,16 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 import 'package:google_search_diff/view/search_result_list_tile.dart';
+
+import 'util/expect_extensions.dart';
+import 'util/localstore_helper.dart';
+import 'util/widget_tester_extension.dart';
 
 void main() {
   testWidgets('Test search produces 3 results', (WidgetTester tester) async {
@@ -92,43 +94,25 @@ void main() {
     expectBadgeLabel('1');
     expect(find.byType(SearchResultListTile), findsNothing);
   });
-}
 
-extension ButtonTap on WidgetTester {
-  Future<int> tapButton(String key) async {
-    await tap(find.byKey(Key(key)));
-    return pumpAndSettle(); // https://stackoverflow.com/questions/49542389/flutter-get-a-popupmenubuttons-popupmenuitem-text-in-unit-tests
-  }
+  testWidgets('Retrieve stored query', (tester) async {
+    cleanupBefore();
 
-  Future<int> performSearch(String query) async {
-    expect(find.byKey(const Key('search-query-field')), findsOneWidget);
-    await enterText(find.byKey(const Key('search-query-field')), query);
-    await tap(find.byKey(const Key('do-search-button')));
-    return pumpAndSettle();
-  }
-}
+    await tester.pumpWidget(MyApp(retriever: StaticRetriever()));
 
-void cleanupBefore() {
-  var directory = Directory('.search');
-  if (directory.existsSync()) directory.deleteSync(recursive: true);
-}
+    expectBadgeVisible(false);
 
-void expectBadgeVisible(bool isVisible) {
-  expect(
-      ((find.byKey(const Key('saved-searches-badge')).evaluate().first
-                  as StatelessElement)
-              .widget as Badge)
-          .isLabelVisible,
-      isVisible);
-}
+    await tester.performSearch('Test Search Stored');
+    expect(find.byType(SearchResultListTile), findsNWidgets(3));
 
-void expectBadgeLabel(String text) {
-  expectBadgeVisible(true);
-  expect(
-      (((find.byKey(const Key('saved-searches-badge')).evaluate().first
-                      as StatelessElement)
-                  .widget as Badge)
-              .label as Text)
-          .data,
-      text);
+    await tester.tapButton('save-search-button');
+    expectBadgeLabel('1');
+
+    await tester.performSearch('Test Search Volatile');
+    expectSearchField('Test Search Volatile');
+    await tester.tapButton('saved-searches-badge');
+    expect(find.byType(PopupMenuItem<String>), findsNWidgets(1));
+    await tester.tap(find.byType(PopupMenuItem<String>).first);
+    expectSearchField('Test Search Stored');
+  });
 }

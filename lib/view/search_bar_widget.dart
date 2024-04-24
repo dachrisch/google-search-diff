@@ -1,35 +1,17 @@
 import 'package:fimber/fimber.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 
-class SearchBarWidget extends StatefulWidget {
+class SearchBarWidget extends StatelessWidget {
   final SearchBarController searchBarController;
-
   final QueryRetriever retriever;
 
-  const SearchBarWidget(
-      {super.key, required this.searchBarController, required this.retriever});
-
-  @override
-  State<StatefulWidget> createState() => _SearchBarWidgetState();
-}
-
-class _SearchBarWidgetState extends State<SearchBarWidget> {
   final logger = FimberLog('search');
 
-  @override
-  void initState() {
-    super.initState();
-    widget.searchBarController.addQueryListener((query) {
-      logger.d('setting query to: $query');
-      // TODO: fixme
-      widget.searchBarController.searchFieldController.text = query;
-    });
-  }
+  SearchBarWidget(
+      {super.key, required this.searchBarController, required this.retriever});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +42,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       left: 16, right: 16, top: 0, bottom: 0),
                   child: TextField(
                     key: const Key('search-query-field'),
-                    controller: widget.searchBarController.searchFieldController,
+                    controller:
+                        searchBarController.searchFieldController,
                     style: const TextStyle(
                       fontSize: 18,
                     ),

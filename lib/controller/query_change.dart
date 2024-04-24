@@ -1,5 +1,4 @@
 import 'package:fimber/fimber.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/service/search_provider.dart';
@@ -46,7 +45,12 @@ class SearchBarController {
 
   final SearchProvider searchProvider;
 
-  SearchBarController(this.searchProvider);
+  SearchBarController(this.searchProvider) {
+    addQueryListener((query) {
+      logger.d('setting query to: $query');
+      searchFieldController.text = query;
+    });
+  }
 
   get query => _queryChange.query;
 
