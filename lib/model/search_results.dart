@@ -32,6 +32,7 @@ class SearchResult {
   }
 
   bool isSame(SearchResult other) => other.title == title && other.link == link;
+  
 }
 
 class NoSearchResults extends SearchResults {
@@ -44,7 +45,7 @@ class NoSearchResults extends SearchResults {
 
   @override
   Map<String, dynamic> toJson({bool onlyNew = true}) {
-    throw StateError("No Search Result - can't create json");
+    return {};
   }
 }
 

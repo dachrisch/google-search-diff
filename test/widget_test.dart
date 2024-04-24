@@ -49,15 +49,32 @@ void main() {
     await tester.pumpWidget(MyApp(retriever: StaticRetriever()));
     await tester.performSearch('Test Search 1');
     expect(find.byType(SearchResultListTile), findsNWidgets(3));
-    expect(find.byType(SearchResultListTile).evaluate().every((element) =>(element.widget as SearchResultListTile).searchResult.status == SearchResultsStatus.added),true);
+    expect(
+        find.byType(SearchResultListTile).evaluate().every((element) =>
+            (element.widget as SearchResultListTile).searchResult.status ==
+            SearchResultsStatus.added),
+        true);
     await tester.tapButton('save-search-button');
     expectBadgeLabel('1');
     await tester.performSearch('Test Search 2');
-    await tester.pumpAndSettle();
-    expect(find.byType(SearchResultListTile), findsNWidgets(3));
-    expect(find.byType(SearchResultListTile).evaluate().any((element) =>(element.widget as SearchResultListTile).searchResult.status == SearchResultsStatus.existing),true);
-    expect(find.byType(SearchResultListTile).evaluate().any((element) =>(element.widget as SearchResultListTile).searchResult.status == SearchResultsStatus.added),true);
-    // expect(find.byType(SearchResultListTile).evaluate().any((element) =>(element.widget as SearchResultListTile).searchResult.status == SearchResultsStatus.removed),true);
+    var resultTiles = find.byType(SearchResultListTile, skipOffstage: false);
+    expect(resultTiles, findsNWidgets(4));
+    expect(
+        resultTiles.evaluate().any((element) =>
+            (element.widget as SearchResultListTile).searchResult.status ==
+            SearchResultsStatus.existing),
+        true);
+    expect(
+        resultTiles.evaluate().any((element) =>
+            (element.widget as SearchResultListTile).searchResult.status ==
+            SearchResultsStatus.added),
+        true);
+    expect(
+        resultTiles.evaluate().any((element) =>
+            (element.widget as SearchResultListTile).searchResult.status ==
+            SearchResultsStatus.removed),
+        true);
+
     await tester.tapButton('save-search-button');
     expectBadgeLabel('2');
 
@@ -66,7 +83,16 @@ void main() {
     await tester.tap(find.byType(PopupMenuItem<String>).first);
     await tester.pumpAndSettle();
     expect(find.byType(SearchResultListTile), findsNWidgets(3));
-    expect(find.byType(SearchResultListTile).evaluate().every((element) =>(element.widget as SearchResultListTile).searchResult.status == SearchResultsStatus.existing),true);
+    expect(
+        find.byType(SearchResultListTile).evaluate().every((element) =>
+            (element.widget as SearchResultListTile).searchResult.status ==
+            SearchResultsStatus.existing),
+        true);
+
+      
+    await tester.tapButton('delete-search-button');
+    expectBadgeLabel('1');
+    expect(find.byType(SearchResultListTile), findsNothing);
   });
 }
 

@@ -37,7 +37,6 @@ class SearchesStore {
   }
 
   void deleteById(String id) async {
-    logger.d('Deleting $this with [$id]');
     // `where is not implemented`
     // https://pub.dev/documentation/localstore/latest/localstore/CollectionRefImpl/where.html
     await _db
@@ -45,7 +44,10 @@ class SearchesStore {
         .get()
         .then((allDocuments) => allDocuments?.entries
             .firstWhere((element) => element.value['id'] == id))
-        .then((element) => _db.collection(_c).doc(element?.key).delete());
+        .then((element)  {
+          logger.d('deleting $element [$id]');
+
+          return _db.collection(_c).doc(element?.key).delete();});
   }
 
   void cancelSubscription() async {

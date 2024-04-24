@@ -47,7 +47,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
     });
 
     _searchBarController.addSearchResultsListener((results) {
-      logger.d('Got new search results: $results');
+      logger.d('Got new search results: ${results.toJson()}');
       setState(() {
         searchResultsController.compareTo(results);
       });
