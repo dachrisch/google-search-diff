@@ -26,12 +26,13 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
 
   final SearchesStore searchesStore = SearchesStore();
 
-  final SearchBarController searchBarController = SearchBarController();
+  late SearchBarController searchBarController;
 
   final logger = FimberLog('screen');
 
   @override
   void initState() {
+    searchBarController = SearchBarController(SearchProvider(widget.queryRetriever));
     searchesStore.findAll().then((allSearches) {
       setState(() {
         allSearches?.entries

@@ -46,19 +46,26 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
     return Expanded(
       child: CustomScrollView(slivers: [
         SliverAppBar(
+          actions: [
+            IconButton(
+              key: const Key('do-search-button'),
+              icon: const Icon(
+                Icons.search,
+              ),
+              onPressed: () {
+                widget.searchBarController.doSearch();
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.filter_list,
+              ),
+              onPressed: () {},
+            )
+          ],
           flexibleSpace: SearchBarWidget(
             retriever: widget.queryRetriever,
             searchBarController: widget.searchBarController,
-          ),
-        ),
-        SliverAppBar(
-          flexibleSpace: Row(
-            children: [
-              FilterChip(
-                label: Text('1'),
-                onSelected: (bool value) {},
-              )
-            ],
           ),
         ),
         SliverFillRemaining(

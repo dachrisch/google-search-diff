@@ -8,10 +8,11 @@ import 'package:google_search_diff/service/search_provider.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final SearchBarController searchBarController;
-  
+
   final QueryRetriever retriever;
 
-  const SearchBarWidget({super.key, required this.searchBarController, required this.retriever});
+  const SearchBarWidget(
+      {super.key, required this.searchBarController, required this.retriever});
 
   @override
   State<StatefulWidget> createState() => _SearchBarWidgetState();
@@ -19,24 +20,21 @@ class SearchBarWidget extends StatefulWidget {
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   final logger = FimberLog('search');
-  final TextEditingController searchFieldController = TextEditingController();
-
-  late SearchProvider searchProvider;
 
   @override
   void initState() {
     super.initState();
     widget.searchBarController.addQueryListener((query) {
       logger.d('setting query to: $query');
-      searchFieldController.text = query;
+      // TODO: fixme
+      widget.searchBarController.searchFieldController.text = query;
     });
-    searchProvider = SearchProvider(widget.searchBarController, widget.retriever);
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      padding: const EdgeInsets.only(left: 16, right: 24, top: 8, bottom: 8),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -62,7 +60,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       left: 16, right: 16, top: 0, bottom: 0),
                   child: TextField(
                     key: const Key('search-query-field'),
-                    controller: searchFieldController,
+                    controller: widget.searchBarController.searchFieldController,
                     style: const TextStyle(
                       fontSize: 18,
                     ),
@@ -73,45 +71,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       hintText: 'Search...',
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: GoogleSearchDiffScreenTheme.buildLightTheme().primaryColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(38.0),
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    offset: const Offset(0, 2),
-                    blurRadius: 8.0),
-              ],
-            ),
-            child: Material(
-              key: const Key('do-search-button'),
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(32.0),
-                ),
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  if (kDebugMode) {
-                    logger.d('search for: ${searchFieldController.text}');
-                  }
-                  widget.searchBarController.startSearch();
-                  searchProvider.doSearch(searchFieldController.text);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Icon(FontAwesomeIcons.magnifyingGlass,
-                      size: 20,
-                      color: GoogleSearchDiffScreenTheme.buildLightTheme()
-                          .colorScheme
-                          .background),
                 ),
               ),
             ),

@@ -57,18 +57,16 @@ class SerapiRetriever implements QueryRetriever {
 }
 
 class SearchProvider {
-  final SearchBarController searchBarController;
   final QueryRetriever queryRetriever;
 
-  SearchProvider(this.searchBarController, this.queryRetriever);
+  SearchProvider(this.queryRetriever);
 
-  Future<void> doSearch(String query) async {
+  Future<SearchResults> doSearch(String query) async {
     var searchResults = SearchResults(query: query, timestamp: DateTime.now());
     for (var element in (await queryRetriever.query(query))) {
       searchResults.add(element);
     }
-    searchBarController.informResults(searchResults);
-    searchBarController.stopSearch();
+    return searchResults;
   }
 }
 
