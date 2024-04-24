@@ -6,7 +6,6 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -89,7 +88,6 @@ void main() {
             SearchResultsStatus.existing),
         true);
 
-      
     await tester.tapButton('delete-search-button');
     expectBadgeLabel('1');
     expect(find.byType(SearchResultListTile), findsNothing);
