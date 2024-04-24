@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,6 +7,8 @@ import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 import 'package:google_search_diff/view/search_result_list_tile.dart';
+import 'package:url_launcher_platform_interface/link.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'util/expect_extensions.dart';
 import 'util/widget_tester_extension.dart';
@@ -77,6 +81,43 @@ void main() {
         .pumpAndSettle(); // https://stackoverflow.com/questions/72136532/flutter-integration-test-how-to-wait-until-element-is-disappear-with-specific-t
     expect(find.byType(SearchResultListTile), findsNWidgets(3));
   });
+
+  testWidgets('Expect click on visit to follow link', (tester) async {
+    await tester.pumpWidget(MyApp(retriever: StaticRetriever()));
+    await tester.enterText(
+        find.byKey(const Key('search-query-field')), 'Test Query');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+    var wasCalledNotifier = FakeUrlLauncher.registerWith();
+    expect(find.widgetWithText(TextButton, 'Visit').first, findsOne);
+    await tester.tap(find.widgetWithText(TextButton, 'Visit').first);
+    expect(wasCalledNotifier.wasCalled, isTrue);
+  });
+}
+
+class WasCalledHandler extends ChangeNotifier {
+  bool wasCalled = false;
+  void call() {
+    wasCalled = true;
+    notifyListeners();
+  }
+}
+
+class FakeUrlLauncher extends UrlLauncherPlatform {
+  @override
+  LinkDelegate? get linkDelegate => null;
+  static final WasCalledHandler wasCalledHandler = WasCalledHandler();
+
+  static WasCalledHandler registerWith() {
+    UrlLauncherPlatform.instance = FakeUrlLauncher();
+    return wasCalledHandler;
+  }
+
+  @override
+  Future<bool> launchUrl(String url, LaunchOptions options) {
+    wasCalledHandler.call();
+    return Future.value(true);
+  }
 }
 
 class FailingStaticRetriever extends StaticRetriever {

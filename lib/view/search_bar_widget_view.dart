@@ -2,7 +2,6 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/actions/actions.dart';
 import 'package:google_search_diff/actions/intents.dart';
-import 'package:google_search_diff/actions/manager.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
 import 'package:google_search_diff/main.dart';
@@ -67,7 +66,6 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
   @override
   Widget build(BuildContext context) {
     return Actions(
-        dispatcher: LoggingActionDispatcher(),
         actions: {
           ClearIntent:
               ClearAction(widget.searchBarController.searchFieldController),
@@ -76,6 +74,7 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
         child: Expanded(
           child: CustomScrollView(slivers: [
             SliverAppBar(
+              pinned: true,
               actions: [
                 IconButton(
                   key: const Key('do-search-button'),
@@ -92,15 +91,18 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
                   menuChildren: List<MenuItemButton>.generate(
                       SearchResultsStatus.values.length,
                       (index) => MenuItemButton(
-                            child: ChoiceChip(
-                              avatar: Icon(
+                            child: ListTile(
+                              leading:  Icon(
                                 SearchResultsStatus.values[index].icon,
                                 color: SearchResultsStatus
                                     .values[index].color[400],
                               ),
-                              label:
+                              title:
                                   Text(SearchResultsStatus.values[index].name),
-                              onSelected: (bool value) {},
+                              onTap: () {
+                                
+                              },
+                              
                               selected: true,
                             ),
                           )),

@@ -84,7 +84,7 @@ class _GoogleSearchAppBarState extends State<GoogleSearchAppBar> {
                             icon: const Icon(
                               Icons.favorite_border,
                             ),
-                            tooltip: 'Choose display filter',
+                            tooltip: 'Select saved search',
                             onPressed: () {
                               if (controller.isOpen) {
                                 controller.close();

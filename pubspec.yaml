@@ -46,6 +46,7 @@ dependencies:
   http: ^1.2.1
   rename_app: ^1.3.2
   lorem_ipsum: ^0.0.3
+  url_launcher: ^6.2.6
 
 dev_dependencies:
   flutter_test:

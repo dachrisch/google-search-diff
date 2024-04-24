@@ -1,6 +1,7 @@
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/search_results.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchResultListTile extends StatelessWidget {
   final SearchResult searchResult;
@@ -10,7 +11,6 @@ class SearchResultListTile extends StatelessWidget {
 
   SearchResultListTile(
       {super.key, required this.searchResult, required this.doDelete});
-
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,8 @@ class SearchResultListTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Icon(searchResult.status.icon, color: searchResult.status.color[400]),
+                leading: Icon(searchResult.status.icon,
+                    color: searchResult.status.color[400]),
                 title: Text(searchResult.title),
                 subtitle: Text(searchResult.source),
               ),
@@ -44,9 +45,7 @@ class SearchResultListTile extends StatelessWidget {
                   const SizedBox(width: 8),
                   TextButton(
                     child: const Text('Visit'),
-                    onPressed: () {
-                      /* ... */
-                    },
+                    onPressed: () => launchUrl(Uri.parse(searchResult.link)),
                   ),
                   const SizedBox(width: 8),
                 ],
