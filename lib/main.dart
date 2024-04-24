@@ -4,6 +4,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_search_diff/actions/intents.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 import 'package:google_search_diff/view/google_search_diff_screen.dart';
 import 'package:relative_time/relative_time.dart';
@@ -13,18 +14,20 @@ void main() async {
   Fimber.plantTree(DebugTree());
   var apiKey = const String.fromEnvironment('GOOGLE_API_KEY');
   QueryRetriever retriever =
-        apiKey == "" ? StaticRetriever() : SerapiRetriever(apiKey: apiKey);
+      apiKey == "" ? StaticRetriever() : SerapiRetriever(apiKey: apiKey);
 
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
-  ]).then((_) => runApp(MyApp(retriever: retriever,)));
+  ]).then((_) => runApp(MyApp(
+        retriever: retriever,
+      )));
 }
 
 class MyApp extends StatelessWidget {
   final QueryRetriever retriever;
 
-  const MyApp({super.key, required this. retriever});
+  const MyApp({super.key, required this.retriever});
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +49,15 @@ class MyApp extends StatelessWidget {
         platform: TargetPlatform.iOS,
       ),
       home: GoogleSearchDiffScreen(queryRetriever: retriever),
+      shortcuts: const {
+        SingleActivator(LogicalKeyboardKey.escape): ClearIntent(),
+      },
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         RelativeTimeLocalizations.delegate,
       ],
     );
   }
 }
-
 
 class GoogleSearchDiffScreenTheme {
   static ThemeData buildLightTheme() {

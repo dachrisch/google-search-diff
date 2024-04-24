@@ -1,5 +1,7 @@
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/actions/actions.dart';
+import 'package:google_search_diff/actions/intents.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/service/search_provider.dart';
@@ -42,8 +44,12 @@ class SearchBarWidget extends StatelessWidget {
                       left: 16, right: 16, top: 0, bottom: 0),
                   child: TextField(
                     key: const Key('search-query-field'),
-                    controller:
-                        searchBarController.searchFieldController,
+                    textInputAction: TextInputAction.search,
+                    onSubmitted: (value) => {
+                      QueryAction(searchBarController)
+                          .invoke(const QueryIntent())
+                    },
+                    controller: searchBarController.searchFieldController,
                     style: const TextStyle(
                       fontSize: 18,
                     ),
