@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleSearchDiffScreenTheme.buildLightTheme().textTheme,
         platform: TargetPlatform.iOS,
       ),
-      home: GoogleSearchDiffScreen(retriever: retriever),
+      home: GoogleSearchDiffScreen(queryRetriever: retriever),
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         RelativeTimeLocalizations.delegate,
       ],

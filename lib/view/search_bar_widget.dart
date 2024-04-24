@@ -21,18 +21,16 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   final logger = FimberLog('search');
   final TextEditingController searchFieldController = TextEditingController();
 
-  late SearchBarController searchBarController;
   late SearchProvider searchProvider;
 
   @override
   void initState() {
     super.initState();
-    searchBarController = widget.searchBarController;
-    searchBarController.addQueryListener((query) {
+    widget.searchBarController.addQueryListener((query) {
       logger.d('setting query to: $query');
       searchFieldController.text = query;
     });
-    searchProvider = SearchProvider(searchBarController, widget.retriever);
+    searchProvider = SearchProvider(widget.searchBarController, widget.retriever);
   }
 
   @override
@@ -104,7 +102,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   if (kDebugMode) {
                     logger.d('search for: ${searchFieldController.text}');
                   }
-                  searchBarController.startSearch();
+                  widget.searchBarController.startSearch();
                   searchProvider.doSearch(searchFieldController.text);
                 },
                 child: Padding(
