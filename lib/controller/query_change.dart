@@ -42,6 +42,7 @@ class SearchBarController {
   final SearchChange _searchChange = SearchChange();
   final TextEditingController searchFieldController = TextEditingController();
   final FimberLog logger = FimberLog('searchbar-controller');
+  final ErrorChange errorChange = ErrorChange();
 
   final SearchProvider searchProvider;
 
@@ -52,7 +53,7 @@ class SearchBarController {
     });
   }
 
-  get query => _queryChange.query;
+  String get query => _queryChange.query;
 
   void initialQuery(String query) => _queryChange.initialQuery(query);
 
@@ -71,16 +72,35 @@ class SearchBarController {
 
   void stopSearch() => _searchChange.informSearch(false);
 
+  bool get isSearching => _searchChange.isSearching;
+
   void addSearchListener(void Function(bool isSearching) listener) {
     _searchChange.addListener(() => listener(_searchChange.isSearching));
   }
 
-  void doSearch() {
+  Future<SearchResults> doSearch() {
     startSearch();
     logger.d('search for: ${searchFieldController.text}');
-    searchProvider.doSearch(searchFieldController.text).then((searchResults) {
+    return searchProvider
+        .doSearch(searchFieldController.text)
+        .then((searchResults) {
       informResults(searchResults);
       stopSearch();
+      return searchResults;
     });
+  }
+
+  void informError(Object? error) => errorChange.informError(error);
+  void addOnErrorListener(void Function(Object? error) listener) {
+    errorChange.addListener(() => listener(errorChange.error));
+  }
+}
+
+class ErrorChange extends ChangeNotifier {
+  Object? error;
+
+  informError(Object? error) {
+    this.error = error;
+    notifyListeners();
   }
 }

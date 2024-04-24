@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:fimber/fimber.dart';
+import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:http/http.dart' as http;
 import 'package:lorem_ipsum/lorem_ipsum.dart';
@@ -60,34 +63,50 @@ class SearchProvider {
 
   SearchProvider(this.queryRetriever);
 
-  Future<SearchResults> doSearch(String query) async {
-    var searchResults = SearchResults(query: query, timestamp: DateTime.now());
-    for (var element in (await queryRetriever.query(query))) {
-      searchResults.add(element);
-    }
-    return searchResults;
-  }
+  Future<SearchResults> doSearch(String query) async =>
+      queryRetriever.query(query).then((searchResultsList) {
+        var searchResults =
+            SearchResults(query: query, timestamp: DateTime.now());
+        for (var element in searchResultsList) {
+          searchResults.add(element);
+        }
+        return searchResults;
+      });
 }
 
 class StaticRetriever implements QueryRetriever {
   @override
   Future<List<SearchResult>> query(String query) {
-    return Future.value([
-      SearchResult(
-          title: 'Agile Coach Jobs und Stellenangebote - 2024',
-          source: 'Stepstone',
-          link: 'https://www.stepstone.de/jobs/agile-coach',
-          snippet:
-              '... Systeme mbH · Scrum Master (m/w/d) / Agile Coach (m/w/d). GWS Gesellschaft für Warenwirtschafts-Systeme mbH. Münster. Teilweise Home-Office. Gehalt anzeigen.'),
-      SearchResult(
-          title: 'Result 2',
-          source: 'Other Test',
-          link: 'http://example-other.com'),
-      SearchResult(
-          title: 'Result $query',
-          source: loremIpsum(words: 2),
-          snippet: loremIpsum(words: 60),
-          link: 'http://example-other.com')
-    ]);
+    return Future.delayed(
+        Durations.long1,
+        () => [
+              SearchResult(
+                  title: 'Agile Coach Jobs und Stellenangebote - 2024',
+                  source: 'Stepstone',
+                  link: 'https://www.stepstone.de/jobs/agile-coach',
+                  snippet:
+                      '... Systeme mbH · Scrum Master (m/w/d) / Agile Coach (m/w/d). GWS Gesellschaft für Warenwirtschafts-Systeme mbH. Münster. Teilweise Home-Office. Gehalt anzeigen.'),
+              SearchResult(
+                  title: 'Result 2',
+                  source: 'Other Test',
+                  link: 'http://example-other.com'),
+              SearchResult(
+                  title: 'Result $query',
+                  source: loremIpsum(words: 2),
+                  snippet: loremIpsum(words: 60),
+                  link: 'http://example-other.com')
+            ]);
+  }
+}
+
+class PerformingSearchError implements Exception {
+  final String message;
+
+  PerformingSearchError(this.message);
+
+ @override
+  String toString() {
+    return '${runtimeType.toString()}: $message';
+
   }
 }

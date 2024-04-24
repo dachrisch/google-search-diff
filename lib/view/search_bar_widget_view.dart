@@ -41,6 +41,25 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
       });
     });
 
+    widget.searchBarController.addOnErrorListener((error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                alignment: Alignment.topCenter,
+                title: const Text('Error while searching'),
+                content: Text(error.toString()),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Dismiss'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ]);
+          });
+    });
+
     super.initState();
   }
 
@@ -63,7 +82,8 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
                     Icons.search,
                   ),
                   onPressed: () {
-                    widget.searchBarController.doSearch();
+                    QueryAction(widget.searchBarController)
+                        .invoke(const QueryIntent());
                   },
                 ),
                 IconButton(
