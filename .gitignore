@@ -44,3 +44,4 @@ app.*.map.json
 
 .keys.json
 .search
+android/fastlane/report.xml
