@@ -74,43 +74,30 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
     return Theme(
       data: GoogleSearchDiffScreenTheme.buildLightTheme(),
       child: Scaffold(
-          body: Stack(
+          body: Column(
             children: <Widget>[
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Column(
-                  children: <Widget>[
-                    getAppBarUI(),
-                    Expanded(
-                      child: CustomScrollView(slivers: [
-                        SliverAppBar(
-                          flexibleSpace: SearchBarWidget(
-                            retriever: widget.retriever,
-                            searchBarController: _searchBarController,
+              getAppBarUI(),
+              Expanded(
+                child: CustomScrollView(slivers: [
+                  SliverAppBar(
+                    flexibleSpace: SearchBarWidget(
+                      retriever: widget.retriever,
+                      searchBarController: _searchBarController,
+                    ),
+                  ),
+                  SliverFillRemaining(
+                      child: Container(
+                    color: GoogleSearchDiffScreenTheme.buildLightTheme()
+                        .colorScheme
+                        .background,
+                    child: isSearching
+                        ? const Center(child: CircularProgressIndicator())
+                        : SearchResultsView(
+                            controller: searchResultsController,
                           ),
-                        ),
-                        SliverFillRemaining(
-                            child: Container(
-                          color: GoogleSearchDiffScreenTheme.buildLightTheme()
-                              .colorScheme
-                              .background,
-                          child: isSearching
-                              ? const Center(child: CircularProgressIndicator())
-                              : SearchResultsView(
-                                  controller: searchResultsController,
-                                ),
-                        ))
-                      ]),
-                    )
-                  ],
-                ),
-              ),
+                  ))
+                ]),
+              )
             ],
           ),
           floatingActionButtonLocation:
