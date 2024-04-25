@@ -31,7 +31,6 @@ class _SearchBarWidgetView extends State<SearchBarAppBar> {
 
   @override
   void initState() {
-
     widget.searchBarController.addOnErrorListener((error) {
       showDialog(
           context: context,
@@ -82,26 +81,10 @@ class _SearchBarWidgetView extends State<SearchBarAppBar> {
             ),
             IconButton(
               icon: const Icon(Icons.filter_list),
-              onPressed: () => showBottomSheet(
+              onPressed: () => showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return SizedBox(
-                        height: 60,
-                        child: Column(children: [
-                          SegmentedButton(
-                            segments: const <ButtonSegment>[
-                              ButtonSegment(
-                                  value: 1,
-                                  icon: Icon(Icons.add),
-                                  label: Text('XS')),
-                              ButtonSegment(value: 2, label: Text('S')),
-                              ButtonSegment(value: 3, label: Text('M')),
-                            ],
-                            emptySelectionAllowed: true,
-                            multiSelectionEnabled: true,
-                            selected: {},
-                          )
-                        ]));
+                    return const SearchResultFilterView();
                   }),
             )
           ]),
@@ -109,48 +92,60 @@ class _SearchBarWidgetView extends State<SearchBarAppBar> {
   }
 }
 
-class SearchResultsFilterChip extends StatelessWidget {
-  final SearchResultsStatus searchResultsStatus;
-  final BorderRadius borderRadius;
-
-  const SearchResultsFilterChip({
+class SearchResultFilterView extends StatefulWidget {
+  const SearchResultFilterView({
     super.key,
-    required this.searchResultsStatus,
-    required this.borderRadius,
   });
 
-  static left(SearchResultsStatus searchResultsStatus) {
-    return SearchResultsFilterChip(
-        searchResultsStatus: searchResultsStatus,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)));
-  }
+  @override
+  State<StatefulWidget> createState() => _SearchResultFilterViewState();
+}
 
-  static middle(SearchResultsStatus searchResultsStatus) {
-    return SearchResultsFilterChip(
-        searchResultsStatus: searchResultsStatus,
-        borderRadius: const BorderRadius.all(Radius.zero));
-  }
-
-  static right(SearchResultsStatus searchResultsStatus) {
-    return SearchResultsFilterChip(
-        searchResultsStatus: searchResultsStatus,
-        borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(20), bottomRight: Radius.circular(20)));
-  }
+class _SearchResultFilterViewState extends State<SearchResultFilterView> {
+  Set<SearchResultsStatus> selected = SearchResultsStatus.values.toSet();
 
   @override
   Widget build(BuildContext context) {
-    return ChoiceChip(
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      label: Text(searchResultsStatus.name),
-      shape: RoundedRectangleBorder(borderRadius: borderRadius),
-      selected: true,
-      showCheckmark: false,
-      avatar: Icon(
-        searchResultsStatus.icon,
-        color: searchResultsStatus.color[900],
-      ),
-    );
+    return Card(
+        margin: const EdgeInsets.only(left: 30, right: 30, bottom: 10, top: 10),
+        child: Wrap(children: [
+          ListTile(
+              title: const Center(child: Text('Results filter')),
+              subtitle: SegmentedButton<SearchResultsStatus>(
+                segments: <ButtonSegment<SearchResultsStatus>>[
+                  SearchResultsStatusButtonSegment(SearchResultsStatus.added),
+                  SearchResultsStatusButtonSegment(
+                      SearchResultsStatus.existing),
+                  SearchResultsStatusButtonSegment(SearchResultsStatus.removed),
+                ],
+                emptySelectionAllowed: true,
+                multiSelectionEnabled: true,
+                showSelectedIcon: false,
+                onSelectionChanged: (newSelection) {
+                  setState(() {
+                    selected = newSelection;
+                  });
+                },
+                selected: selected,
+              )),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () {},
+              child: Text('Filter'),
+            ),
+          )
+        ]));
   }
+}
+
+class SearchResultsStatusButtonSegment
+    extends ButtonSegment<SearchResultsStatus> {
+  SearchResultsStatusButtonSegment(SearchResultsStatus s)
+      : super(
+            value: s,
+            icon: Icon(
+              s.icon,
+              color: s.color,
+            ),
+            label: Text(s.name));
 }

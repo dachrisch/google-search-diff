@@ -25,6 +25,7 @@ class SavedSearchedBadgeWidget extends StatelessWidget {
             visible: searchResultsController.itemCount() > 0 &&
                 !searchResultsStore.has(searchResultsController.searchResults),
             child: FloatingActionButton.small(
+
                 onPressed: () {
                   if (kDebugMode) {
                     logger.d('saving ${searchResultsController.searchResults}');
