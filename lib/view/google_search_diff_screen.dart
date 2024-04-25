@@ -1,4 +1,5 @@
 import 'package:fimber/fimber.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
@@ -8,7 +9,8 @@ import 'package:google_search_diff/service/search_provider.dart';
 import 'package:google_search_diff/service/searches_store.dart';
 import 'package:google_search_diff/view/google_search_app_bar.dart';
 import 'package:google_search_diff/view/saved_searched_badge_widget.dart';
-import 'package:google_search_diff/view/search_bar_widget_view.dart';
+import 'package:google_search_diff/view/search_bar_appbar.dart';
+import 'package:google_search_diff/view/search_results_view.dart';
 
 class GoogleSearchDiffScreen extends StatefulWidget {
   final QueryRetriever queryRetriever;
@@ -32,7 +34,8 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
 
   @override
   void initState() {
-    searchBarController = SearchBarController(SearchProvider(widget.queryRetriever));
+    searchBarController =
+        SearchBarController(SearchProvider(widget.queryRetriever));
     searchesStore.findAll().then((allSearches) {
       setState(() {
         allSearches?.entries
@@ -70,17 +73,18 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
     return Theme(
       data: GoogleSearchDiffScreenTheme.buildLightTheme(),
       child: Scaffold(
-        appBar: GoogleSearchAppBar(
-          searchResultsStore: searchResultsStore,
-          searchResultsController: searchResultsController,
-          searchBarController: searchBarController,
-        ),
+          appBar: GoogleSearchAppBar(
+            searchResultsStore: searchResultsStore,
+            searchResultsController: searchResultsController,
+            searchBarController: searchBarController,
+          ),
           body: Column(
             children: <Widget>[
-              SearchBarWidgetView(
+              SearchBarAppBar(
                   searchBarController: searchBarController,
                   searchResultsController: searchResultsController,
-                  queryRetriever: widget.queryRetriever)
+                  queryRetriever: widget.queryRetriever),
+              SearchResultsView(searchResultsController: searchResultsController, searchBarController: searchBarController,)
             ],
           ),
           floatingActionButtonLocation:

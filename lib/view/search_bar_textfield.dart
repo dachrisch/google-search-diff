@@ -6,13 +6,13 @@ import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 
-class SearchBarWidget extends StatelessWidget {
+class SearchBarTextField extends StatelessWidget {
   final SearchBarController searchBarController;
   final QueryRetriever retriever;
 
   final logger = FimberLog('search');
 
-  SearchBarWidget(
+  SearchBarTextField(
       {super.key, required this.searchBarController, required this.retriever});
 
   @override
