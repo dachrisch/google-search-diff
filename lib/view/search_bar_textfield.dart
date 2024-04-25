@@ -54,7 +54,12 @@ class SearchBarTextField extends StatelessWidget {
                     ),
                     cursorColor: GoogleSearchDiffScreenTheme.buildLightTheme()
                         .primaryColor,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () => ClearAction(
+                                  searchBarController.searchFieldController)
+                              .invoke(const ClearIntent()),
+                          icon: const Icon(Icons.clear_sharp)),
                       border: InputBorder.none,
                       hintText: 'Search...',
                     ),

@@ -23,10 +23,12 @@ class QueryAction extends Action<QueryIntent> {
 
 class ClearAction extends Action<ClearIntent> {
   final TextEditingController searchFieldController;
+  final FimberLog logger=FimberLog('clear');
   ClearAction(this.searchFieldController);
 
   @override
   Object? invoke(ClearIntent intent) {
+    logger.d('cleared search field');
     searchFieldController.clear();
     return null;
   }

@@ -75,8 +75,14 @@ class _SearchBarWidgetView extends State<SearchBarAppBar> {
               ),
               tooltip: 'Perform google search with query',
               onPressed: () {
-                QueryAction(widget.searchBarController)
-                    .invoke(const QueryIntent());
+                if (widget.searchBarController.searchFieldController.text !=
+                    '') {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  QueryAction(widget.searchBarController)
+                      .invoke(const QueryIntent());
+                }else{
+                  logger.d('Query empty, not searching.');
+                }
               },
             ),
             IconButton(

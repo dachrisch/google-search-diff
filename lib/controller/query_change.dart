@@ -57,7 +57,7 @@ class SearchBarController {
 
   void initialQuery(String query) => _queryChange.initialQuery(query);
 
-  void addQueryListener(void Function(String) listener) =>
+  void addQueryListener(void Function(String query) listener) =>
       _queryChange.addListener(() => listener(_queryChange.query));
 
   void informResults(SearchResults searchResults) =>

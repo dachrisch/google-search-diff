@@ -34,8 +34,7 @@ class _GoogleSearchAppBarState extends State<GoogleSearchAppBar> {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
+        padding: const EdgeInsets.only(left: 8, right: 8),
         child: Row(
           children: <Widget>[
             const Expanded(
