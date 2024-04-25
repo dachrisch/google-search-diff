@@ -137,7 +137,7 @@ class _SearchResultFilterViewState extends State<SearchResultFilterView> {
           ListTile(
             title: ElevatedButton(
               onPressed: () {},
-              child: Text('Filter'),
+              child: const Text('Filter'),
             ),
           )
         ]));
