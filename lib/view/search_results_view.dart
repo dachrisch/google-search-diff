@@ -8,7 +8,11 @@ import 'package:google_search_diff/view/search_result_list_tile.dart';
 class SearchResultsView extends StatefulWidget {
   final SearchResultsController searchResultsController;
   final SearchBarController searchBarController;
-  const SearchResultsView({super.key, required this.searchResultsController, required this.searchBarController});
+
+  const SearchResultsView(
+      {super.key,
+      required this.searchResultsController,
+      required this.searchBarController});
 
   @override
   State<StatefulWidget> createState() => _SearchResultsView();
@@ -17,7 +21,7 @@ class SearchResultsView extends StatefulWidget {
 class _SearchResultsView extends State<SearchResultsView> {
   final FimberLog logger = FimberLog('search-result');
 
-  bool isSearching=false;
+  bool isSearching = false;
 
   @override
   void initState() {
@@ -34,25 +38,30 @@ class _SearchResultsView extends State<SearchResultsView> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Container(
-          color: GoogleSearchDiffScreenTheme.buildLightTheme()
-              .colorScheme
-              .background,
-          child: ListView.builder(
-            key: const Key('search-results'),
-            itemCount: widget.searchResultsController.itemCount(),
-            padding: const EdgeInsets.only(top: 8),
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) => SearchResultListTile(
-                key: Key('search-result-tile-$index'),
-                doDelete: (searchResult) {
-                  logger.d('Removing $searchResult from list');
-                  setState(() {
-                    widget.searchResultsController.removeResult(searchResult);
-                  });
-                },
-                searchResult: widget.searchResultsController.resultAt(index)),
-          ),
-        ));
+        child: isSearching
+            ? const Center(child: CircularProgressIndicator())
+            : Container(
+                color: GoogleSearchDiffScreenTheme.buildLightTheme()
+                    .colorScheme
+                    .background,
+                child: ListView.builder(
+                  key: const Key('search-results'),
+                  itemCount: widget.searchResultsController.itemCount(),
+                  padding: const EdgeInsets.only(top: 8),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) =>
+                      SearchResultListTile(
+                          key: Key('search-result-tile-$index'),
+                          doDelete: (searchResult) {
+                            logger.d('Removing $searchResult from list');
+                            setState(() {
+                              widget.searchResultsController
+                                  .removeResult(searchResult);
+                            });
+                          },
+                          searchResult:
+                              widget.searchResultsController.resultAt(index)),
+                ),
+              ));
   }
 }
