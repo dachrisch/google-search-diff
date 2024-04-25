@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
     ));
     return MaterialApp(
       title: 'Google Search Diff',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: GoogleSearchDiffScreenTheme.buildLightTheme().textTheme,

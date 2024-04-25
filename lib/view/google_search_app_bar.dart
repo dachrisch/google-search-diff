@@ -2,20 +2,23 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
-import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:relative_time/relative_time.dart';
 
-class GoogleSearchAppBar extends StatefulWidget {
+class GoogleSearchAppBar extends StatefulWidget implements PreferredSizeWidget {
   final SearchResultsStore searchResultsStore;
   final SearchResultsController searchResultsController;
   final SearchBarController searchBarController;
+
+  @override
+  final Size preferredSize;
 
   const GoogleSearchAppBar(
       {super.key,
       required this.searchResultsStore,
       required this.searchResultsController,
-      required this.searchBarController});
+      required this.searchBarController})
+      : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
   State<StatefulWidget> createState() {
@@ -25,21 +28,11 @@ class GoogleSearchAppBar extends StatefulWidget {
 
 class _GoogleSearchAppBarState extends State<GoogleSearchAppBar> {
   final logger = FimberLog('appbar');
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: GoogleSearchDiffScreenTheme.buildLightTheme()
-            .colorScheme
-            .background,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, 2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Padding(
+    return AppBar(
+      title: Padding(
         padding: EdgeInsets.only(
             top: MediaQuery.of(context).padding.top, left: 8, right: 8),
         child: Row(

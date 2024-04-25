@@ -70,13 +70,13 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
     return Theme(
       data: GoogleSearchDiffScreenTheme.buildLightTheme(),
       child: Scaffold(
+        appBar: GoogleSearchAppBar(
+          searchResultsStore: searchResultsStore,
+          searchResultsController: searchResultsController,
+          searchBarController: searchBarController,
+        ),
           body: Column(
             children: <Widget>[
-              GoogleSearchAppBar(
-                searchResultsStore: searchResultsStore,
-                searchResultsController: searchResultsController,
-                searchBarController: searchBarController,
-              ),
               SearchBarWidgetView(
                   searchBarController: searchBarController,
                   searchResultsController: searchResultsController,

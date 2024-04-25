@@ -74,6 +74,10 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
         child: Expanded(
           child: CustomScrollView(slivers: [
             SliverAppBar(
+              title: SearchBarWidget(
+                retriever: widget.queryRetriever,
+                searchBarController: widget.searchBarController,
+              ),
               pinned: true,
               actions: [
                 IconButton(
@@ -92,17 +96,14 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
                       SearchResultsStatus.values.length,
                       (index) => MenuItemButton(
                             child: ListTile(
-                              leading:  Icon(
+                              leading: Icon(
                                 SearchResultsStatus.values[index].icon,
                                 color: SearchResultsStatus
                                     .values[index].color[400],
                               ),
                               title:
                                   Text(SearchResultsStatus.values[index].name),
-                              onTap: () {
-                                
-                              },
-                              
+                              onTap: () {},
                               selected: true,
                             ),
                           )),
@@ -121,10 +122,6 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
                   ),
                 )
               ],
-              flexibleSpace: SearchBarWidget(
-                retriever: widget.queryRetriever,
-                searchBarController: widget.searchBarController,
-              ),
             ),
             SliverFillRemaining(
                 child: Container(
@@ -139,5 +136,51 @@ class _SearchBarWidgetView extends State<SearchBarWidgetView> {
             ))
           ]),
         ));
+  }
+}
+
+class SearchResultsFilterChip extends StatelessWidget {
+  final SearchResultsStatus searchResultsStatus;
+  final BorderRadius borderRadius;
+
+  const SearchResultsFilterChip({
+    super.key,
+    required this.searchResultsStatus,
+    required this.borderRadius,
+  });
+
+  static left(SearchResultsStatus searchResultsStatus) {
+    return SearchResultsFilterChip(
+        searchResultsStatus: searchResultsStatus,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)));
+  }
+
+  static middle(SearchResultsStatus searchResultsStatus) {
+    return SearchResultsFilterChip(
+        searchResultsStatus: searchResultsStatus,
+        borderRadius: const BorderRadius.all(Radius.zero));
+  }
+
+  static right(SearchResultsStatus searchResultsStatus) {
+    return SearchResultsFilterChip(
+        searchResultsStatus: searchResultsStatus,
+        borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(20), bottomRight: Radius.circular(20)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      label: Text(searchResultsStatus.name),
+      shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      selected: true,
+      showCheckmark: false,
+      avatar: Icon(
+        searchResultsStatus.icon,
+        color: searchResultsStatus.color[900],
+      ),
+    );
   }
 }

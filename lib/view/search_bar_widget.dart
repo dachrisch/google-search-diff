@@ -18,12 +18,12 @@ class SearchBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 24, top: 8, bottom: 8),
+      padding: const EdgeInsets.only(left: 16, right: 0, top: 8, bottom: 8),
       child: Row(
         children: <Widget>[
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right: 16, top: 4, bottom: 4),
+              padding: const EdgeInsets.only(right: 0, top: 4, bottom: 4),
               child: Container(
                 decoration: BoxDecoration(
                   color: GoogleSearchDiffScreenTheme.buildLightTheme()
@@ -40,8 +40,7 @@ class SearchBarWidget extends StatelessWidget {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 0, bottom: 0),
+                  padding: const EdgeInsets.only(left: 16),
                   child: TextField(
                     key: const Key('search-query-field'),
                     textInputAction: TextInputAction.search,
