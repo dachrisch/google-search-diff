@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/page/results_scaffold.dart';
+import 'package:google_search_diff/_new/routes/routes.dart';
 import 'package:google_search_diff/_new/widget/results_card.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,7 @@ void main() {
   testWidgets('Adds a single query and removes it',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQuery = QueryModel('Test query');
+    var searchQuery = QueryModel(Query('Test query'));
     await tester.pumpWidget(ScaffoldValueProviderTestApp<QueryModel>(
       providedValue: searchQuery,
       scaffoldUnderTest: const ResultsScaffold(),

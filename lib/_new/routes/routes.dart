@@ -4,20 +4,27 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/provider/query_scaffold_model.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
+import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
-import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:provider/provider.dart';
+
 class ResultModel {
   final String title;
   final String source;
   final String link;
   final String snippet;
 
-  ResultModel({required this.title,  this.source='', this.link='',  this.snippet=''});
+  ResultModel(
+      {required this.title,
+      this.source = '',
+      this.link = '',
+      this.snippet = ''});
 }
+
 class Query {
   final String query;
-  Query(this. query);
+
+  Query(this.query);
 }
 
 class RouterApp extends StatelessWidget {
@@ -31,7 +38,12 @@ class RouterApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<QueriesStoreModel>(
             create: (BuildContext context) => QueriesStoreModel()),
-        Provider<SearchService>(create: (BuildContext context) => LoremIpsumSearchService(),)
+        Provider<SearchService>(
+          create: (BuildContext context) => LoremIpsumSearchService(),
+        ),
+        Provider<HistoryService>(
+          create: (BuildContext context) => HistoryService(),
+        )
       ],
       child: MaterialApp.router(
         theme: theme,

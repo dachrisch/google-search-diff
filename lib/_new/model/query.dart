@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
+import 'package:google_search_diff/_new/routes/routes.dart';
 
 class QueryModel extends ChangeNotifier {
-  final String query;
+  final Query query;
   final List<ResultsModel> _results = [];
   final QueryId queryId;
 

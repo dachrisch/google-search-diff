@@ -32,7 +32,7 @@ class SingleQueryCard extends StatelessWidget {
                 onPressed: () => searchQuery.addResults(ResultsModel()),
               ),
             ),
-            title: Text(searchQuery.query),
+            title: Text(searchQuery.query.query),
             subtitle: Column(
               children: [Text('Results: ${searchQuery.items}')],
             ),

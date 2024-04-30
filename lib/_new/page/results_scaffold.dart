@@ -18,7 +18,7 @@ class ResultsScaffold extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(searchQuery.query),
+        title: Text(searchQuery.query.query),
       ),
       body: ListView.builder(
           itemCount: searchQuery.items,

@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/routes/routes.dart';
+import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 
 class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   final SearchService searchProvider;
+  final HistoryService historyService;
+  final void Function(String query) onSave;
 
-  SearchProviderSearchDelegate({required this.searchProvider});
+  SearchProviderSearchDelegate(
+      {required this.searchProvider,
+      required this.historyService,
+      required this.onSave})
+      : super(searchFieldLabel: 'Search...');
 
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
-          onPressed: query.isNotEmpty ? () {} : null,
+          onPressed: () {
+            if(query.isEmpty) {
+              return null;
+            }else {
+              onSave(query);
+            }
+          },
           icon: const Icon(Icons.favorite_outline)),
       IconButton(
         icon: const Icon(Icons.clear),
@@ -32,6 +45,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
 
   @override
   Widget buildResults(BuildContext context) {
+    historyService.addQuery(Query(query));
     return FutureBuilder<List<ResultModel>>(
       future: searchProvider.doSearch(Query(query)),
       builder: (context, snapshot) {
@@ -52,7 +66,12 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    var suggestions = historyService.getMatching(Query(query));
     return ListView.builder(
-        itemBuilder: (context, index) => null, itemCount: 0);
+        itemBuilder: (context, index) => ListTile(
+              title: Text(suggestions[index].query),
+              onTap: () => query = suggestions[index].query,
+            ),
+        itemCount: suggestions.length);
   }
 }
