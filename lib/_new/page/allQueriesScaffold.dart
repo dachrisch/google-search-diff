@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/searchQuery.dart';
 import 'package:google_search_diff/_new/model/searchQueryStore.dart';
-import 'package:google_search_diff/_new/widget/singleQueryView.dart';
+import 'package:google_search_diff/_new/provider/singeQueryModelProvider.dart';
+import 'package:google_search_diff/_new/widget/singleQueryCard.dart';
 import 'package:provider/provider.dart';
 
-class AllQueriesPage extends StatelessWidget {
-  const AllQueriesPage({super.key});
+class AllQueriesScaffold extends StatelessWidget {
+  const AllQueriesScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class AllQueriesPage extends StatelessWidget {
       ),
       body: ListView.builder(
         itemCount: searchQueries.items,
-        itemBuilder: (context, index) => SingleQueryViewProvider(searchQuery:  searchQueries.at(index)),
+        itemBuilder: (context, index) => SingleQueryModelProvider(searchQuery:  searchQueries.at(index)),
       ),
       floatingActionButton: FloatingActionButton.small(
           onPressed: () {
@@ -28,15 +29,3 @@ class AllQueriesPage extends StatelessWidget {
   }
 }
 
-class SingleQueryViewProvider extends StatelessWidget {
-  final SearchQueryModel searchQuery;
-
-  const SingleQueryViewProvider({super.key, required this.searchQuery});
-
-  @override
-  Widget build(BuildContext context) {
-
-    return ChangeNotifierProvider.value(
-        value: searchQuery, child: SingleQueryView());
-  }
-}

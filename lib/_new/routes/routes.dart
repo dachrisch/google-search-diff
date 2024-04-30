@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/searchQueryStore.dart';
-import 'package:google_search_diff/_new/query/singleQueryPage.dart';
-import 'package:google_search_diff/_new/widget/allQueriesPage.dart';
+import 'package:google_search_diff/_new/provider/singleQueryModelProvider.dart';
+import 'package:google_search_diff/_new/page/singleQueryScaffold.dart';
+import 'package:google_search_diff/_new/routes/queryId.dart';
+import 'package:google_search_diff/_new/page/allQueriesScaffold.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -35,26 +37,16 @@ class RouterConfigBuilder {
         routes: [
           GoRoute(
               path: '/queries',
-              builder: (context, state) => const AllQueriesPage(),
+              builder: (context, state) => const AllQueriesScaffold(),
               routes: [
                 GoRoute(
                   path: ':queryId',
                   builder: (context, state) => Provider<QueryId>.value(
                       value: QueryId.fromState(state),
-                      child: SingleQueryPageProvider()),
+                      child: const SingleQueryModelProvider()),
                 )
               ]),
         ],
       );
 }
 
-class QueryId {
-  final String queryId;
-
-  QueryId(this.queryId);
-
-  static fromState(GoRouterState state) =>
-      QueryId(state.pathParameters['queryId']!);
-
-  static withUuid() => QueryId(Uuid().v4());
-}

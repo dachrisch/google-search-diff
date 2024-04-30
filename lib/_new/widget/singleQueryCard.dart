@@ -4,8 +4,8 @@ import 'package:google_search_diff/_new/model/searchQuery.dart';
 import 'package:google_search_diff/_new/model/searchQueryStore.dart';
 import 'package:provider/provider.dart';
 
-class SingleQueryView extends StatelessWidget {
-  const SingleQueryView({
+class SingleQueryCard extends StatelessWidget {
+  const SingleQueryCard({
     super.key,
   });
 
