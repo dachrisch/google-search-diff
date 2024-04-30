@@ -19,6 +19,6 @@ class SearchQueriesStore extends ChangeNotifier {
 
   SearchQueryModel at(int index) => searchQueries[index];
 
-  SearchQueryModel findById(QueryId queryId) => searchQueries
-      .firstWhere((element) => element.queryId == queryId);
+  SearchQueryModel findById(QueryId queryId) =>
+      searchQueries.firstWhere((element) => element.queryId == queryId);
 }

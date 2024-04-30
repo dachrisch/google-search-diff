@@ -5,6 +5,7 @@ import 'package:google_search_diff/_new/page/allQueriesScaffold.dart';
 import 'package:google_search_diff/_new/widget/singleQueryCard.dart';
 import 'package:provider/provider.dart';
 
+import 'util/testProvider.dart';
 import 'widget_tester_extension.dart';
 
 void main() {
@@ -24,27 +25,13 @@ void main() {
     expect(searchQueriesStore.items, 1);
     expect(find.byType(SingleQueryCard), findsNWidgets(1));
 
-    await tester.tapButtonByKey('delete-search-query-${searchQueriesStore.at(0).queryId}');
+    expect(find.widgetWithText(Column, 'Results: 0'), findsOneWidget);
+    await tester.tapButtonByKey('refresh-query-results-outside-button');
+    expect(find.widgetWithText(Column, 'Results: 1'), findsOneWidget);
+
+    await tester.tapButtonByKey(
+        'delete-search-query-${searchQueriesStore.at(0).queryId}');
     expect(searchQueriesStore.items, 0);
     expect(find.byType(SingleQueryCard), findsNWidgets(0));
   });
-}
-
-class ScaffoldValueProviderTestApp<T extends ChangeNotifier>
-    extends StatelessWidget {
-  final Widget scaffoldUnderTest;
-  final T providedValue;
-
-  const ScaffoldValueProviderTestApp({
-    super.key,
-    required this.providedValue,
-    required this.scaffoldUnderTest,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        home: ChangeNotifierProvider<T>.value(
-            value: providedValue, child: scaffoldUnderTest));
-  }
 }

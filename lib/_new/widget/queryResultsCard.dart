@@ -24,6 +24,7 @@ class QueryResultCard extends StatelessWidget {
                     border: Border(
                         left: BorderSide(width: 1.0, color: Colors.white))),
                 child: IconButton(
+                  key: Key('delete-query-results-${queryResults.resultsId}'),
                   icon: const Icon(Icons.delete),
                   onPressed: () => searchQuery.removeResults(queryResults),
                 )),

@@ -21,10 +21,11 @@ class SingleQueryScaffold extends StatelessWidget {
         title: Text(searchQuery.query),
       ),
       body: ListView.builder(
-          itemCount: searchQuery.results.length,
+          itemCount: searchQuery.items,
           itemBuilder: (context, index) =>
               QueryResultCard(searchQuery.resultsAt(index))),
       floatingActionButton: FloatingActionButton.small(
+          key: const Key('refresh-query-results-button'),
           onPressed: () => searchQuery.addResults(QueryResultsModel()),
           child: const Icon(Icons.refresh_outlined)),
     );

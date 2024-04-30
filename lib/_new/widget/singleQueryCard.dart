@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_search_diff/_new/model/queryResults.dart';
 import 'package:google_search_diff/_new/model/searchQuery.dart';
 import 'package:google_search_diff/_new/model/searchQueryStore.dart';
 import 'package:provider/provider.dart';
@@ -26,20 +27,21 @@ class SingleQueryCard extends StatelessWidget {
                   border: Border(
                       right: BorderSide(width: 1.0, color: Colors.white))),
               child: IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () {},
+                key: const Key('refresh-query-results-outside-button'),
+                icon: const Icon(Icons.refresh_outlined),
+                onPressed: () => searchQuery.addResults(QueryResultsModel()),
               ),
             ),
             title: Text(searchQuery.query),
             subtitle: Column(
-              children: [Text('Results: ${searchQuery.results.length}')],
+              children: [Text('Results: ${searchQuery.items}')],
             ),
             trailing: Container(
                 decoration: const BoxDecoration(
                     border: Border(
                         left: BorderSide(width: 1.0, color: Colors.white))),
                 child: IconButton(
-                  key:Key('delete-search-query-${searchQuery.queryId}'),
+                  key: Key('delete-search-query-${searchQuery.queryId}'),
                   icon: const Icon(Icons.delete),
                   onPressed: () => searchQueriesStore.remove(searchQuery),
                 )),

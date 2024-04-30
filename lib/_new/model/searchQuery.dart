@@ -4,21 +4,22 @@ import 'package:google_search_diff/_new/routes/queryId.dart';
 
 class SearchQueryModel extends ChangeNotifier {
   final String query;
-  final List<QueryResultsModel> results = [];
-
+  final List<QueryResultsModel> _results = [];
   final QueryId queryId;
 
   SearchQueryModel(this.query) : queryId = QueryId.withUuid();
 
-  QueryResultsModel resultsAt(int index) => results[index];
+  int get items => _results.length;
+
+  QueryResultsModel resultsAt(int index) => _results[index];
 
   addResults(QueryResultsModel queryResults) {
-    results.add(queryResults);
+    _results.add(queryResults);
     notifyListeners();
   }
 
   removeResults(QueryResultsModel queryResults) {
-    results.remove(queryResults);
+    _results.remove(queryResults);
     notifyListeners();
   }
 }

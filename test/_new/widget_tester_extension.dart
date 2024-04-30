@@ -14,4 +14,3 @@ extension ButtonTap on WidgetTester {
     return pumpAndSettle(); // https://stackoverflow.com/questions/49542389/flutter-get-a-popupmenubuttons-popupmenuitem-text-in-unit-tests
   }
 }
-
