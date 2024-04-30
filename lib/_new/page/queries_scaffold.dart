@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
 import 'package:google_search_diff/_new/provider/query_card_model.dart';
+import 'package:google_search_diff/_new/routes/routes.dart';
+import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
+
+
 
 class QueriesScaffold extends StatelessWidget {
   const QueriesScaffold({super.key});
@@ -9,10 +14,20 @@ class QueriesScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QueriesStoreModel searchQueries = context.watch<QueriesStoreModel>();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Appbar title'),
+        title: const Text('SearchWizard'),
+        actions: [
+          IconButton(
+              onPressed: () => showSearch(
+                  context: context,
+                  delegate: SearchProviderSearchDelegate(
+                      searchProvider: context.read<SearchService>())),
+              icon: const Icon(Icons.search)),
+          const SizedBox(width: 16)
+        ],
       ),
       body: ListView.builder(
         itemCount: searchQueries.items,
