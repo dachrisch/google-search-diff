@@ -19,7 +19,7 @@ class SingleQueryCard extends StatelessWidget {
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: InkWell(
-          onTap: () => context.go('/queries/${searchQuery.queryId.queryId}'),
+          onTap: () => context.go('/queries/${searchQuery.queryId}'),
           child: ListTile(
             leading: Container(
               decoration: const BoxDecoration(
@@ -39,6 +39,7 @@ class SingleQueryCard extends StatelessWidget {
                     border: Border(
                         left: BorderSide(width: 1.0, color: Colors.white))),
                 child: IconButton(
+                  key:Key('delete-search-query-${searchQuery.queryId}'),
                   icon: const Icon(Icons.delete),
                   onPressed: () => searchQueriesStore.remove(searchQuery),
                 )),

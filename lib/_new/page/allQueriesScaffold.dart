@@ -20,6 +20,7 @@ class AllQueriesScaffold extends StatelessWidget {
             SingleQueryModelProvider(searchQuery: searchQueries.at(index)),
       ),
       floatingActionButton: FloatingActionButton.small(
+        key: const Key('add-search-query-button'),
           onPressed: () {
             searchQueries.add('new ${searchQueries.items}');
           },
