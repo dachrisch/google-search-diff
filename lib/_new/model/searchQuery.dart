@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/queryResults.dart';
 import 'package:google_search_diff/_new/routes/queryId.dart';
-import 'package:google_search_diff/_new/routes/routes.dart';
 
 class SearchQueryModel extends ChangeNotifier {
   final String query;
@@ -23,4 +22,3 @@ class SearchQueryModel extends ChangeNotifier {
     notifyListeners();
   }
 }
-

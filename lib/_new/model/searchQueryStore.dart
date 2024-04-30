@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/searchQuery.dart';
 import 'package:google_search_diff/_new/routes/queryId.dart';
-import 'package:google_search_diff/_new/routes/routes.dart';
 
 class SearchQueriesStore extends ChangeNotifier {
   final List<SearchQueryModel> searchQueries = [];
@@ -20,6 +19,6 @@ class SearchQueriesStore extends ChangeNotifier {
 
   SearchQueryModel at(int index) => searchQueries[index];
 
-  SearchQueryModel findById(QueryId queryId) =>
-      searchQueries.firstWhere((element) => element.queryId.queryId == queryId.queryId);
+  SearchQueryModel findById(QueryId queryId) => searchQueries
+      .firstWhere((element) => element.queryId.queryId == queryId.queryId);
 }

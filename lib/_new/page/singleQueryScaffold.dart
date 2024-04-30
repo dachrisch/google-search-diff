@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/queryResults.dart';
 import 'package:google_search_diff/_new/model/searchQuery.dart';
-import 'package:google_search_diff/_new/model/searchQueryStore.dart';
-import 'package:google_search_diff/_new/routes/queryId.dart';
-import 'package:google_search_diff/_new/routes/routes.dart';
 import 'package:google_search_diff/_new/widget/queryResultsCard.dart';
 import 'package:provider/provider.dart';
-
 
 class SingleQueryScaffold extends StatelessWidget {
   const SingleQueryScaffold({
@@ -34,4 +30,3 @@ class SingleQueryScaffold extends StatelessWidget {
     );
   }
 }
-

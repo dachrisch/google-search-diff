@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/searchQueryStore.dart';
-import 'package:google_search_diff/_new/provider/singleQueryModelProvider.dart';
-import 'package:google_search_diff/_new/page/singleQueryScaffold.dart';
-import 'package:google_search_diff/_new/routes/queryId.dart';
 import 'package:google_search_diff/_new/page/allQueriesScaffold.dart';
+import 'package:google_search_diff/_new/provider/singleQueryModelProvider.dart';
+import 'package:google_search_diff/_new/routes/queryId.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class RouterApp extends StatelessWidget {
   const RouterApp({super.key});
@@ -49,4 +47,3 @@ class RouterConfigBuilder {
         ],
       );
 }
-

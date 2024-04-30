@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/queryResults.dart';
 import 'package:google_search_diff/_new/model/searchQuery.dart';
