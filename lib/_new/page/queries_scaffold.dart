@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_search_diff/_new/model/searchQueryStore.dart';
-import 'package:google_search_diff/_new/provider/singeQueryModelProvider.dart';
+import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/provider/query_card_model.dart';
 import 'package:provider/provider.dart';
 
-class AllQueriesScaffold extends StatelessWidget {
-  const AllQueriesScaffold({super.key});
+class QueriesScaffold extends StatelessWidget {
+  const QueriesScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
-    SearchQueriesStore searchQueries = context.watch<SearchQueriesStore>();
+    QueriesStoreModel searchQueries = context.watch<QueriesStoreModel>();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -17,7 +17,7 @@ class AllQueriesScaffold extends StatelessWidget {
       body: ListView.builder(
         itemCount: searchQueries.items,
         itemBuilder: (context, index) =>
-            SingleQueryModelProvider(searchQuery: searchQueries.at(index)),
+            QueryCardQueryModelProvider(searchQuery: searchQueries.at(index)),
       ),
       floatingActionButton: FloatingActionButton.small(
           key: const Key('add-search-query-button'),

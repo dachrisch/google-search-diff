@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/_new/model/queryResults.dart';
-import 'package:google_search_diff/_new/model/searchQuery.dart';
-import 'package:google_search_diff/_new/model/searchQueryStore.dart';
+import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/query.dart';
+import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:provider/provider.dart';
 
 class SingleQueryCard extends StatelessWidget {
@@ -12,9 +12,9 @@ class SingleQueryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SearchQueryModel searchQuery = context.watch<SearchQueryModel>();
+    QueryModel searchQuery = context.watch<QueryModel>();
 
-    SearchQueriesStore searchQueriesStore = context.watch<SearchQueriesStore>();
+    QueriesStoreModel searchQueriesStore = context.watch<QueriesStoreModel>();
 
     return Card(
       elevation: 4.0,
@@ -29,7 +29,7 @@ class SingleQueryCard extends StatelessWidget {
               child: IconButton(
                 key: const Key('refresh-query-results-outside-button'),
                 icon: const Icon(Icons.refresh_outlined),
-                onPressed: () => searchQuery.addResults(QueryResultsModel()),
+                onPressed: () => searchQuery.addResults(ResultsModel()),
               ),
             ),
             title: Text(searchQuery.query),

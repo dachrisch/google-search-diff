@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/_new/model/uuidMixin.dart';
+import 'package:google_search_diff/_new/model/uuid_mixin.dart';
 import 'package:uuid/uuid.dart';
 
 class QueryId with UuidMixin {

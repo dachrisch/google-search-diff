@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/_new/model/searchQueryStore.dart';
-import 'package:google_search_diff/_new/page/allQueriesScaffold.dart';
-import 'package:google_search_diff/_new/provider/singleQueryModelProvider.dart';
-import 'package:google_search_diff/_new/routes/queryId.dart';
-import 'package:google_search_diff/main.dart';
+import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/page/queries_scaffold.dart';
+import 'package:google_search_diff/_new/provider/query_scaffold_model.dart';
+import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:provider/provider.dart';
 
 class RouterApp extends StatelessWidget {
-  const RouterApp({super.key});
+  final ThemeData theme;
+
+  const RouterApp({super.key, required this.theme});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<SearchQueriesStore>(
-            create: (BuildContext context) => SearchQueriesStore()),
+        ChangeNotifierProvider<QueriesStoreModel>(
+            create: (BuildContext context) => QueriesStoreModel()),
       ],
       child: MaterialApp.router(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: GoogleSearchDiffScreenTheme.buildLightTheme().textTheme,
-          platform: TargetPlatform.iOS,
-        ),
+        theme: theme,
         routerConfig: RouterConfigBuilder.build(),
       ),
     );
@@ -35,13 +32,13 @@ class RouterConfigBuilder {
         routes: [
           GoRoute(
               path: '/queries',
-              builder: (context, state) => const AllQueriesScaffold(),
+              builder: (context, state) => const QueriesScaffold(),
               routes: [
                 GoRoute(
                   path: ':queryId',
                   builder: (context, state) => Provider<QueryId>.value(
                       value: QueryId.fromState(state),
-                      child: const SingleQueryModelProvider()),
+                      child: const QueryScaffoldQueryModelProvider()),
                 )
               ]),
         ],

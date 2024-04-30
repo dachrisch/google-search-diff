@@ -1,4 +1,4 @@
-import 'package:google_search_diff/_new/model/uuidMixin.dart';
+import 'package:google_search_diff/_new/model/uuid_mixin.dart';
 import 'package:uuid/uuid.dart';
 
 class ResultsId with UuidMixin {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_search_diff/_new/model/searchQueryStore.dart';
-import 'package:google_search_diff/_new/page/allQueriesScaffold.dart';
-import 'package:google_search_diff/_new/widget/singleQueryCard.dart';
+import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/page/queries_scaffold.dart';
+import 'package:google_search_diff/_new/widget/query_card.dart';
 import 'package:provider/provider.dart';
 
 import 'util/testProvider.dart';
@@ -12,10 +12,10 @@ void main() {
   testWidgets('Adds a single query and removes it',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQueriesStore = SearchQueriesStore();
-    await tester.pumpWidget(ScaffoldValueProviderTestApp<SearchQueriesStore>(
+    var searchQueriesStore = QueriesStoreModel();
+    await tester.pumpWidget(ScaffoldValueProviderTestApp<QueriesStoreModel>(
       providedValue: searchQueriesStore,
-      scaffoldUnderTest: const AllQueriesScaffold(),
+      scaffoldUnderTest: const QueriesScaffold(),
     ));
 
     expect(find.byType(SingleQueryCard), findsNWidgets(0));
