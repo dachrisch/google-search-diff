@@ -1,4 +1,4 @@
-package com.example.google_search_diff
+package de.bumbleflies.app
 
 import io.flutter.embedding.android.FlutterActivity
 
