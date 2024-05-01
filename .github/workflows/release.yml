@@ -43,6 +43,7 @@ jobs:
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
+          echo "# from github action" >> android/local.properties
           echo "release.store.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.alias=key0" >> android/local.properties
