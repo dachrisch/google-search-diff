@@ -63,12 +63,11 @@ jobs:
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
+          echo "# from github action" >> android/local.properties
           echo "release.store.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.alias=key0" >> android/local.properties
           echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
-          cat android/local.properties
-          pwd
       - name: Build APK
         run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}} -t lib/router.dart
       - name: Archive APK
