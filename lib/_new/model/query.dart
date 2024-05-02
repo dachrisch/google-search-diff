@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
-import 'package:google_search_diff/_new/routes/routes.dart';
 
 class QueryModel extends ChangeNotifier {
   final Query query;
@@ -23,4 +22,21 @@ class QueryModel extends ChangeNotifier {
     _results.remove(queryResults);
     notifyListeners();
   }
+}
+
+class Query {
+  final String query;
+
+  Query(this.query);
+
+  @override
+  int get hashCode => query.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Query && other.query == query;
+  }
+
+  @override
+  String toString() => query.toString();
 }

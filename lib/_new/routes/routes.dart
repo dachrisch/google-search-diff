@@ -8,25 +8,6 @@ import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
 
-class ResultModel {
-  final String title;
-  final String source;
-  final String link;
-  final String snippet;
-
-  ResultModel(
-      {required this.title,
-      this.source = '',
-      this.link = '',
-      this.snippet = ''});
-}
-
-class Query {
-  final String query;
-
-  Query(this.query);
-}
-
 class RouterApp extends StatelessWidget {
   final ThemeData theme;
 
@@ -41,7 +22,7 @@ class RouterApp extends StatelessWidget {
         Provider<SearchService>(
           create: (BuildContext context) => LoremIpsumSearchService(),
         ),
-        Provider<HistoryService>(
+        ChangeNotifierProvider<HistoryService>(
           create: (BuildContext context) => HistoryService(),
         )
       ],

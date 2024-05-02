@@ -10,8 +10,7 @@ mixin UuidMixin {
   int get hashCode => _id.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      other.runtimeType == runtimeType && _id == (other as UuidMixin)._id;
+  bool operator ==(Object other) => other is UuidMixin && _id == other._id;
 
   void initId(String id) => _id = id;
 }

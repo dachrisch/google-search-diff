@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/_new/model/results.dart';
-import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/model/query.dart';
+import 'package:google_search_diff/_new/model/results.dart';
 import 'package:provider/provider.dart';
 
 class SingleQueryCard extends StatelessWidget {
