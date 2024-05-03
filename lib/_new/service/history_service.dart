@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 
 class HistoryService extends ChangeNotifier {

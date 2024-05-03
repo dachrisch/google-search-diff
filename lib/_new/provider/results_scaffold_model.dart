@@ -5,8 +5,8 @@ import 'package:google_search_diff/_new/page/results_scaffold.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:provider/provider.dart';
 
-class QueryScaffoldQueryModelProvider extends StatelessWidget {
-  const QueryScaffoldQueryModelProvider({super.key});
+class ResultsScaffoldQueryModelProvider extends StatelessWidget {
+  const ResultsScaffoldQueryModelProvider({super.key});
 
   @override
   Widget build(BuildContext context) {

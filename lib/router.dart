@@ -16,9 +16,8 @@ void main() async {
   var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
   var queriesStore = QueriesStoreModel();
-  queriesStore.add(QueryModel(Query('Saved query 1'), results: [
-    ResultsModel(Query('Saved query 1'), [ResultModel(title: 'result 1')])
-  ]));
+  queriesStore.add(QueryModel.fromResultsModel(
+      ResultsModel(Query('Saved query 1'), [ResultModel(title: 'result 1')])));
 
   SharedPreferences.getInstance()
       .then((prefs) => prefs.setInt('refreshEvery', 10))

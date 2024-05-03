@@ -1,23 +1,30 @@
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/results_id.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 
 class QueryModel extends ChangeNotifier {
   final Query query;
-  final List<ResultsModel> results;
+  final SplayTreeSet<ResultsModel> results;
   final QueryId queryId;
 
   static QueryModel fromResultsModel(ResultsModel resultsModel) {
-    return QueryModel(resultsModel.query, results: [resultsModel]);
+    return QueryModel(resultsModel.query,
+        results: SplayTreeSet.of([resultsModel],
+            (key1, key2) => ResultsModel.compare(key1, key2, reverse: true)));
   }
 
-  QueryModel(this.query, {List<ResultsModel>? results})
-      : results = results ?? List<ResultsModel>.empty(growable: true),
+  QueryModel(this.query, {SplayTreeSet<ResultsModel>? results})
+      : results = results ??
+            SplayTreeSet<ResultsModel>((key1, key2) =>
+                ResultsModel.compare(key1, key2, reverse: true)),
         queryId = QueryId.withUuid();
 
   int get items => results.length;
 
-  ResultsModel resultsAt(int index) => results[index];
+  ResultsModel resultsAt(int index) => results.elementAt(index);
 
   ResultsModel get latest => results.reduce((current, next) =>
       current.queryDate.isAfter(next.queryDate) ? current : next);
@@ -31,6 +38,9 @@ class QueryModel extends ChangeNotifier {
     results.remove(queryResults);
     notifyListeners();
   }
+
+  ResultsModel findById(ResultsId resultsId) =>
+      results.firstWhere((value) => value.resultsId == resultsId);
 }
 
 class Query {

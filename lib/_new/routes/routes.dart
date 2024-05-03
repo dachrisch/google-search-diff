@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/model/results_id.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
-import 'package:google_search_diff/_new/provider/query_scaffold_model.dart';
+import 'package:google_search_diff/_new/page/result_scaffold.dart';
+import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
@@ -53,16 +55,34 @@ class RouterConfigBuilder {
   static build() => GoRouter(
         initialLocation: '/queries',
         routes: [
+          GoRoute(path: '/', redirect: (context, state) => '/queries'),
           GoRoute(
               path: '/queries',
               builder: (context, state) => const QueriesScaffold(),
               routes: [
                 GoRoute(
                   path: ':queryId',
-                  builder: (context, state) => Provider<QueryId>.value(
-                      value: QueryId.fromState(state),
-                      child: const QueryScaffoldQueryModelProvider()),
-                )
+                  redirect: (context, state) {
+                    final queryId = state.pathParameters['queryId'];
+                    return '/queries/$queryId/results';
+                  },
+                ),
+                GoRoute(
+                    path: ':queryId/results',
+                    builder: (context, state) => Provider<QueryId>.value(
+                        value: QueryId.fromState(state),
+                        child: const ResultsScaffoldQueryModelProvider()),
+                    routes: [
+                      GoRoute(
+                        path: ':resultsId',
+                        builder: (context, state) => MultiProvider(providers: [
+                          Provider<ResultsId>.value(
+                              value: ResultsId.fromState(state)),
+                          Provider<QueryId>.value(
+                              value: QueryId.fromState(state))
+                        ], child: ResultScaffoldResultsModelProvider()),
+                      )
+                    ])
               ]),
         ],
       );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/results.dart';
-import 'package:google_search_diff/_new/widget/results_card.dart';
+import 'package:google_search_diff/_new/provider/query_result_model.dart';
 import 'package:provider/provider.dart';
 
 class ResultsScaffold extends StatelessWidget {
@@ -11,19 +11,19 @@ class ResultsScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var searchQuery = context.watch<QueryModel>();
+    QueryModel searchQuery = context.watch<QueryModel>();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(searchQuery.query.query),
+        title: Text('Query - ${searchQuery.query.query}'),
       ),
       body: ListView.builder(
           itemCount: searchQuery.items,
-          itemBuilder: (context, index) =>
-              QueryResultCard(searchQuery.resultsAt(index))),
+          itemBuilder: (context, index) => QueryResultCardResultsModelProvider(
+              resultsModel: searchQuery.resultsAt(index))),
       floatingActionButton: FloatingActionButton.small(
           key: const Key('refresh-query-results-button'),
           onPressed: () => searchQuery.addResults(ResultsModel.empty()),

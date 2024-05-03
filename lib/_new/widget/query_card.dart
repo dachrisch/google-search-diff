@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
+import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SingleQueryCard extends StatefulWidget {
   const SingleQueryCard({
@@ -18,23 +16,7 @@ class SingleQueryCard extends StatefulWidget {
   State<StatefulWidget> createState() => _SingleQueryCard();
 }
 
-class _SingleQueryCard extends State<SingleQueryCard> {
-  Timer? timer;
-
-  @override
-  void initState() {
-    SharedPreferences.getInstance().then((prefs) => timer = Timer.periodic(
-        Duration(seconds: prefs.getInt('refreshEvery')!),
-        (_) => setState(() {})));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    timer?.cancel();
-  }
-
+class _SingleQueryCard extends State<SingleQueryCard> with TimerMixin {
   @override
   Widget build(BuildContext context) {
     QueryModel searchQuery = context.watch<QueryModel>();
@@ -45,7 +27,7 @@ class _SingleQueryCard extends State<SingleQueryCard> {
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: InkWell(
-          onTap: () => context.go('/queries/${searchQuery.queryId}'),
+          onTap: () => context.goRelative('${searchQuery.queryId}'),
           child: ListTile(
             leading: Container(
               decoration: const BoxDecoration(
