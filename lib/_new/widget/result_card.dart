@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
+import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
@@ -12,7 +13,7 @@ class QueryResultCard extends StatefulWidget {
   State<StatefulWidget> createState() => _QueryResultCardState();
 }
 
-class _QueryResultCardState extends State<QueryResultCard> {
+class _QueryResultCardState extends State<QueryResultCard> with TimerMixin {
   @override
   Widget build(BuildContext context) {
     ResultsModel queryResults = context.read<ResultsModel>();
