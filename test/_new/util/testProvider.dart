@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:relative_time/relative_time.dart';
 
 class ScaffoldValueProviderTestApp<T extends ChangeNotifier>
     extends StatelessWidget {
@@ -16,6 +17,9 @@ class ScaffoldValueProviderTestApp<T extends ChangeNotifier>
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          RelativeTimeLocalizations.delegate,
+        ],
         home: ChangeNotifierProvider<T>.value(
             value: providedValue, child: scaffoldUnderTest));
   }
@@ -33,6 +37,13 @@ class ScaffoldMultiProviderTestApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: providers, child: MaterialApp(home: scaffoldUnderTest));
+    return MultiProvider(
+        providers: providers,
+        child: MaterialApp(
+          home: scaffoldUnderTest,
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            RelativeTimeLocalizations.delegate,
+          ],
+        ));
   }
 }

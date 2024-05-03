@@ -14,7 +14,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
 
   SearchProviderSearchDelegate(
       {required this.searchProvider, required this.onSave})
-      : super(searchFieldLabel: 'Search...');
+      : super(searchFieldLabel: 'Create search...');
 
   @override
   List<Widget>? buildActions(BuildContext context) {

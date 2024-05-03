@@ -7,6 +7,7 @@ import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
 
 class RouterApp extends StatelessWidget {
   final ThemeData theme;
@@ -38,6 +39,9 @@ class RouterApp extends StatelessWidget {
         )
       ],
       child: MaterialApp.router(
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          RelativeTimeLocalizations.delegate,
+        ],
         theme: theme,
         routerConfig: RouterConfigBuilder.build(),
       ),

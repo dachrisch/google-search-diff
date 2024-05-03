@@ -19,6 +19,9 @@ class QueryModel extends ChangeNotifier {
 
   ResultsModel resultsAt(int index) => results[index];
 
+  ResultsModel get latest => results.reduce((current, next) =>
+      current.queryDate.isAfter(next.queryDate) ? current : next);
+
   addResults(ResultsModel queryResults) {
     results.add(queryResults);
     notifyListeners();

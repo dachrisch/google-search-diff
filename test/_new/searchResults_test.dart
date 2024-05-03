@@ -22,7 +22,8 @@ void main() {
     await tester.tapButtonByKey('show-searchbar-button');
     expect(find.widgetWithText(Card, 'No recent searches'), findsOne);
     var searchField = find.byWidgetPredicate((widget) =>
-    widget is TextField && widget.decoration?.hintText == 'Search...');
+        widget is TextField &&
+        widget.decoration?.hintText == 'Create search...');
     expect(searchField, findsOne);
     await tester.enterText(searchField, 'Test query 1');
     await tester.testTextInput.receiveAction(TextInputAction.search);

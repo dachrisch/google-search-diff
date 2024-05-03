@@ -15,35 +15,52 @@ class QueriesScaffold extends StatelessWidget {
     QueriesStoreModel queriesStore = context.watch<QueriesStoreModel>();
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('SearchFlux'),
-        actions: [
-          IconButton(
-              key: const Key('show-searchbar-button'),
-              onPressed: () {
-                showSearch(
-                    context: context,
-                    delegate: SearchProviderSearchDelegate(
-                      searchProvider: context.read<SearchService>(),
-                      onSave: (results) {
-                        queriesStore.add(QueryModel.fromResultsModel(results));
-                        if (GoRouter.maybeOf(context) != null) {
-                          // avoid context pop when used standalone (in tests)
-                          context.pop();
-                        }
-                      },
-                    ));
-              },
-              icon: const Icon(Icons.search)),
-          const SizedBox(width: 16)
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: queriesStore.items,
-        itemBuilder: (context, index) =>
-            QueryCardQueryModelProvider(searchQuery: queriesStore.at(index)),
-      ),
-    );
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('SearchFlux'),
+          actions: [
+            IconButton(
+                key: const Key('show-searchbar-button'),
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: SearchProviderSearchDelegate(
+                        searchProvider: context.read<SearchService>(),
+                        onSave: (results) {
+                          queriesStore
+                              .add(QueryModel.fromResultsModel(results));
+                          if (GoRouter.maybeOf(context) != null) {
+                            // avoid context pop when used standalone (in tests)
+                            context.pop();
+                          }
+                        },
+                      ));
+                },
+                icon: const Icon(Icons.search)),
+            const SizedBox(width: 16)
+          ],
+        ),
+        body: Container(
+          margin: const EdgeInsets.only(left: 10, right: 10),
+          child: Column(children: [
+            Row(children: [
+              Expanded(
+                  child: Text(
+                      queriesStore.items > 0
+                          ? 'Your saved queries'
+                          : 'No saved queries',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w100,
+                        fontSize: 16,
+                      )))
+            ]),
+            Expanded(
+                child: ListView.builder(
+              itemCount: queriesStore.items,
+              itemBuilder: (context, index) => QueryCardQueryModelProvider(
+                  searchQuery: queriesStore.at(index)),
+            ))
+          ]),
+        ));
   }
 }

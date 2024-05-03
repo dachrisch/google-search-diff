@@ -1,14 +1,39 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/results.dart';
 import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SingleQueryCard extends StatelessWidget {
+class SingleQueryCard extends StatefulWidget {
   const SingleQueryCard({
     super.key,
   });
+
+  @override
+  State<StatefulWidget> createState() => _SingleQueryCard();
+}
+
+class _SingleQueryCard extends State<SingleQueryCard> {
+  Timer? timer;
+
+  @override
+  void initState() {
+    SharedPreferences.getInstance().then((prefs) => timer = Timer.periodic(
+        Duration(seconds: prefs.getInt('refreshEvery')!),
+        (_) => setState(() {})));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +58,15 @@ class SingleQueryCard extends StatelessWidget {
               ),
             ),
             title: Text(searchQuery.query.query),
-            subtitle: Column(
-              children: [Text('Results: ${searchQuery.items}')],
+            subtitle: Row(
+              children: [
+                Text('Results: ${searchQuery.items}'),
+                const SizedBox(
+                  width: 30,
+                ),
+                Text(
+                    'Updated: ${searchQuery.items > 0 ? RelativeTime(context).format(searchQuery.latest.queryDate) : 'N/A'}')
+              ],
             ),
             trailing: Container(
                 decoration: const BoxDecoration(
