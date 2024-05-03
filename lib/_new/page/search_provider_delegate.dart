@@ -12,8 +12,6 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
 
   final ScrollController scrollController = ScrollController();
 
-  ResultsModel results = ResultsModel.empty();
-
   SearchProviderSearchDelegate(
       {required this.searchProvider, required this.onSave})
       : super(searchFieldLabel: 'Search...');
@@ -21,16 +19,6 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      IconButton(
-          key: const Key('save-query-button'),
-          onPressed: () {
-            if (query.isEmpty) {
-              return;
-            } else {
-              onSave(results);
-            }
-          },
-          icon: const Icon(Icons.favorite_outline)),
       IconButton(
         key: const Key('clear-search-button'),
         icon: const Icon(Icons.clear_outlined),
@@ -62,14 +50,23 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
         future: searchProvider.doSearch(Query(query)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            results = ResultsModel(Query(query), snapshot.data!);
-            return ListView.builder(
-                itemBuilder: (context, index) => Card(
-                      child: ListTile(
-                        title: Text(snapshot.data![index].title),
+            return Scaffold(
+              body: ListView.builder(
+                  itemBuilder: (context, index) => Card(
+                        child: ListTile(
+                          title: Text(snapshot.data![index].title),
+                        ),
                       ),
-                    ),
-                itemCount: snapshot.data!.length);
+                  itemCount: snapshot.data!.length),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: FloatingActionButton.extended(
+                  key: const Key('add-search-query-button'),
+                  onPressed: () =>
+                      onSave(ResultsModel(Query(query), snapshot.data!)),
+                  label: const Text('Store query'),
+                  icon: const Icon(Icons.add_box_rounded)),
+            );
           } else {
             return const Center(child: CircularProgressIndicator());
           }

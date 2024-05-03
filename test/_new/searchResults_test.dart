@@ -26,7 +26,8 @@ void main() {
     expect(searchField, findsOne);
     await tester.enterText(searchField, 'Test query 1');
     await tester.testTextInput.receiveAction(TextInputAction.search);
-    await tester.tapButtonByKey('save-query-button');
+    await tester.pumpAndSettle();
+    await tester.tapButtonByKey('add-search-query-button');
     await tester.pumpAndSettle();
     expect(searchQueriesStore.items, 1);
     expect(find.byType(SingleQueryCard), findsOne);

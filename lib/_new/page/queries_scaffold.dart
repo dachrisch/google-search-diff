@@ -44,12 +44,6 @@ class QueriesScaffold extends StatelessWidget {
         itemBuilder: (context, index) =>
             QueryCardQueryModelProvider(searchQuery: queriesStore.at(index)),
       ),
-      floatingActionButton: FloatingActionButton.small(
-          key: const Key('add-search-query-button'),
-          onPressed: () {
-            queriesStore.add(QueryModel(Query('new ${queriesStore.items}')));
-          },
-          child: const Icon(Icons.add_box_rounded)),
     );
   }
 }

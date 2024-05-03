@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
 import 'package:provider/provider.dart';
@@ -13,15 +14,12 @@ void main() {
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
     var searchQueriesStore = QueriesStoreModel();
+    searchQueriesStore.add(QueryModel(Query('Test query')));
     await tester.pumpWidget(ScaffoldValueProviderTestApp<QueriesStoreModel>(
       providedValue: searchQueriesStore,
       scaffoldUnderTest: const QueriesScaffold(),
     ));
 
-    expect(find.byType(SingleQueryCard), findsNWidgets(0));
-    expect(searchQueriesStore.items, 0);
-
-    await tester.tapButtonByKey('add-search-query-button');
     expect(searchQueriesStore.items, 1);
     expect(find.byType(SingleQueryCard), findsNWidgets(1));
 

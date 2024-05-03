@@ -64,7 +64,5 @@ void main() {
     await tester.pumpAndSettle();
     expect(historyService.queries.length, 0);
 
-    await tester.enterText(searchField, 'Test query');
-    await tester.tapButtonByKey('save-query-button');
   });
 }
