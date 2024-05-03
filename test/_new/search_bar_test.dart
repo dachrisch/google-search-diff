@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/result.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
@@ -15,9 +15,9 @@ class TestSearchService extends SearchService {
   Query lastSearch = Query('');
 
   @override
-  Future<List<ResultModel>> doSearch(Query query) {
+  Future<RunModel> doSearch(Query query) {
     lastSearch = query;
-    return Future.value(<ResultModel>[]);
+    return Future.value(RunModel(query, []));
   }
 }
 
@@ -64,6 +64,5 @@ void main() {
     await tester.tapButtonByKey('delete-search-0-button');
     await tester.pumpAndSettle();
     expect(historyService.queries.length, 0);
-
   });
 }

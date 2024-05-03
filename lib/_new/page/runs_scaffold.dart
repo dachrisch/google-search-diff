@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
-import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/provider/query_result_model.dart';
+import 'package:google_search_diff/_new/service/search_service.dart';
+import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
 import 'package:google_search_diff/_new/widget/header_listview.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class RunsScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QueryRunsModel queryRuns = context.watch<QueryRunsModel>();
+    SearchService searchService = context.read<SearchService>();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -27,10 +29,14 @@ class RunsScaffold extends StatelessWidget {
             resultsModel: queryRuns.runAt(index)),
         headerText: 'Runs',
       ),
-      floatingActionButton: FloatingActionButton.small(
-          key: const Key('refresh-query-results-button'),
-          onPressed: () => queryRuns.addRun(RunModel.empty()),
-          child: const Icon(Icons.refresh_outlined)),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: AnimatedRefreshIconButton(
+            buttonKey: const Key('refresh-query-results-button'),
+            onPressed: () => searchService
+                .doSearch(queryRuns.query)
+                .then((run) => queryRuns.addRun(run)),
+          )),
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
-import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
+import 'package:google_search_diff/_new/service/search_service.dart';
+import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
@@ -16,12 +17,15 @@ class SingleQueryCard extends StatefulWidget {
   State<StatefulWidget> createState() => _SingleQueryCard();
 }
 
-class _SingleQueryCard extends State<SingleQueryCard> with TimerMixin {
+class _SingleQueryCard extends State<SingleQueryCard>
+    with TimerMixin, TickerProviderStateMixin {
+  bool isSearching = false;
+
   @override
   Widget build(BuildContext context) {
     QueryRunsModel queryRuns = context.watch<QueryRunsModel>();
-
     QueriesStoreModel searchQueriesStore = context.watch<QueriesStoreModel>();
+    SearchService searchService = context.read<SearchService>();
 
     return Card(
       elevation: 4.0,
@@ -33,11 +37,11 @@ class _SingleQueryCard extends State<SingleQueryCard> with TimerMixin {
               decoration: const BoxDecoration(
                   border: Border(
                       right: BorderSide(width: 1.0, color: Colors.white))),
-              child: IconButton(
-                key: const Key('refresh-query-results-outside-button'),
-                icon: const Icon(Icons.refresh_outlined),
-                onPressed: () => queryRuns.addRun(RunModel.empty()),
-              ),
+              child: AnimatedRefreshIconButton(
+                  buttonKey: const Key('refresh-query-results-outside-button'),
+                  onPressed: () => searchService
+                      .doSearch(queryRuns.query)
+                      .then((run) => queryRuns.addRun(run))),
             ),
             title: Text(queryRuns.query.query),
             subtitle: Row(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
@@ -46,7 +45,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
       );
     } else {
       context.watch<HistoryService>().addQuery(Query(query));
-      return FutureBuilder<List<ResultModel>>(
+      return FutureBuilder<RunModel>(
         future: searchProvider.doSearch(Query(query)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -57,13 +56,12 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
                           title: Text(snapshot.data![index].title),
                         ),
                       ),
-                  itemCount: snapshot.data!.length),
+                  itemCount: snapshot.data!.items),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
               floatingActionButton: FloatingActionButton.extended(
                   key: const Key('add-search-query-button'),
-                  onPressed: () =>
-                      onSave(RunModel(Query(query), snapshot.data!)),
+                  onPressed: () => onSave(snapshot.data!),
                   label: const Text('Store query'),
                   icon: const Icon(Icons.add_box_rounded)),
             );

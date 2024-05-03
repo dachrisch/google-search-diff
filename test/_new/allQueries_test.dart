@@ -4,9 +4,11 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
+import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
 import 'package:provider/provider.dart';
 
+import 'search_bar_test.dart';
 import 'util/testProvider.dart';
 import 'widget_tester_extension.dart';
 
@@ -16,8 +18,14 @@ void main() {
     Provider.debugCheckInvalidValueType = null;
     var searchQueriesStore = QueriesStoreModel();
     searchQueriesStore.add(QueryRunsModel(Query('Test query')));
-    await tester.pumpWidget(ScaffoldValueProviderTestApp<QueriesStoreModel>(
-      providedValue: searchQueriesStore,
+    var testSearchService = TestSearchService();
+    await tester.pumpWidget(ScaffoldMultiProviderTestApp(
+      providers: [
+        ChangeNotifierProvider.value(value: searchQueriesStore),
+        Provider<SearchService>.value(
+          value: testSearchService,
+        ),
+      ],
       scaffoldUnderTest: const QueriesScaffold(),
     ));
 

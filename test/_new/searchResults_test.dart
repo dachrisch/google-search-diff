@@ -15,7 +15,10 @@ void main() {
     var searchQueriesStore = QueriesStoreModel();
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
-    await tester.pumpWidget(RouterApp(theme:theme ,queriesStore: searchQueriesStore,));
+    await tester.pumpWidget(RouterApp(
+      theme: theme,
+      queriesStore: searchQueriesStore,
+    ));
 
     expect(find.byType(SingleQueryCard), findsNothing);
     expect(searchQueriesStore.items, 0);
@@ -32,6 +35,5 @@ void main() {
     await tester.pumpAndSettle();
     expect(searchQueriesStore.items, 1);
     expect(find.byType(SingleQueryCard), findsOne);
-
   });
 }

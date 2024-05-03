@@ -10,5 +10,6 @@ class QueryResultCardResultsModelProvider extends StatelessWidget {
       {super.key, required this.resultsModel});
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider.value(value: resultsModel, child: const RunCard());
+  Widget build(BuildContext context) =>
+      ChangeNotifierProvider.value(value: resultsModel, child: const RunCard());
 }

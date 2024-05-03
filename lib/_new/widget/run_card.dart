@@ -25,7 +25,8 @@ class _RunCardState extends State<RunCard> with TimerMixin {
           onTap: () => context.goRelative(run.runId.toString()),
           child: ListTile(
             leading: const Icon(Icons.list_outlined),
-            title: Text('Created: ${RelativeTime(context).format(run.queryDate)}'),
+            title:
+                Text('Created: ${RelativeTime(context).format(run.queryDate)}'),
             subtitle: Text('Results: ${run.results.length}'),
             trailing: Container(
                 decoration: const BoxDecoration(
