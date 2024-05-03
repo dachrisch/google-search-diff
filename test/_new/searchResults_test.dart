@@ -20,7 +20,7 @@ void main() {
     expect(find.byType(SingleQueryCard), findsNothing);
     expect(searchQueriesStore.items, 0);
     await tester.tapButtonByKey('show-searchbar-button');
-    expect(find.widgetWithText(Card, 'No recent searches'), findsOne);
+    expect(find.widgetWithText(Container, 'No recent searches'), findsOne);
     var searchField = find.byWidgetPredicate((widget) =>
         widget is TextField &&
         widget.decoration?.hintText == 'Create search...');

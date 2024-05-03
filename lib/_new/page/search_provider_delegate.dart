@@ -80,11 +80,8 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
     var historyService = context.watch<HistoryService>();
     var suggestions = historyService.getMatching(Query(query));
 
-    return Card(
-        elevation: 8,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))),
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 130),
+    return Container(
+        margin: const EdgeInsets.only(left: 10, right: 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
             padding: const EdgeInsets.all(8.0),

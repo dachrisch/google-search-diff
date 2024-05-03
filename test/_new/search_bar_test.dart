@@ -43,7 +43,7 @@ void main() {
     ));
 
     await tester.tapButtonByKey('show-searchbar-button');
-    expect(find.widgetWithText(Card, 'No recent searches'), findsOne);
+    expect(find.widgetWithText(Container, 'No recent searches'), findsOne);
     var searchField = find.byWidgetPredicate((widget) =>
         widget is TextField &&
         widget.decoration?.hintText == 'Create search...');
@@ -59,8 +59,8 @@ void main() {
     await tester.enterText(searchField, 'Test query');
     await tester.pumpAndSettle();
     expect(historyService.queries.length, 1);
-    expect(find.widgetWithText(Card, 'Recent searches'), findsOne);
-    expect(find.widgetWithText(Card, 'Test query 1'), findsOne);
+    expect(find.widgetWithText(Container, 'Recent searches'), findsOne);
+    expect(find.widgetWithText(ListTile, 'Test query 1'), findsOne);
     await tester.tapButtonByKey('delete-search-0-button');
     await tester.pumpAndSettle();
     expect(historyService.queries.length, 0);
