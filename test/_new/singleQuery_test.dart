@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/page/results_scaffold.dart';
-import 'package:google_search_diff/_new/widget/result_card.dart';
+import 'package:google_search_diff/_new/model/query_runs.dart';
+import 'package:google_search_diff/_new/page/runs_scaffold.dart';
+import 'package:google_search_diff/_new/widget/run_card.dart';
 import 'package:provider/provider.dart';
 
 import 'util/testProvider.dart';
@@ -11,22 +12,21 @@ void main() {
   testWidgets('Refresh adds a new result and then deletes it',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQuery = QueryModel(Query('Test query'));
-    await tester.pumpWidget(ScaffoldValueProviderTestApp<QueryModel>(
+    var searchQuery = QueryRunsModel(Query('Test query'));
+    await tester.pumpWidget(ScaffoldValueProviderTestApp<QueryRunsModel>(
       providedValue: searchQuery,
-      scaffoldUnderTest: const ResultsScaffold(),
+      scaffoldUnderTest: const RunsScaffold(),
     ));
 
-    expect(find.byType(QueryResultCard), findsNWidgets(0));
+    expect(find.byType(RunCard), findsNWidgets(0));
     expect(searchQuery.items, 0);
 
     await tester.tapButtonByKey('refresh-query-results-button');
     expect(searchQuery.items, 1);
-    expect(find.byType(QueryResultCard), findsNWidgets(1));
+    expect(find.byType(RunCard), findsNWidgets(1));
 
-    await tester.tapButtonByKey(
-        'delete-query-results-${searchQuery.resultsAt(0).resultsId}');
+    await tester.tapButtonByKey('delete-query-results-${searchQuery.runAt(0).runId}');
     expect(searchQuery.items, 0);
-    expect(find.byType(QueryResultCard), findsNWidgets(0));
+    expect(find.byType(RunCard), findsNWidgets(0));
   });
 }

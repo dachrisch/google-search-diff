@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
-import 'package:google_search_diff/_new/model/results_id.dart';
+import 'package:google_search_diff/_new/model/run_id.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/page/result_scaffold.dart';
 import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
@@ -76,8 +76,7 @@ class RouterConfigBuilder {
                       GoRoute(
                         path: ':resultsId',
                         builder: (context, state) => MultiProvider(providers: [
-                          Provider<ResultsId>.value(
-                              value: ResultsId.fromState(state)),
+                          Provider<RunId>.value(value: RunId.fromState(state)),
                           Provider<QueryId>.value(
                               value: QueryId.fromState(state))
                         ], child: ResultScaffoldResultsModelProvider()),

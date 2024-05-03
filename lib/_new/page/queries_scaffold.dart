@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
-import 'package:google_search_diff/_new/model/query.dart';
+import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
 import 'package:google_search_diff/_new/provider/query_card_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
+import 'package:google_search_diff/_new/widget/header_listview.dart';
 import 'package:provider/provider.dart';
 
 class QueriesScaffold extends StatelessWidget {
@@ -28,7 +29,7 @@ class QueriesScaffold extends StatelessWidget {
                         searchProvider: context.read<SearchService>(),
                         onSave: (results) {
                           queriesStore
-                              .add(QueryModel.fromResultsModel(results));
+                              .add(QueryRunsModel.fromRunModel(results));
                           if (GoRouter.maybeOf(context) != null) {
                             // avoid context pop when used standalone (in tests)
                             context.pop();
@@ -40,27 +41,12 @@ class QueriesScaffold extends StatelessWidget {
             const SizedBox(width: 16)
           ],
         ),
-        body: Container(
-          margin: const EdgeInsets.only(left: 10, right: 10),
-          child: Column(children: [
-            Row(children: [
-              Expanded(
-                  child: Text(
-                      queriesStore.items > 0
-                          ? 'Your saved queries'
-                          : 'No saved queries',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w100,
-                        fontSize: 16,
-                      )))
-            ]),
-            Expanded(
-                child: ListView.builder(
-              itemCount: queriesStore.items,
-              itemBuilder: (context, index) => QueryCardQueryModelProvider(
-                  searchQuery: queriesStore.at(index)),
-            ))
-          ]),
-        ));
+        body: ListViewWithHeader(
+            headerText: queriesStore.items > 0
+                ? 'Your saved queries'
+                : 'No saved queries',
+            itemBuilder: (context, index) =>
+                QueryCardQueryModelProvider(queryRuns: queriesStore.at(index)),
+            items: queriesStore.items));
   }
 }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:google_search_diff/_new/model/query.dart';
+import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
 import 'package:provider/provider.dart';
 
 class QueryCardQueryModelProvider extends StatelessWidget {
-  final QueryModel searchQuery;
+  final QueryRunsModel queryRuns;
 
-  const QueryCardQueryModelProvider({super.key, required this.searchQuery});
+  const QueryCardQueryModelProvider({super.key, required this.queryRuns});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-        value: searchQuery, child: SingleQueryCard());
+        value: queryRuns, child: const SingleQueryCard());
   }
 }

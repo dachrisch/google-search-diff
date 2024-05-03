@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
-import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/query_runs.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,7 @@ class SingleQueryCard extends StatefulWidget {
 class _SingleQueryCard extends State<SingleQueryCard> with TimerMixin {
   @override
   Widget build(BuildContext context) {
-    QueryModel searchQuery = context.watch<QueryModel>();
+    QueryRunsModel queryRuns = context.watch<QueryRunsModel>();
 
     QueriesStoreModel searchQueriesStore = context.watch<QueriesStoreModel>();
 
@@ -27,7 +27,7 @@ class _SingleQueryCard extends State<SingleQueryCard> with TimerMixin {
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: InkWell(
-          onTap: () => context.goRelative('${searchQuery.queryId}'),
+          onTap: () => context.goRelative('${queryRuns.query.id}'),
           child: ListTile(
             leading: Container(
               decoration: const BoxDecoration(
@@ -36,18 +36,18 @@ class _SingleQueryCard extends State<SingleQueryCard> with TimerMixin {
               child: IconButton(
                 key: const Key('refresh-query-results-outside-button'),
                 icon: const Icon(Icons.refresh_outlined),
-                onPressed: () => searchQuery.addResults(ResultsModel.empty()),
+                onPressed: () => queryRuns.addRun(RunModel.empty()),
               ),
             ),
-            title: Text(searchQuery.query.query),
+            title: Text(queryRuns.query.query),
             subtitle: Row(
               children: [
-                Text('Results: ${searchQuery.items}'),
+                Text('Results: ${queryRuns.items}'),
                 const SizedBox(
                   width: 30,
                 ),
                 Text(
-                    'Updated: ${searchQuery.items > 0 ? RelativeTime(context).format(searchQuery.latest.queryDate) : 'N/A'}')
+                    'Updated: ${queryRuns.items > 0 ? RelativeTime(context).format(queryRuns.latest.queryDate) : 'N/A'}')
               ],
             ),
             trailing: Container(
@@ -55,9 +55,9 @@ class _SingleQueryCard extends State<SingleQueryCard> with TimerMixin {
                     border: Border(
                         left: BorderSide(width: 1.0, color: Colors.white))),
                 child: IconButton(
-                  key: Key('delete-search-query-${searchQuery.queryId}'),
+                  key: Key('delete-search-query-${queryRuns.query.id}'),
                   icon: const Icon(Icons.delete),
-                  onPressed: () => searchQueriesStore.remove(searchQuery),
+                  onPressed: () => searchQueriesStore.remove(queryRuns),
                 )),
           )),
     );

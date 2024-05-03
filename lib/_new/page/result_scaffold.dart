@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/results.dart';
-import 'package:google_search_diff/_new/model/results_id.dart';
+import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/model/run_id.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
+import 'package:google_search_diff/_new/widget/header_listview.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,10 +14,9 @@ class ResultScaffoldResultsModelProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QueryId queryId = context.read<QueryId>();
-    ResultsId resultsId = context.read<ResultsId>();
+    RunId resultsId = context.read<RunId>();
     QueriesStoreModel queriesStore = context.read<QueriesStoreModel>();
-    ResultsModel resultsModel =
-        queriesStore.findById(queryId).findById(resultsId);
+    RunModel resultsModel = queriesStore.findById(queryId).findById(resultsId);
     return ChangeNotifierProvider.value(
         value: resultsModel, child: const ResultScaffold());
   }
@@ -27,7 +27,7 @@ class ResultScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ResultsModel results = context.read<ResultsModel>();
+    RunModel results = context.read<RunModel>();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -36,9 +36,10 @@ class ResultScaffold extends StatelessWidget {
         ),
         title: Text('Result - ${results.query.query}'),
       ),
-      body: ListView.builder(
-        itemCount: results.items,
+      body: ListViewWithHeader(
+        items: results.items,
         itemBuilder: (context, index) => ResultCard(results[index]),
+        headerText: 'Results',
       ),
     );
   }

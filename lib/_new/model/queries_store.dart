@@ -1,24 +1,24 @@
 import 'package:flutter/foundation.dart';
-import 'package:google_search_diff/_new/model/query.dart';
+import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 
 class QueriesStoreModel extends ChangeNotifier {
-  final List<QueryModel> searchQueries = [];
+  final List<QueryRunsModel> searchQueries = [];
 
   int get items => searchQueries.length;
 
-  void add(QueryModel queryModel) {
+  void add(QueryRunsModel queryModel) {
     searchQueries.add(queryModel);
     notifyListeners();
   }
 
-  void remove(QueryModel searchQuery) {
+  void remove(QueryRunsModel searchQuery) {
     searchQueries.remove(searchQuery);
     notifyListeners();
   }
 
-  QueryModel at(int index) => searchQueries[index];
+  QueryRunsModel at(int index) => searchQueries[index];
 
-  QueryModel findById(QueryId queryId) =>
-      searchQueries.firstWhere((element) => element.queryId == queryId);
+  QueryRunsModel findById(QueryId queryId) =>
+      searchQueries.firstWhere((element) => element.query.id == queryId);
 }

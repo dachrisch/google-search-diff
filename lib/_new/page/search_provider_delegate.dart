@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
 
 class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   final SearchService searchProvider;
-  final void Function(ResultsModel results) onSave;
+  final void Function(RunModel results) onSave;
 
   final ScrollController scrollController = ScrollController();
 
@@ -63,7 +63,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
               floatingActionButton: FloatingActionButton.extended(
                   key: const Key('add-search-query-button'),
                   onPressed: () =>
-                      onSave(ResultsModel(Query(query), snapshot.data!)),
+                      onSave(RunModel(Query(query), snapshot.data!)),
                   label: const Text('Store query'),
                   icon: const Icon(Icons.add_box_rounded)),
             );
