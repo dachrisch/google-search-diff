@@ -29,7 +29,7 @@ class SingleQueryCard extends StatelessWidget {
               child: IconButton(
                 key: const Key('refresh-query-results-outside-button'),
                 icon: const Icon(Icons.refresh_outlined),
-                onPressed: () => searchQuery.addResults(ResultsModel()),
+                onPressed: () => searchQuery.addResults(ResultsModel.empty()),
               ),
             ),
             title: Text(searchQuery.query.query),

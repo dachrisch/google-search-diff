@@ -26,8 +26,8 @@ class QueriesScaffold extends StatelessWidget {
                     context: context,
                     delegate: SearchProviderSearchDelegate(
                       searchProvider: context.read<SearchService>(),
-                      onSave: (query) {
-                        queriesStore.add(query);
+                      onSave: (results) {
+                        queriesStore.add(QueryModel.fromResultsModel(results));
                         if (GoRouter.maybeOf(context) != null) {
                           // avoid context pop when used standalone (in tests)
                           context.pop();
@@ -47,7 +47,7 @@ class QueriesScaffold extends StatelessWidget {
       floatingActionButton: FloatingActionButton.small(
           key: const Key('add-search-query-button'),
           onPressed: () {
-            queriesStore.add(Query('new ${queriesStore.items}'));
+            queriesStore.add(QueryModel(Query('new ${queriesStore.items}')));
           },
           child: const Icon(Icons.add_box_rounded)),
     );

@@ -4,22 +4,28 @@ import 'package:google_search_diff/_new/routes/query_id.dart';
 
 class QueryModel extends ChangeNotifier {
   final Query query;
-  final List<ResultsModel> _results = [];
+  final List<ResultsModel> results;
   final QueryId queryId;
 
-  QueryModel(this.query) : queryId = QueryId.withUuid();
+  static QueryModel fromResultsModel(ResultsModel resultsModel) {
+    return QueryModel(resultsModel.query, results: [resultsModel]);
+  }
 
-  int get items => _results.length;
+  QueryModel(this.query, {List<ResultsModel>? results})
+      : results = results ?? List<ResultsModel>.empty(growable: true),
+        queryId = QueryId.withUuid();
 
-  ResultsModel resultsAt(int index) => _results[index];
+  int get items => results.length;
+
+  ResultsModel resultsAt(int index) => results[index];
 
   addResults(ResultsModel queryResults) {
-    _results.add(queryResults);
+    results.add(queryResults);
     notifyListeners();
   }
 
   removeResults(ResultsModel queryResults) {
-    _results.remove(queryResults);
+    results.remove(queryResults);
     notifyListeners();
   }
 }
@@ -39,4 +45,6 @@ class Query {
 
   @override
   String toString() => query.toString();
+
+  static Query empty() => Query('');
 }

@@ -26,7 +26,7 @@ class ResultsScaffold extends StatelessWidget {
               QueryResultCard(searchQuery.resultsAt(index))),
       floatingActionButton: FloatingActionButton.small(
           key: const Key('refresh-query-results-button'),
-          onPressed: () => searchQuery.addResults(ResultsModel()),
+          onPressed: () => searchQuery.addResults(ResultsModel.empty()),
           child: const Icon(Icons.refresh_outlined)),
     );
   }

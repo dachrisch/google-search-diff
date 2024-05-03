@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/result.dart';
+import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
 
 class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   final SearchService searchProvider;
-  final void Function(Query query) onSave;
+  final void Function(ResultsModel results) onSave;
 
   final ScrollController scrollController = ScrollController();
+
+  ResultsModel results = ResultsModel.empty();
 
   SearchProviderSearchDelegate(
       {required this.searchProvider, required this.onSave})
@@ -19,17 +22,17 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
-          key: Key('save-query-button'),
+          key: const Key('save-query-button'),
           onPressed: () {
             if (query.isEmpty) {
               return;
             } else {
-              onSave(Query(query));
+              onSave(results);
             }
           },
           icon: const Icon(Icons.favorite_outline)),
       IconButton(
-        key: Key('clear-search-button'),
+        key: const Key('clear-search-button'),
         icon: const Icon(Icons.clear_outlined),
         onPressed: () {
           query = '';
@@ -59,6 +62,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
         future: searchProvider.doSearch(Query(query)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            results = ResultsModel(Query(query), snapshot.data!);
             return ListView.builder(
                 itemBuilder: (context, index) => Card(
                       child: ListTile(

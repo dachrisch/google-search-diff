@@ -7,8 +7,8 @@ class QueriesStoreModel extends ChangeNotifier {
 
   int get items => searchQueries.length;
 
-  void add(Query query) {
-    searchQueries.add(QueryModel(query));
+  void add(QueryModel queryModel) {
+    searchQueries.add(queryModel);
     notifyListeners();
   }
 

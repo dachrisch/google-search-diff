@@ -10,20 +10,31 @@ import 'package:provider/provider.dart';
 
 class RouterApp extends StatelessWidget {
   final ThemeData theme;
+  final QueriesStoreModel queriesStore;
+  final SearchService searchService;
+  final HistoryService historyService;
 
-  const RouterApp({super.key, required this.theme});
+  RouterApp(
+      {super.key,
+      required this.theme,
+      QueriesStoreModel? queriesStore,
+      SearchService? searchService,
+      HistoryService? historyService})
+      : queriesStore = queriesStore ?? QueriesStoreModel(),
+        searchService = searchService ?? LoremIpsumSearchService(),
+        historyService = historyService ?? HistoryService();
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<QueriesStoreModel>(
-            create: (BuildContext context) => QueriesStoreModel()),
+            create: (BuildContext context) => queriesStore),
         Provider<SearchService>(
-          create: (BuildContext context) => LoremIpsumSearchService(),
+          create: (BuildContext context) => searchService,
         ),
         ChangeNotifierProvider<HistoryService>(
-          create: (BuildContext context) => HistoryService(),
+          create: (BuildContext context) => historyService,
         )
       ],
       child: MaterialApp.router(
