@@ -45,6 +45,3 @@ app.*.map.json
 .keys.json
 .search
 android/fastlane/report.xml
-
-# ignore generated files
-*.g.dart

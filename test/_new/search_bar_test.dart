@@ -4,7 +4,6 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
-import 'package:google_search_diff/_new/service/db_service.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +27,7 @@ void main() {
   });
   testWidgets('Search bar history is added, retrieved and deleted',
       (WidgetTester tester) async {
-    var searchQueriesStore = QueriesStoreModel(dbService: DbService());
+    var searchQueriesStore = QueriesStoreModel();
     var historyService = HistoryService();
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(

@@ -31,7 +31,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: InkWell(
-          onTap: () => context.goRelative('${queryRuns.query.queryId}'),
+          onTap: () => context.goRelative('${queryRuns.query.id}'),
           child: ListTile(
             leading: Container(
               decoration: const BoxDecoration(
@@ -43,7 +43,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
                       .doSearch(queryRuns.query)
                       .then((run) => queryRuns.addRun(run))),
             ),
-            title: Text(queryRuns.query.term),
+            title: Text(queryRuns.query.query),
             subtitle: Row(
               children: [
                 Text('Results: ${queryRuns.items}'),
@@ -59,7 +59,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
                     border: Border(
                         left: BorderSide(width: 1.0, color: Colors.white))),
                 child: IconButton(
-                  key: Key('delete-search-query-${queryRuns.query.queryId}'),
+                  key: Key('delete-search-query-${queryRuns.query.id}'),
                   icon: const Icon(Icons.delete),
                   onPressed: () => searchQueriesStore.remove(queryRuns),
                 )),

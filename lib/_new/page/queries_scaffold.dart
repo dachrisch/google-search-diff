@@ -15,11 +15,9 @@ class QueriesScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     QueriesStoreModel queriesStore = context.watch<QueriesStoreModel>();
 
-    return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              elevation: 0.1,
-              automaticallyImplyLeading: false,
+    return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text('SearchFlux'),
           actions: [
             IconButton(
@@ -49,6 +47,6 @@ class QueriesScaffold extends StatelessWidget {
                 : 'No saved queries',
             itemBuilder: (context, index) =>
                 QueryCardQueryModelProvider(queryRuns: queriesStore.at(index)),
-                items: queriesStore.items)));
+            items: queriesStore.items));
   }
 }

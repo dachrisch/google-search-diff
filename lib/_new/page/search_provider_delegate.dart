@@ -58,11 +58,11 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
                       ),
                   itemCount: snapshot.data!.items),
               floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
+                  FloatingActionButtonLocation.centerDocked,
               floatingActionButton: FloatingActionButton.extended(
                   key: const Key('add-search-query-button'),
                   onPressed: () => onSave(snapshot.data!),
-                  label: const Text('Save query'),
+                  label: const Text('Store query'),
                   icon: const Icon(Icons.add_box_rounded)),
             );
           } else {
@@ -92,7 +92,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
                   controller: scrollController,
                   itemBuilder: (context, index) => ListTile(
                       leading: const Icon(Icons.history),
-                      title: Text(suggestions[index].term),
+                      title: Text(suggestions[index].query),
                       trailing: IconButton(
                         key: Key('delete-search-$index-button'),
                         icon: const Icon(Icons.clear_outlined),
@@ -100,7 +100,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
                             historyService.remove(suggestions[index]),
                       ),
                       onTap: () {
-                        query = suggestions[index].term;
+                        query = suggestions[index].query;
                         showResults(context);
                       }),
                   itemCount: suggestions.length))
