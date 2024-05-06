@@ -7,10 +7,13 @@ import 'package:google_search_diff/_new/service/db_runs_service.dart';
 class QueryRunsModel extends ChangeNotifier {
   final Query query;
   final List<RunModel> runs;
-  final DbRunsService dbRunsService=DbRunsService();
+  final DbRunsService dbRunsService = DbRunsService();
 
-  static QueryRunsModel fromRunModel(RunModel runModel) =>
-      QueryRunsModel(runModel.query, runs: [runModel]);
+  static QueryRunsModel fromRunModel(RunModel runModel) {
+    var queryRunsModel = QueryRunsModel(runModel.query);
+    queryRunsModel.addRun(runModel);
+    return queryRunsModel;
+  }
 
   QueryRunsModel(this.query, {List<RunModel>? runs}) : runs = runs ?? [];
 
@@ -21,11 +24,15 @@ class QueryRunsModel extends ChangeNotifier {
   RunModel get latest => runs.reduce((current, next) =>
       current.queryDate.isAfter(next.queryDate) ? current : next);
 
-  Future<void> addRun(RunModel run) =>
-    dbRunsService.saveQueryRun(run).then((value) => runs.add(run)).then((value) => notifyListeners());
+  Future<void> addRun(RunModel run) => dbRunsService
+      .saveQueryRun(run)
+      .then((value) => runs.add(run))
+      .then((value) => notifyListeners());
 
-  removeRun(RunModel run) =>
-    dbRunsService.removeQueryRun(run).then((value) => runs.remove(run)).then((value) => notifyListeners());
+  removeRun(RunModel run) => dbRunsService
+      .removeQueryRun(run)
+      .then((value) => runs.remove(run))
+      .then((value) => notifyListeners());
 
   @override
   String toString() => 'QueryRuns(query: $query, runs: $runs)';

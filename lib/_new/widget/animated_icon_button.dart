@@ -56,7 +56,6 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    l.d('Button key: $buttonKey');
     return Transform.rotate(
         angle: animation.value,
         child: IconButton(
