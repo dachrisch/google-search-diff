@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/provider/query_result_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
-import 'package:google_search_diff/_new/widget/header_listview.dart';
+import 'package:google_search_diff/_new/widget/timer_mixin.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
 
-class RunsScaffold extends StatelessWidget {
-  const RunsScaffold({
+class RunsScaffold extends StatefulWidget {
+  RunsScaffold({
     super.key,
   });
+
+  @override
+  State<StatefulWidget> createState() => _RunsScaffoldState();
+}
+
+class _RunsScaffoldState extends State<RunsScaffold> with TimerMixin {
+  final Map<TimeUnit, String> groups = {
+    TimeUnit.second: 'Now',
+    TimeUnit.minute: 'Recently',
+    TimeUnit.hour: 'Today',
+    TimeUnit.day: 'Couple Days',
+    TimeUnit.month: 'Older',
+    TimeUnit.year: 'Older'
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +40,23 @@ class RunsScaffold extends StatelessWidget {
         ),
         title: Text('Query - ${queryRuns.query.term}'),
       ),
-      body: ListViewWithHeader(
-        items: queryRuns.items,
-        itemBuilder: (context, index) => QueryResultCardResultsModelProvider(
-            resultsModel: queryRuns.runAt(index)),
-        headerText: 'Runs',
+      body: GroupedListView(
+        elements: queryRuns.runs,
+        itemBuilder: (context, element) =>
+            QueryResultCardResultsModelProvider(resultsModel: element),
+        groupSeparatorBuilder: (TimeUnit value) =>
+            Center(child: Text(groups[value]!)),
+        groupBy: (RunModel rm) {
+          try {
+            return TimeUnit.values.firstWhere((tu) =>
+                tu.difference(rm.queryDate.difference(DateTime.now()).abs()) >
+                1);
+          } on StateError {
+            return TimeUnit.second;
+          }
+        },
+        itemComparator: (element1, element2) =>
+            element2.queryDate.compareTo(element1.queryDate),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {},

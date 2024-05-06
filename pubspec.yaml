@@ -48,6 +48,7 @@ dependencies:
   shared_preferences: ^2.2.3
   async_button_builder: ^3.0.0+1
   json_annotation: ^4.9.0
+  grouped_list: ^5.1.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

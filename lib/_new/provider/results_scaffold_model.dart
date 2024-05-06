@@ -16,6 +16,6 @@ class ResultsScaffoldQueryModelProvider extends StatelessWidget {
             (store) => store.findById(queryId));
 
     return ChangeNotifierProvider.value(
-        value: queryRuns, child: const RunsScaffold());
+        value: queryRuns, child: RunsScaffold());
   }
 }
