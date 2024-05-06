@@ -27,14 +27,14 @@ class QueriesScaffold extends StatelessWidget {
                       context: context,
                       delegate: SearchProviderSearchDelegate(
                         searchProvider: context.read<SearchService>(),
-                        onSave: (results) {
-                          queriesStore
-                              .add(QueryRunsModel.fromRunModel(results));
+                        onSave: (results) => queriesStore
+                            .add(QueryRunsModel.fromRunModel(results))
+                            .then((value) {
                           if (GoRouter.maybeOf(context) != null) {
                             // avoid context pop when used standalone (in tests)
                             context.pop();
                           }
-                        },
+                        }),
                       ));
                 },
                 icon: const Icon(Icons.search)),

@@ -1,3 +1,4 @@
+import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/run.dart';
@@ -7,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   final SearchService searchProvider;
-  final void Function(RunModel results) onSave;
+  final Future<void> Function(RunModel results) onSave;
 
   final ScrollController scrollController = ScrollController();
 
@@ -50,21 +51,25 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-              body: ListView.builder(
-                  itemBuilder: (context, index) => Card(
-                        child: ListTile(
-                          title: Text(snapshot.data![index].title),
+                body: ListView.builder(
+                    itemBuilder: (context, index) => Card(
+                          child: ListTile(
+                            title: Text(snapshot.data![index].title),
+                          ),
                         ),
-                      ),
-                  itemCount: snapshot.data!.items),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: FloatingActionButton.extended(
-                  key: const Key('add-search-query-button'),
-                  onPressed: () => onSave(snapshot.data!),
-                  label: const Text('Store query'),
-                  icon: const Icon(Icons.add_box_rounded)),
-            );
+                    itemCount: snapshot.data!.items),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerFloat,
+                floatingActionButton: AsyncButtonBuilder(
+                    child: const Icon(Icons.add_outlined),
+                    onPressed: () async => await onSave(snapshot.data!),
+                    builder: (context, child, callback, buttonState) {
+                      return FloatingActionButton.extended(
+                          key: const Key('add-search-query-button'),
+                          onPressed: callback,
+                          icon: child,
+                          label: const Text('Save Query'));
+                    }));
           } else {
             return const Center(child: CircularProgressIndicator());
           }

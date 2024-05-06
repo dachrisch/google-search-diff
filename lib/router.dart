@@ -17,7 +17,7 @@ void main() async {
   var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
   var queriesStore = QueriesStoreModel();
-  queriesStore.add(QueryRunsModel.fromRunModel(
+  await queriesStore.add(QueryRunsModel.fromRunModel(
       RunModel(Query('Saved query 1'), [ResultModel(title: 'result 1')])));
 
   SharedPreferences.getInstance()
