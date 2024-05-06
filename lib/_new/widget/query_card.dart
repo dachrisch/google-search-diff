@@ -31,7 +31,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: InkWell(
-          onTap: () => context.goRelative('${queryRuns.query.queryId}'),
+          onTap: () => context.goRelative(queryRuns.query.queryId.id),
           child: ListTile(
               leading: Container(
                 decoration: const BoxDecoration(

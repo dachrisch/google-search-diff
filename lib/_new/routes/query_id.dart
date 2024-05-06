@@ -1,12 +1,12 @@
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/_new/model/uuid_mixin.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/parsing.dart';
 import 'package:uuid/uuid.dart';
 
 part 'query_id.g.dart';
 
 @JsonSerializable()
-class QueryId with UuidMixin {
+class QueryId {
   final String id;
 
   @override
@@ -18,7 +18,10 @@ class QueryId with UuidMixin {
   @override
   bool operator ==(Object other) => other is QueryId && id == other.id;
 
-  QueryId(this.id);
+  QueryId(this.id) {
+    // validate uuid
+    UuidParsing.parse(id);
+  }
 
   factory QueryId.withUuid() => QueryId(const Uuid().v4());
 
