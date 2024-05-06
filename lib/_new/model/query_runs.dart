@@ -1,24 +1,21 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/model/run_id.dart';
+import 'package:google_search_diff/_new/service/db_runs_service.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'query_runs.g.dart';
+
+@JsonSerializable()
 class QueryRunsModel extends ChangeNotifier {
   final Query query;
-  final SplayTreeSet<RunModel> runs;
+  final List<RunModel> runs;
 
-  static QueryRunsModel fromRunModel(RunModel runModel) {
-    return QueryRunsModel(runModel.query,
-        runs: SplayTreeSet.of([runModel],
-            (key1, key2) => RunModel.compare(key1, key2, reverse: true)));
-  }
+  static QueryRunsModel fromRunModel(RunModel runModel) => QueryRunsModel(runModel.query, runs: [runModel]);
 
-  QueryRunsModel(this.query, {SplayTreeSet<RunModel>? runs})
-      : runs = runs ??
-            SplayTreeSet<RunModel>(
-                (key1, key2) => RunModel.compare(key1, key2, reverse: true));
+
+  QueryRunsModel(this.query, {List<RunModel>? runs}) : runs = runs ?? [];
 
   int get items => runs.length;
 
@@ -37,6 +34,14 @@ class QueryRunsModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
+  String toString() => 'QueryRuns(query: $query, runs: $runs)';
+
   RunModel findById(RunId runId) =>
       runs.firstWhere((value) => value.runId == runId);
+
+  factory QueryRunsModel.fromJson(Map<String, dynamic> json) =>
+      _$QueryRunsModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$QueryRunsModelToJson(this);
 }

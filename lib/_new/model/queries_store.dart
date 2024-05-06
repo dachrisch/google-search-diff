@@ -1,70 +1,34 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
-import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
-import 'package:localstore/localstore.dart';
-
-class DbService {
-  final Localstore db = Localstore.instance;
-  final FimberLog l = FimberLog('db');
-  final Map<Query, String> queryIdMap = {};
-
-  late Future<void> loadFuture;
-
-  DbService._() {
-    loadFuture = db.collection('.queries').get().then((allQueriesJson) {
-      l.d('Loading [${allQueriesJson?.length}] Queries');
-      allQueriesJson?.entries.forEach((q) {
-        var query = Query.fromJson(q.value);
-        l.d('Loaded $query');
-        queryIdMap.putIfAbsent(query, () => q.key);
-      });
-    });
-  }
-
-  factory DbService() => DbService._();
-
-  Future<void> saveQuery(Query query) {
-    String id = db.collection('.queries').doc().id;
-    l.d('Saving $query with [$id]');
-    return db
-        .collection('.queries')
-        .doc(id)
-        .set(query.toJson())
-        .then((value) => queryIdMap.putIfAbsent(query, () => id));
-  }
-
-  Future<void> removeQuery(Query query) async {
-    var id = queryIdMap.remove(query);
-    l.d('Deleting $query with [$id]');
-    return db.collection('.queries').doc(id).delete();
-  }
-
-  Future<List<Query>> fetchAllQueries() =>
-      loadFuture.then((value) => queryIdMap.keys.toList());
-}
+import 'package:google_search_diff/_new/service/db_queries_service.dart';
+import 'package:google_search_diff/_new/service/db_runs_service.dart';
 
 class QueriesStoreModel extends ChangeNotifier {
   final List<QueryRunsModel> searchQueries = [];
-  final DbService dbService = DbService();
+  final DbQueriesService dbQueryService = DbQueriesService();
+  final DbRunsService dbRunsService = DbRunsService();
 
   QueriesStoreModel() {
-    dbService.fetchAllQueries().then((allQueries) =>
-        searchQueries.addAll(allQueries.map((e) => QueryRunsModel(e))));
+    dbQueryService.fetchAllQueries().then((allQueries) => allQueries.forEach(
+        (query) => dbRunsService
+            .fetchRunsForQuery(query)
+            .then((runs) => searchQueries.addAll(runs))));
   }
 
   int get items => searchQueries.length;
 
-  Future<void> add(QueryRunsModel queryModel) {
-    return Future.sync(() => searchQueries.add(queryModel))
-        .then((_) => dbService.saveQuery(queryModel.query))
+  Future<void> add(QueryRunsModel queryRuns) {
+    return Future.sync(() => searchQueries.add(queryRuns))
+        .then((_) => dbQueryService.saveQuery(queryRuns.query))
+        .then((_) => dbRunsService.saveQueryRuns(queryRuns))
         .then((value) => notifyListeners());
   }
 
-  Future<void> remove(QueryRunsModel queryModel) =>
-      Future.sync(() => searchQueries.remove(queryModel))
-          .then((_) => dbService.removeQuery(queryModel.query))
+  Future<void> remove(QueryRunsModel queryRuns) =>
+      Future.sync(() => searchQueries.remove(queryRuns))
+          .then((_) => dbQueryService.removeQuery(queryRuns.query))
+          .then((_) => dbRunsService.removeQueryRuns(queryRuns))
           .then((value) => notifyListeners());
 
   QueryRunsModel at(int index) => searchQueries[index];

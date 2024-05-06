@@ -64,17 +64,17 @@ class RouterConfigBuilder {
                   path: ':queryId',
                   redirect: (context, state) {
                     final queryId = state.pathParameters['queryId'];
-                    return '/queries/$queryId/results';
+                    return '/queries/$queryId/runs';
                   },
                 ),
                 GoRoute(
-                    path: ':queryId/results',
+                    path: ':queryId/runs',
                     builder: (context, state) => Provider<QueryId>.value(
                         value: QueryId.fromState(state),
                         child: const ResultsScaffoldQueryModelProvider()),
                     routes: [
                       GoRoute(
-                        path: ':resultsId',
+                        path: ':runId',
                         builder: (context, state) => MultiProvider(providers: [
                           Provider<RunId>.value(value: RunId.fromState(state)),
                           Provider<QueryId>.value(

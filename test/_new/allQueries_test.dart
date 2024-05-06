@@ -15,7 +15,6 @@ import 'widget_tester_extension.dart';
 void main() {
   testWidgets('Adds a single query and removes it',
       (WidgetTester tester) async {
-    Provider.debugCheckInvalidValueType = null;
     var searchQueriesStore = QueriesStoreModel();
     searchQueriesStore.add(QueryRunsModel(Query('Test query')));
     var testSearchService = TestSearchService();
@@ -41,4 +40,6 @@ void main() {
     expect(searchQueriesStore.items, 0);
     expect(find.byType(SingleQueryCard), findsNWidgets(0));
   });
+
+
 }

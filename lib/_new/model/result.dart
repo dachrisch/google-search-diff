@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'result.g.dart';
+
+@JsonSerializable()
 class ResultModel {
   final String title;
   final String source;
@@ -9,4 +14,9 @@ class ResultModel {
       this.source = '',
       this.link = '',
       this.snippet = ''});
+
+  Map<String, dynamic> toJson() => _$ResultModelToJson(this);
+
+  factory ResultModel.fromJson(Map<String, dynamic> json) =>
+      _$ResultModelFromJson(json);
 }
