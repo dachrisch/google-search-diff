@@ -10,15 +10,29 @@ class DbService {
   final FimberLog l = FimberLog('db');
   final Map<Query, String> queryIdMap = {};
 
-  DbService._();
+  late Future<void> loadFuture;
+
+  DbService._() {
+    loadFuture = db.collection('.queries').get().then((allQueriesJson) {
+      l.d('Loading [${allQueriesJson?.length}] Queries');
+      allQueriesJson?.entries.forEach((q) {
+        var query = Query.fromJson(q.value);
+        l.d('Loaded $query');
+        queryIdMap.putIfAbsent(query, () => q.key);
+      });
+    });
+  }
 
   factory DbService() => DbService._();
 
   Future<void> saveQuery(Query query) {
     String id = db.collection('.queries').doc().id;
     l.d('Saving $query with [$id]');
-    return db.collection('.queries').doc(id).set({'query': query.query}).then(
-        (value) => queryIdMap.putIfAbsent(query, () => id));
+    return db
+        .collection('.queries')
+        .doc(id)
+        .set(query.toJson())
+        .then((value) => queryIdMap.putIfAbsent(query, () => id));
   }
 
   Future<void> removeQuery(Query query) async {
@@ -26,11 +40,19 @@ class DbService {
     l.d('Deleting $query with [$id]');
     return db.collection('.queries').doc(id).delete();
   }
+
+  Future<List<Query>> fetchAllQueries() =>
+      loadFuture.then((value) => queryIdMap.keys.toList());
 }
 
 class QueriesStoreModel extends ChangeNotifier {
   final List<QueryRunsModel> searchQueries = [];
   final DbService dbService = DbService();
+
+  QueriesStoreModel() {
+    dbService.fetchAllQueries().then((allQueries) =>
+        searchQueries.addAll(allQueries.map((e) => QueryRunsModel(e))));
+  }
 
   int get items => searchQueries.length;
 
@@ -48,5 +70,5 @@ class QueriesStoreModel extends ChangeNotifier {
   QueryRunsModel at(int index) => searchQueries[index];
 
   QueryRunsModel findById(QueryId queryId) =>
-      searchQueries.firstWhere((element) => element.query.id == queryId);
+      searchQueries.firstWhere((element) => element.query.queryId == queryId);
 }

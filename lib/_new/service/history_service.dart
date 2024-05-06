@@ -11,11 +11,11 @@ class HistoryService extends ChangeNotifier {
   }
 
   List<Query> getMatching(Query query) {
-    return query.query.isEmpty
+    return query.term.isEmpty
         ? _queries.toList()
         : _queries
             .where((element) =>
-                element.query.toLowerCase().contains(query.query.toLowerCase()))
+                element.term.toLowerCase().contains(query.term.toLowerCase()))
             .toList();
   }
 

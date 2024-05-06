@@ -51,9 +51,9 @@ void main() {
     await tester.enterText(searchField, 'Test query 1');
     await tester.testTextInput.receiveAction(TextInputAction.search);
     await tester.pumpAndSettle();
-    expect(testSearchService.lastSearch, Query('Test query 1'));
+    expect(testSearchService.lastSearch.term, 'Test query 1');
     expect(historyService.queries.length, 1);
-    expect(historyService.queries[0], Query('Test query 1'));
+    expect(historyService.queries[0].term, 'Test query 1');
 
     await tester.tapButtonByKey('clear-search-button');
     await tester.enterText(searchField, 'Test query');

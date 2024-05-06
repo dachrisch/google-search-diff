@@ -1,21 +1,30 @@
 import 'package:google_search_diff/_new/routes/query_id.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'query.g.dart';
+
+@JsonSerializable()
 class Query {
-  final String query;
-  final QueryId id;
+  final String term;
+  final QueryId queryId;
 
-  Query(this.query) : id = QueryId.withUuid();
+  Query(this.term, {QueryId? queryId})
+      : queryId = queryId ?? QueryId.withUuid();
 
   @override
-  int get hashCode => query.hashCode;
+  int get hashCode => term.hashCode;
 
   @override
   bool operator ==(Object other) {
-    return other is Query && other.query == query;
+    return other is Query && other.term == term && other.queryId == queryId;
   }
 
   @override
-  String toString() => query.toString();
+  String toString() => 'Query(term: $term, queryId: $queryId)';
 
-  static Query empty() => Query('');
+  factory Query.empty() => Query('');
+
+  factory Query.fromJson(Map<String, dynamic> json) => _$QueryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$QueryToJson(this);
 }

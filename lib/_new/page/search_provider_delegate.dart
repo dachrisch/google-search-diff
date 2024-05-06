@@ -97,7 +97,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
                   controller: scrollController,
                   itemBuilder: (context, index) => ListTile(
                       leading: const Icon(Icons.history),
-                      title: Text(suggestions[index].query),
+                      title: Text(suggestions[index].term),
                       trailing: IconButton(
                         key: Key('delete-search-$index-button'),
                         icon: const Icon(Icons.clear_outlined),
@@ -105,7 +105,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
                             historyService.remove(suggestions[index]),
                       ),
                       onTap: () {
-                        query = suggestions[index].query;
+                        query = suggestions[index].term;
                         showResults(context);
                       }),
                   itemCount: suggestions.length))
