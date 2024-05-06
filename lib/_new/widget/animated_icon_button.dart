@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedRefreshIconButton extends StatefulWidget {
@@ -44,8 +45,9 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
   final AnimationController controller;
 
   final Key buttonKey;
+  final FimberLog l = FimberLog('button');
 
-  const _AnimatedRefreshIconButton(
+   _AnimatedRefreshIconButton(
       {required this.buttonKey,
       required this.onPressed,
       required this.animation,
@@ -54,6 +56,7 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
+    l.d('Button key: $buttonKey');
     return Transform.rotate(
         angle: animation.value,
         child: IconButton(

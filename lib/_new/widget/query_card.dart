@@ -38,8 +38,8 @@ class _SingleQueryCard extends State<SingleQueryCard>
                     border: Border(
                         right: BorderSide(width: 1.0, color: Colors.white))),
                 child: AnimatedRefreshIconButton(
-                    buttonKey:
-                        const Key('refresh-query-results-outside-button'),
+                    buttonKey: Key(
+                        'refresh-query-results-outside-button-${queryRuns.query.queryId.id}'),
                     onPressed: () => searchService
                         .doSearch(queryRuns.query)
                         .then((run) => queryRuns.addRun(run))),
