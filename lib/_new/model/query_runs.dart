@@ -39,4 +39,9 @@ class QueryRunsModel extends ChangeNotifier {
 
   RunModel findById(RunId runId) =>
       runs.firstWhere((value) => value.runId == runId);
+
+  @override
+  String toString() {
+    return 'QueryRunsModel(query: $query)';
+  }
 }

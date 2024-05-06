@@ -6,6 +6,7 @@ import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/page/result_scaffold.dart';
 import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
+import 'package:google_search_diff/_new/service/db_service.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
@@ -16,38 +17,54 @@ class RouterApp extends StatelessWidget {
   final QueriesStoreModel queriesStore;
   final SearchService searchService;
   final HistoryService historyService;
+  final DbService dbService;
 
   RouterApp(
       {super.key,
       required this.theme,
       QueriesStoreModel? queriesStore,
       SearchService? searchService,
-      HistoryService? historyService})
-      : queriesStore = queriesStore ?? QueriesStoreModel(),
-        searchService = searchService ?? LoremIpsumSearchService(),
-        historyService = historyService ?? HistoryService();
+      HistoryService? historyService,
+      DbService? dbService})
+      : searchService = searchService ?? LoremIpsumSearchService(),
+        historyService = historyService ?? HistoryService(),
+        dbService = dbService ?? DbService.instance(),
+        queriesStore =
+            queriesStore ?? QueriesStoreModel(dbService: DbService.instance());
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<QueriesStoreModel>(
-            create: (BuildContext context) => queriesStore),
-        Provider<SearchService>(
-          create: (BuildContext context) => searchService,
-        ),
-        ChangeNotifierProvider<HistoryService>(
-          create: (BuildContext context) => historyService,
-        )
-      ],
-      child: MaterialApp.router(
-        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          RelativeTimeLocalizations.delegate,
+        providers: [
+          ChangeNotifierProvider<QueriesStoreModel>(
+              create: (BuildContext context) => queriesStore),
+          Provider<SearchService>(
+            create: (BuildContext context) => searchService,
+          ),
+          ChangeNotifierProvider<HistoryService>(
+            create: (BuildContext context) => historyService,
+          ),
+          Provider<DbService>(
+            create: (context) => dbService,
+          )
         ],
-        theme: theme,
-        routerConfig: RouterConfigBuilder.build(),
-      ),
-    );
+        child: FutureBuilder(
+            future: dbService.fetchAllQueries(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                queriesStore.loadQueries(snapshot.data);
+                return MaterialApp.router(
+                  localizationsDelegates: const <LocalizationsDelegate<
+                      dynamic>>[
+                    RelativeTimeLocalizations.delegate,
+                  ],
+                  theme: theme,
+                  routerConfig: RouterConfigBuilder.build(),
+                );
+              }
+            }));
   }
 }
 

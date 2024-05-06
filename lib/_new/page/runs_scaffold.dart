@@ -21,7 +21,7 @@ class RunsScaffold extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Query - ${queryRuns.query.query}'),
+        title: Text('Query - ${queryRuns.query.term}'),
       ),
       body: ListViewWithHeader(
         items: queryRuns.items,

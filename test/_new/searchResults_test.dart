@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/routes/routes.dart';
+import 'package:google_search_diff/_new/service/db_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,7 @@ void main() {
   testWidgets('Search results appear in results list',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQueriesStore = QueriesStoreModel();
+    var searchQueriesStore = QueriesStoreModel(dbService: DbService());
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
     await tester.pumpWidget(RouterApp(

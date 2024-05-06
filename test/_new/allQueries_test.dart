@@ -4,6 +4,7 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
+import 'package:google_search_diff/_new/service/db_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ void main() {
   testWidgets('Adds a single query and removes it',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQueriesStore = QueriesStoreModel();
+    var searchQueriesStore = QueriesStoreModel(dbService: DbService());
     searchQueriesStore.add(QueryRunsModel(Query('Test query')));
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
@@ -37,7 +38,7 @@ void main() {
     expect(find.widgetWithText(Column, 'Results: 1'), findsOneWidget);
 
     await tester.tapButtonByKey(
-        'delete-search-query-${searchQueriesStore.at(0).query.id}');
+        'delete-search-query-${searchQueriesStore.at(0).query.queryId}');
     expect(searchQueriesStore.items, 0);
     expect(find.byType(SingleQueryCard), findsNWidgets(0));
   });

@@ -34,7 +34,7 @@ class ResultScaffold extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Result - ${results.query.query}'),
+        title: Text('Result - ${results.query.term}'),
       ),
       body: ListViewWithHeader(
         items: results.items,
