@@ -69,43 +69,34 @@ class _RunCardState extends State<RunCard> with TimerMixin {
               subtitle: SizedBox(
                   width: 100,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(children: [
-                            const Icon(Icons.arrow_left_outlined,
-                                color: Colors.green),
-                            Text(resultComparison.added.length.toString())
-                          ])
+                          Icon(Icons.arrow_left_outlined, color: Colors.green),
+                          Icon(Icons.compare_arrows_outlined,
+                              color: Colors.grey),
+                          Icon(Icons.arrow_right_outlined, color: Colors.red),
                         ],
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      const SizedBox(width: 16),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.arrow_left_outlined,
-                                  color: Colors.grey),
-                              Text(resultComparison.existing.length.toString()),
-                              const Icon(Icons.arrow_right_outlined,
-                                  color: Colors.grey),
-                            ],
-                          )
+                          Text('Added: '),
+                          Text('Existing: '),
+                          Text('Removed:')
                         ],
                       ),
+                      const SizedBox(width: 16),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Row(
-                            children: [
-                              Text(resultComparison.removed.length.toString()),
-                              const Icon(Icons.arrow_right_outlined,
-                                  color: Colors.red),
-                            ],
-                          )
+                          Text(resultComparison.added.length.toString()),
+                          Text(resultComparison.existing.length.toString()),
+                          Text(resultComparison.removed.length.toString()),
                         ],
                       ),
                     ],
