@@ -15,8 +15,8 @@ class RunModel extends ChangeNotifier {
   final Query query;
   final List<ResultModel> results;
 
-  RunModel(this.query, this.results, [DateTime? queryDate, RunId? runId])
-      : runDate = queryDate ?? DateTime.now(),
+  RunModel(this.query, this.results, {DateTime? runDate, RunId? runId})
+      : runDate = runDate ?? DateTime.now(),
         runId = runId ?? RunId.withUuid();
 
   int get items => results.length;
