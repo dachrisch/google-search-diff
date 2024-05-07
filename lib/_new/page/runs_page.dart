@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/action/intent/search.dart';
 import 'package:google_search_diff/_new/action/search_and_add_run.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
@@ -9,6 +10,7 @@ import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
 import 'package:google_search_diff/_new/widget/run_card.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
@@ -39,6 +41,8 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
     TimeUnit.year: 'Older'
   };
 
+  bool isDragging = false;
+
   @override
   Widget build(BuildContext context) {
     QueryRuns queryRuns = context.watch<QueryRuns>();
@@ -56,24 +60,48 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                     ),
                     title: Text('Query - ${queryRuns.query.term}'),
                   ),
-                  body: GroupedListView(
-                    elements: queryRuns.runs,
-                    itemBuilder: (context, run) => ChangeNotifierProvider.value(
-                        value: run, child: const RunCard()),
-                    groupSeparatorBuilder: (TimeUnit value) =>
-                        Center(child: Text(groups[value]!)),
-                    groupBy: (Run rm) {
-                      try {
-                        return TimeUnit.values.firstWhere((tu) =>
-                            tu.difference(
-                                rm.runDate.difference(DateTime.now()).abs()) >
-                            1);
-                      } on StateError {
-                        return TimeUnit.second;
-                      }
-                    },
-                    itemComparator: (element1, element2) =>
-                        element2.runDate.compareTo(element1.runDate),
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: GroupedListView(
+                          elements: queryRuns.runs,
+                          itemBuilder: (context, run) =>
+                              ChangeNotifierProvider.value(
+                                  value: run,
+                                  child: RunCard(
+                                      onDragChanged: (isDragging) =>
+                                          setState(() {
+                                            this.isDragging = isDragging;
+                                          }))),
+                          groupSeparatorBuilder: (TimeUnit value) =>
+                              Center(child: Text(groups[value]!)),
+                          groupBy: (Run rm) {
+                            try {
+                              return TimeUnit.values.firstWhere((tu) =>
+                                  tu.difference(rm.runDate
+                                      .difference(DateTime.now())
+                                      .abs()) >
+                                  1);
+                            } on StateError {
+                              return TimeUnit.second;
+                            }
+                          },
+                          itemComparator: (element1, element2) =>
+                              element2.runDate.compareTo(element1.runDate),
+                        ),
+                      ),
+                      AnimatedContainer(
+                        height: isDragging ? 100 : 0,
+                        duration: const Duration(milliseconds: 200),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            RunDragTarget(),
+                            RunDragTarget(),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                   floatingActionButton: FloatingActionButton(
                       onPressed: () {},
@@ -83,5 +111,37 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                             Actions.invoke(context, SearchIntent(queryRuns)),
                       )),
                 )));
+  }
+}
+
+class RunDragTarget extends StatelessWidget {
+  final Logger l = getLogger('RunDragTarget');
+
+  RunDragTarget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget<Run>(
+      builder: (context, candidateData, rejectedData) {
+        return SizedBox(
+            height: 100.0,
+            width: 100.0,
+            child: Card(
+              elevation: candidateData.isEmpty ? 4 : 12,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color:
+                  candidateData.isEmpty ? Colors.grey[100] : Colors.grey[600],
+              child: const Center(
+                child: Text(
+                  'DROP_ITEMS_HERE',
+                  style: TextStyle(color: Colors.black, fontSize: 22.0),
+                ),
+              ),
+            ));
+      },
+    );
   }
 }
