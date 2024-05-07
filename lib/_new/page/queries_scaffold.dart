@@ -27,9 +27,7 @@ class _QueriesScaffoldState extends State<QueriesScaffold> with TimerMixin {
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(100))),
           backgroundColor: MaterialTheme.lightScheme().primaryContainer,
-          leading: const SizedBox(
-            width: 10,
-          ),
+          leading: Image.asset('assets/logo.png', fit: BoxFit.scaleDown),
           automaticallyImplyLeading: false,
           title: Text(
             'SearchFlux',
@@ -63,8 +61,7 @@ class _QueriesScaffoldState extends State<QueriesScaffold> with TimerMixin {
                 ? 'Your saved queries'
                 : 'No saved queries',
             itemBuilder: (context, index) => QueryCardQueryModelProvider(
-                queryRuns: queriesStore.at(index),
-                lastUpdated: queriesStore.at(index).latest.runDate),
+                queryRuns: queriesStore.at(index)),
             items: queriesStore.items));
   }
 }

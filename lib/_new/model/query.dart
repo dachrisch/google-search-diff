@@ -7,9 +7,11 @@ part 'query.g.dart';
 class Query {
   final String term;
   final QueryId queryId;
+  final DateTime createdDate;
 
-  Query(this.term, {QueryId? queryId})
-      : queryId = queryId ?? QueryId.withUuid();
+  Query(this.term, {QueryId? queryId, DateTime? createdDate})
+      : queryId = queryId ?? QueryId.withUuid(),
+        createdDate = createdDate ?? DateTime.now();
 
   @override
   int get hashCode => term.hashCode;

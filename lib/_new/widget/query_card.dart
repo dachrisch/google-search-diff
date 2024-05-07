@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
@@ -10,11 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
 class SingleQueryCard extends StatefulWidget {
-  final DateTime lastUpdated;
 
   const SingleQueryCard({
     super.key,
-    required this.lastUpdated,
   });
 
   @override
@@ -25,11 +24,22 @@ class _SingleQueryCard extends State<SingleQueryCard>
     with TickerProviderStateMixin {
   final Logger l = getLogger('QueryCard');
 
+  late String lastUpdatedText;
+  late String relativeCreatedString;
+
+  updateRelativeTimes(BuildContext context, QueryRunsModel queryRuns) {
+    setState(() => lastUpdatedText = queryRuns.latest != null
+        ? RelativeTime(context).format(queryRuns.latest!.runDate)
+        : 'N/A');
+    setState(() => relativeCreatedString = RelativeTime(context).format(queryRuns.query.createdDate));
+  }
+
   @override
   Widget build(BuildContext context) {
     QueryRunsModel queryRuns = context.watch<QueryRunsModel>();
     QueriesStoreModel searchQueriesStore = context.watch<QueriesStoreModel>();
     SearchService searchService = context.read<SearchService>();
+    updateRelativeTimes(context, queryRuns);
 
     return Dismissible(
         key: Key(queryRuns.hashCode.toString()),
@@ -93,8 +103,8 @@ class _SingleQueryCard extends State<SingleQueryCard>
           }
         },
         child: Card(
-          elevation: 4.0,
-          margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          elevation: 1.0,
+          margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
           child: InkWell(
               onTap: () => context.goRelativeWithId(queryRuns.query.queryId),
               child: ListTile(
@@ -108,17 +118,24 @@ class _SingleQueryCard extends State<SingleQueryCard>
                             'refresh-query-results-outside-button-${queryRuns.query.queryId.id}'),
                         onPressed: () => searchService
                             .doSearch(queryRuns.query)
-                            .then((run) => queryRuns.addRun(run))),
+                            .then((run) => queryRuns.addRun(run))
+                            .then((value) => updateRelativeTimes(context,queryRuns))),
                   ),
                   title: Text(queryRuns.query.term),
-                  subtitle: Row(
+                  subtitle: Column(
                     children: [
-                      Text('Results: ${queryRuns.items}'),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      Text(
-                          'Updated: ${queryRuns.items > 0 ? RelativeTime(context).format(widget.lastUpdated) : 'N/A'}')
+                      Row(children: [
+                        Text('Created: $relativeCreatedString'),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Text('Results: ${queryRuns.items}'),
+                      ]),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text('Updated: $lastUpdatedText'),
+                          ]),
                     ],
                   ),
                   trailing: Container(

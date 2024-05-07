@@ -58,8 +58,8 @@ class _RunCardState extends State<RunCard> with TimerMixin {
         );
       },
       child: Card(
-        elevation: 4.0,
-        margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+        elevation: 1.0,
+        margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
         child: InkWell(
             onTap: () => context.goRelativeWithId(run.runId),
             child: ListTile(

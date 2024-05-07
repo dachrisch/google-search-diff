@@ -5,14 +5,13 @@ import 'package:provider/provider.dart';
 
 class QueryCardQueryModelProvider extends StatelessWidget {
   final QueryRunsModel queryRuns;
-  final DateTime lastUpdated;
 
-  const QueryCardQueryModelProvider(
-      {super.key, required this.queryRuns, required this.lastUpdated});
+  const QueryCardQueryModelProvider({super.key, required this.queryRuns});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-        value: queryRuns, child: SingleQueryCard(lastUpdated: lastUpdated));
+        value: queryRuns,
+        child: const SingleQueryCard());
   }
 }
