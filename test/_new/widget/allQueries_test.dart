@@ -7,7 +7,7 @@ import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/page/queries_page.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
-import 'package:google_search_diff/_new/widget/query_card.dart';
+import 'package:google_search_diff/_new/widget/card/query_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/localstore_helper.dart';

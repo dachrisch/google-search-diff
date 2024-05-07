@@ -9,7 +9,7 @@ import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
-import 'package:google_search_diff/_new/widget/query_card.dart';
+import 'package:google_search_diff/_new/widget/card/query_card.dart';
 import 'package:google_search_diff/_new/widget/time_grouped_list_view.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
@@ -59,9 +59,7 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
 }
 
 class _SearchButton extends StatelessWidget {
-  const _SearchButton({
-    super.key,
-  });
+  const _SearchButton();
 
   @override
   Widget build(BuildContext context) {

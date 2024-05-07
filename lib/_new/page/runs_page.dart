@@ -7,7 +7,7 @@ import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
-import 'package:google_search_diff/_new/widget/run_card.dart';
+import 'package:google_search_diff/_new/widget/card/run_card.dart';
 import 'package:google_search_diff/_new/widget/time_grouped_list_view.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';

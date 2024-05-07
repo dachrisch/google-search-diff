@@ -3,7 +3,7 @@ import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/runs_page.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
-import 'package:google_search_diff/_new/widget/run_card.dart';
+import 'package:google_search_diff/_new/widget/card/run_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/testProvider.dart';
