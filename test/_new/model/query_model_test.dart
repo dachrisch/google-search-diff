@@ -10,9 +10,9 @@ void main() {
     var query = Query('Test');
     QueryRunsModel queryRunsModel = QueryRunsModel(query);
     RunModel first =
-        RunModel(query, [ResultModel(title: 'test1')], queryDate: DateTime(2000, 1, 1));
+        RunModel(query, [ResultModel(title: 'test1')], runDate: DateTime(2000, 1, 1));
     RunModel second =
-        RunModel(query, [ResultModel(title: 'test1')], queryDate: DateTime(2000, 1, 2));
+        RunModel(query, [ResultModel(title: 'test1')], runDate: DateTime(2000, 1, 2));
     await queryRunsModel.addRun(first);
     await queryRunsModel.addRun(second);
 
@@ -23,20 +23,20 @@ void main() {
   test('Compares two runs: Both equal', () {
     var query = Query('Test');
     RunModel first =
-        RunModel(query, [ResultModel(title: 'test1')], queryDate: DateTime(2000, 1, 1));
+        RunModel(query, [ResultModel(title: 'test1')], runDate: DateTime(2000, 1, 1));
     RunModel second =
-        RunModel(query, [ResultModel(title: 'test1')], queryDate: DateTime(2000, 1, 2));
+        RunModel(query, [ResultModel(title: 'test1')], runDate: DateTime(2000, 1, 2));
     expect(first.compareTo(second),
         ResultComparison(existing: [ResultModel(title: 'test1')]));
   });
   test('Compares two runs: One added', () {
     var query = Query('Test');
     RunModel first =
-        RunModel(query, [ResultModel(title: 'test1')], queryDate: DateTime(2000, 1, 1));
+        RunModel(query, [ResultModel(title: 'test1')], runDate: DateTime(2000, 1, 1));
     RunModel second = RunModel(
         query,
         [ResultModel(title: 'test1'), ResultModel(title: 'test2')],
-        queryDate:  DateTime(2000, 1, 2));
+        runDate:  DateTime(2000, 1, 2));
     expect(
         first.compareTo(second),
         ResultComparison(
@@ -46,11 +46,11 @@ void main() {
   test('Compares two runs: One removed', () {
     var query = Query('Test');
     RunModel first =
-        RunModel(query, [ResultModel(title: 'test1')], queryDate: DateTime(2000, 1, 1));
+        RunModel(query, [ResultModel(title: 'test1')], runDate: DateTime(2000, 1, 1));
     RunModel second = RunModel(
         query,
         [ResultModel(title: 'test1'), ResultModel(title: 'test2')],
-        queryDate:  DateTime(2000, 1, 2));
+        runDate:  DateTime(2000, 1, 2));
     expect(
         second.compareTo(first),
         ResultComparison(
