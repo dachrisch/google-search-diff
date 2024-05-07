@@ -31,35 +31,64 @@ class _SingleQueryCard extends State<SingleQueryCard>
 
     return Dismissible(
         key: Key(queryRuns.hashCode.toString()),
-        direction: DismissDirection.endToStart,
+        direction: DismissDirection.horizontal,
         background: Container(
+          margin: const EdgeInsets.all(10),
+          color: Colors.amber,
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(width: 8),
+              Icon(Icons.refresh_outlined, color: Colors.white),
+            ],
+          ),
+        ),
+        secondaryBackground: Container(
           margin: const EdgeInsets.all(10),
           color: Colors.red,
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Icon(Icons.delete, color: Colors.white),
+              Icon(Icons.delete_outline, color: Colors.white),
               SizedBox(width: 8)
             ],
           ),
         ),
+        dismissThresholds: const {
+          DismissDirection.endToStart: .2,
+          DismissDirection.startToEnd: .2
+        },
+        confirmDismiss: (direction) => direction == DismissDirection.endToStart
+            ? Future<bool>.value(true)
+            : searchService
+                .doSearch(queryRuns.query)
+                .then((run) => queryRuns.addRun(run))
+                .then((value) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Performing new run "${queryRuns.query.term}"'),
+                ));
+              }).then((_) => false),
         onDismissed: (direction) {
           // https://www.dhiwise.com/post/how-to-implement-flutter-swipe-action-cell-in-mobile-app
-
-          searchQueriesStore.remove(queryRuns);
-          // Show a snackbar with undo action
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Query "${queryRuns.query.term}" removed'),
-              action: SnackBarAction(
-                label: 'Undo',
-                onPressed: () async {
-                  l.d('Restore $queryRuns');
-                  searchQueriesStore.add(queryRuns);
-                },
+          if (direction == DismissDirection.startToEnd) {
+            // refresh
+          } else {
+            // delete
+            searchQueriesStore.remove(queryRuns);
+            // Show a snackbar with undo action
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Query "${queryRuns.query.term}" removed'),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () async {
+                    l.d('Restore $queryRuns');
+                    searchQueriesStore.add(queryRuns);
+                  },
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
         child: Card(
           elevation: 4.0,
