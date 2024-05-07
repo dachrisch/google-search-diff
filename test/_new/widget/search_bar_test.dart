@@ -8,7 +8,7 @@ import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
 
-import 'util/testProvider.dart';
+import '../util/testProvider.dart';
 import 'widget_tester_extension.dart';
 
 class TestSearchService extends SearchService {

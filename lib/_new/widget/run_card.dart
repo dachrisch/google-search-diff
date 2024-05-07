@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/model/comparison.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
@@ -18,6 +19,8 @@ class _RunCardState extends State<RunCard> with TimerMixin {
   Widget build(BuildContext context) {
     RunModel run = context.read<RunModel>();
     QueryRunsModel queryRuns = context.watch<QueryRunsModel>();
+    ResultComparison resultComparison =
+        queryRuns.nextRecentTo(run).compareTo(run);
     return Card(
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -26,8 +29,51 @@ class _RunCardState extends State<RunCard> with TimerMixin {
           child: ListTile(
             leading: const Icon(Icons.list_outlined),
             title:
-                Text('Created: ${RelativeTime(context).format(run.queryDate)}'),
-            subtitle: Text('Results: ${run.results.length}'),
+                Text('Created: ${RelativeTime(context).format(run.runDate)}'),
+            subtitle: SizedBox(
+                width: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(children: [
+                          const Icon(Icons.arrow_left_outlined,
+                              color: Colors.green),
+                          Text(resultComparison.added.length.toString())
+                        ])
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.arrow_left_outlined,
+                                color: Colors.grey),
+                            Text(resultComparison.existing.length.toString()),
+                            const Icon(Icons.arrow_right_outlined,color: Colors.grey),
+
+                          ],
+                        )
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Text(resultComparison.removed.length.toString()),
+                            const Icon(Icons.arrow_right_outlined,
+                                color: Colors.red),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                )),
             trailing: Container(
                 decoration: const BoxDecoration(
                     border: Border(

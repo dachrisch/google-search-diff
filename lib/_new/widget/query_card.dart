@@ -52,7 +52,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
                     width: 30,
                   ),
                   Text(
-                      'Updated: ${queryRuns.items > 0 ? RelativeTime(context).format(queryRuns.latest.queryDate) : 'N/A'}')
+                      'Updated: ${queryRuns.items > 0 ? RelativeTime(context).format(queryRuns.latest.runDate) : 'N/A'}')
                 ],
               ),
               trailing: Container(

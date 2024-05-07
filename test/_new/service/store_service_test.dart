@@ -8,7 +8,7 @@ import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 
-import 'util/localstore_helper.dart';
+import '../util/localstore_helper.dart';
 
 void main() {
   setUp(() => cleanupBefore(['.queries', '.runs']));

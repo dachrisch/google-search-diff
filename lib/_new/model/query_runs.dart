@@ -22,7 +22,7 @@ class QueryRunsModel extends ChangeNotifier {
   RunModel runAt(int index) => runs.elementAt(index);
 
   RunModel get latest => runs.reduce((current, next) =>
-      current.queryDate.isAfter(next.queryDate) ? current : next);
+      current.runDate.isAfter(next.runDate) ? current : next);
 
   Future<void> addRun(RunModel run) => dbRunsService
       .saveQueryRun(run)
@@ -39,4 +39,15 @@ class QueryRunsModel extends ChangeNotifier {
 
   RunModel findById(RunId runId) =>
       runs.firstWhere((value) => value.runId == runId);
+
+  RunModel nextRecentTo(RunModel run) =>
+      runs.fold<RunModel?>(
+          null,
+          (closest, element) => element.runDate.isBefore(run.runDate) &&
+                  (closest == null ||
+                      run.runDate.difference(element.runDate) <
+                          run.runDate.difference(closest.runDate))
+              ? element
+              : closest) ??
+      run;
 }

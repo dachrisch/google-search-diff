@@ -8,12 +8,11 @@ import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
-import 'package:google_search_diff/model/search_results.dart';
 import 'package:provider/provider.dart';
 
+import '../util/localstore_helper.dart';
+import '../util/testProvider.dart';
 import 'search_bar_test.dart';
-import 'util/localstore_helper.dart';
-import 'util/testProvider.dart';
 import 'widget_tester_extension.dart';
 
 void main() {

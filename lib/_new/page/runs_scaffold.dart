@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
 class RunsScaffold extends StatefulWidget {
-  RunsScaffold({
+  const RunsScaffold({
     super.key,
   });
 
@@ -49,14 +49,14 @@ class _RunsScaffoldState extends State<RunsScaffold> with TimerMixin {
         groupBy: (RunModel rm) {
           try {
             return TimeUnit.values.firstWhere((tu) =>
-                tu.difference(rm.queryDate.difference(DateTime.now()).abs()) >
+                tu.difference(rm.runDate.difference(DateTime.now()).abs()) >
                 1);
           } on StateError {
             return TimeUnit.second;
           }
         },
         itemComparator: (element1, element2) =>
-            element2.queryDate.compareTo(element1.queryDate),
+            element2.runDate.compareTo(element1.runDate),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {},
