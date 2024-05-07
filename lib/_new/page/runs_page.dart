@@ -8,11 +8,10 @@ import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
 import 'package:google_search_diff/_new/widget/run_card.dart';
+import 'package:google_search_diff/_new/widget/time_grouped_list_view.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:relative_time/relative_time.dart';
 
 class RunsPage extends StatelessWidget {
   const RunsPage({super.key});
@@ -32,15 +31,6 @@ class RunsPageScaffold extends StatefulWidget {
 }
 
 class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
-  final Map<TimeUnit, String> groups = {
-    TimeUnit.second: 'Now',
-    TimeUnit.minute: 'Recently',
-    TimeUnit.hour: 'Today',
-    TimeUnit.day: 'Couple Days',
-    TimeUnit.month: 'Older',
-    TimeUnit.year: 'Older'
-  };
-
   bool isDragging = false;
 
   @override
@@ -62,32 +52,19 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                   ),
                   body: Column(
                     children: [
+                      Text(
+                        'Query runs',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                       Expanded(
-                        child: GroupedListView(
+                        child: TimeGroupedListView(
                           elements: queryRuns.runs,
-                          itemBuilder: (context, run) =>
-                              ChangeNotifierProvider.value(
-                                  value: run,
-                                  child: RunCard(
-                                      onDragChanged: (isDragging) =>
-                                          setState(() {
-                                            this.isDragging = isDragging;
-                                          }))),
-                          groupSeparatorBuilder: (TimeUnit value) =>
-                              Center(child: Text(groups[value]!)),
-                          groupBy: (Run rm) {
-                            try {
-                              return TimeUnit.values.firstWhere((tu) =>
-                                  tu.difference(rm.runDate
-                                      .difference(DateTime.now())
-                                      .abs()) >
-                                  1);
-                            } on StateError {
-                              return TimeUnit.second;
-                            }
-                          },
-                          itemComparator: (element1, element2) =>
-                              element2.runDate.compareTo(element1.runDate),
+                          headerText: 'Your query runs',
+                          childWidgetBuilder: () => RunCard(
+                              onDragChanged: (isDragging) => setState(() {
+                                    this.isDragging = isDragging;
+                                  })),
+                          dateForItem: (Run item) => item.runDate,
                         ),
                       ),
                       AnimatedContainer(

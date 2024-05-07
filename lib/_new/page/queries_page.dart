@@ -5,11 +5,12 @@ import 'package:google_search_diff/_new/action/dispatcher.dart';
 import 'package:google_search_diff/_new/action/intent/add_result.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
-import 'package:google_search_diff/_new/widget/header_listview.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
+import 'package:google_search_diff/_new/widget/time_grouped_list_view.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -46,39 +47,41 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                     'SearchFlux',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  actions: [
-                    IconButton(
-                        key: const Key('show-searchbar-button'),
-                        onPressed: () {
-                          showSearch(
-                              context: context,
-                              delegate: SearchProviderSearchDelegate(
-                                  textStyle:
-                                      Theme.of(context).textTheme.titleMedium,
-                                  searchProvider: context.read<SearchService>(),
-                                  onSave: (results) =>
-                                      (Actions.invoke<AddResultsIntent>(context,
-                                                  AddResultsIntent(results))
-                                              as Future)
-                                          .then((_) {
-                                        if (GoRouter.maybeOf(context) != null) {
-                                          // avoid context pop when used standalone (in tests)
-                                          context.pop();
-                                        }
-                                      })));
-                        },
-                        icon: const Icon(Icons.search)),
-                    const SizedBox(width: 16)
-                  ],
+                  actions: const [_SearchButton(), SizedBox(width: 16)],
                 ),
-                body: ListViewWithHeader(
-                    headerText: queriesStore.items > 0
-                        ? 'Your saved queries'
-                        : 'No saved queries',
-                    itemBuilder: (context, index) =>
-                        ChangeNotifierProvider.value(
-                            value: queriesStore.at(index),
-                            child: const QueryCard()),
-                    items: queriesStore.items))));
+                body: TimeGroupedListView(
+                  headerText: 'Your saved queries',
+                  elements: queriesStore.queryRuns,
+                  childWidgetBuilder: () => const QueryCard(),
+                  dateForItem: (QueryRuns item) => item.query.createdDate,
+                ))));
+  }
+}
+
+class _SearchButton extends StatelessWidget {
+  const _SearchButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        key: const Key('show-searchbar-button'),
+        onPressed: () {
+          showSearch(
+              context: context,
+              delegate: SearchProviderSearchDelegate(
+                  textStyle: Theme.of(context).textTheme.titleMedium,
+                  searchProvider: context.read<SearchService>(),
+                  onSave: (results) => (Actions.invoke<AddResultsIntent>(
+                              context, AddResultsIntent(results)) as Future)
+                          .then((_) {
+                        if (GoRouter.maybeOf(context) != null) {
+                          // avoid context pop when used standalone (in tests)
+                          context.pop();
+                        }
+                      })));
+        },
+        icon: const Icon(Icons.search));
   }
 }
