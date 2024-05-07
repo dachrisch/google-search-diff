@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
@@ -15,9 +15,9 @@ class TestSearchService extends SearchService {
   Query lastSearch = Query('');
 
   @override
-  Future<RunModel> doSearch(Query query) {
+  Future<Results> doSearch(Query query) {
     lastSearch = query;
-    return Future.value(RunModel(query, []));
+    return Future.value(Results(query, []));
   }
 }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
-import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/provider/query_result_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
@@ -46,7 +46,7 @@ class _RunsScaffoldState extends State<RunsScaffold> with TimerMixin {
             QueryResultCardResultsModelProvider(resultsModel: element),
         groupSeparatorBuilder: (TimeUnit value) =>
             Center(child: Text(groups[value]!)),
-        groupBy: (RunModel rm) {
+        groupBy: (Results rm) {
           try {
             return TimeUnit.values.firstWhere((tu) =>
                 tu.difference(rm.runDate.difference(DateTime.now()).abs()) > 1);

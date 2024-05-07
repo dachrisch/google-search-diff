@@ -6,24 +6,24 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'comparison.dart';
 
-part 'run.g.dart';
+part 'results.g.dart';
 
 @JsonSerializable()
-class RunModel extends ChangeNotifier {
+class Results extends ChangeNotifier {
   final DateTime runDate;
   final RunId runId;
   final Query query;
   final List<ResultModel> results;
 
-  RunModel(this.query, this.results, {DateTime? runDate, RunId? runId})
+  Results(this.query, this.results, {DateTime? runDate, RunId? runId})
       : runDate = runDate ?? DateTime.now(),
         runId = runId ?? RunId.withUuid();
 
   int get items => results.length;
 
-  static RunModel empty() => RunModel(Query.empty(), []);
+  static Results empty() => Results(Query.empty(), []);
 
-  static int compare(RunModel a, RunModel b, {bool reverse = false}) =>
+  static int compare(Results a, Results b, {bool reverse = false}) =>
       (reverse ? -1 : 1) * a.runDate.compareTo(b.runDate);
 
   ResultModel operator [](int index) {
@@ -33,12 +33,12 @@ class RunModel extends ChangeNotifier {
   @override
   String toString() => 'Run(id: $runId, date: $runDate)';
 
-  factory RunModel.fromJson(Map<String, dynamic> json) =>
-      _$RunModelFromJson(json);
+  factory Results.fromJson(Map<String, dynamic> json) =>
+      _$ResultsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$RunModelToJson(this);
+  Map<String, dynamic> toJson() => _$ResultsToJson(this);
 
-  ResultComparison compareTo(RunModel run) {
+  ResultComparison compareTo(Results run) {
     ResultComparison resultComparison = ResultComparison();
     for (var result in run.results) {
       if (results.contains(result)) {

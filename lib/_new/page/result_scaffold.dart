@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/model/run_id.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:google_search_diff/_new/widget/header_listview.dart';
@@ -16,7 +16,7 @@ class ResultScaffoldResultsProvider extends StatelessWidget {
     QueryId queryId = context.read<QueryId>();
     RunId resultsId = context.read<RunId>();
     QueriesStoreModel queriesStore = context.read<QueriesStoreModel>();
-    RunModel resultsModel = queriesStore.findById(queryId).findById(resultsId);
+    Results resultsModel = queriesStore.findById(queryId).findById(resultsId);
     return ChangeNotifierProvider.value(
         value: resultsModel, child: const ResultScaffold());
   }
@@ -27,7 +27,7 @@ class ResultScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RunModel results = context.read<RunModel>();
+    Results results = context.read<Results>();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

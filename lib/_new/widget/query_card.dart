@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
-import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
@@ -11,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
 class SingleQueryCard extends StatefulWidget {
-
   const SingleQueryCard({
     super.key,
   });
@@ -31,7 +29,8 @@ class _SingleQueryCard extends State<SingleQueryCard>
     setState(() => lastUpdatedText = queryRuns.latest != null
         ? RelativeTime(context).format(queryRuns.latest!.runDate)
         : 'N/A');
-    setState(() => relativeCreatedString = RelativeTime(context).format(queryRuns.query.createdDate));
+    setState(() => relativeCreatedString =
+        RelativeTime(context).format(queryRuns.query.createdDate));
   }
 
   @override
@@ -119,23 +118,47 @@ class _SingleQueryCard extends State<SingleQueryCard>
                         onPressed: () => searchService
                             .doSearch(queryRuns.query)
                             .then((run) => queryRuns.addRun(run))
-                            .then((value) => updateRelativeTimes(context,queryRuns))),
+                            .then((value) =>
+                                updateRelativeTimes(context, queryRuns))),
                   ),
                   title: Text(queryRuns.query.term),
-                  subtitle: Column(
+                  subtitle: Row(
+                    verticalDirection: VerticalDirection.up,
                     children: [
-                      Row(children: [
-                        Text('Created: $relativeCreatedString'),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        Text('Results: ${queryRuns.items}'),
-                      ]),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                      const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Updated: $lastUpdatedText'),
+                            Text('Created:'),
+                            Text('Updated:'),
                           ]),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(relativeCreatedString),
+                          Text(lastUpdatedText)
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(''),
+                            Text('Results:'),
+                          ]),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Column(
+                        children: [
+                          const Text(''),
+                          Text(queryRuns.items.toString())
+                        ],
+                      )
                     ],
                   ),
                   trailing: Container(

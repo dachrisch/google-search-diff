@@ -4,7 +4,7 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/page/queries_scaffold.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
@@ -24,7 +24,8 @@ void main() {
     await searchQueriesStore.initFuture;
     var query = Query('Test query');
     var queryRunsModel = QueryRunsModel(query);
-    queryRunsModel.addRun(RunModel(query, [ResultModel(title: 'Test', source: 'T', link: 'http://example.com')]));
+    queryRunsModel.addRun(Results(query,
+        [ResultModel(title: 'Test', source: 'T', link: 'http://example.com')]));
     searchQueriesStore.add(queryRunsModel);
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
@@ -40,9 +41,9 @@ void main() {
     expect(searchQueriesStore.items, 1);
     expect(find.byType(SingleQueryCard), findsNWidgets(1));
 
-    expect(find.widgetWithText(Column, 'Results: 1'), findsOneWidget);
+    expect(find.widgetWithText(Row, '1'), findsOneWidget);
     await tester.tapButtonByKey('refresh-query-results-outside-button-${query.queryId.id}');
-    expect(find.widgetWithText(Column, 'Results: 2'), findsOneWidget);
+    expect(find.widgetWithText(Row, '2'), findsOneWidget);
 
     await tester.tapButtonByKey(
         'delete-search-query-${searchQueriesStore.at(0).query.queryId}');

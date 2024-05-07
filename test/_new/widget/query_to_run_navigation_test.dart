@@ -4,7 +4,7 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/model/results.dart';
 import 'package:google_search_diff/_new/routes/routes.dart';
 import 'package:google_search_diff/_new/theme.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
@@ -17,7 +17,7 @@ void main() {
     Provider.debugCheckInvalidValueType = null;
     var queriesStore = QueriesStoreModel();
     await queriesStore.add(QueryRunsModel.fromRunModel(
-        RunModel(Query('Saved query 1'), [ResultModel(title: 'result 1')])));
+        Results(Query('Saved query 1'), [ResultModel(title: 'result 1')])));
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
     await tester.pumpWidget(RouterApp(
