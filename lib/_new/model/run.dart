@@ -6,39 +6,38 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'comparison.dart';
 
-part 'results.g.dart';
+part 'run.g.dart';
 
 @JsonSerializable()
-class Results extends ChangeNotifier {
+class Run extends ChangeNotifier {
   final DateTime runDate;
-  final RunId runId;
+  final RunId id;
   final Query query;
-  final List<ResultModel> results;
+  final List<Result> results;
 
-  Results(this.query, this.results, {DateTime? runDate, RunId? runId})
+  Run(this.query, this.results, {DateTime? runDate, RunId? id})
       : runDate = runDate ?? DateTime.now(),
-        runId = runId ?? RunId.withUuid();
+        id = id ?? RunId.withUuid();
 
   int get items => results.length;
 
-  static Results empty() => Results(Query.empty(), []);
+  static Run empty() => Run(Query.empty(), []);
 
-  static int compare(Results a, Results b, {bool reverse = false}) =>
+  static int compare(Run a, Run b, {bool reverse = false}) =>
       (reverse ? -1 : 1) * a.runDate.compareTo(b.runDate);
 
-  ResultModel operator [](int index) {
+  Result operator [](int index) {
     return results[index];
   }
 
   @override
-  String toString() => 'Run(id: $runId, date: $runDate)';
+  String toString() => 'Run(id: $id, date: $runDate)';
 
-  factory Results.fromJson(Map<String, dynamic> json) =>
-      _$ResultsFromJson(json);
+  factory Run.fromJson(Map<String, dynamic> json) => _$RunFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ResultsToJson(this);
+  Map<String, dynamic> toJson() => _$RunToJson(this);
 
-  ResultComparison compareTo(Results run) {
+  ResultComparison compareTo(Run run) {
     ResultComparison resultComparison = ResultComparison();
     for (var result in run.results) {
       if (results.contains(result)) {

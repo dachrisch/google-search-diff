@@ -1,47 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/model/run_id.dart';
 import 'package:google_search_diff/_new/service/db_runs_service.dart';
 
-class QueryRunsModel extends ChangeNotifier {
+class QueryRuns extends ChangeNotifier {
   final Query query;
-  final List<Results> runs;
+  final List<Run> runs;
   final DbRunsService dbRunsService = DbRunsService();
 
-  static QueryRunsModel fromRunModel(Results runModel) {
-    var queryRunsModel = QueryRunsModel(runModel.query);
-    queryRunsModel.addRun(runModel);
-    return queryRunsModel;
+  static QueryRuns fromRun(Run run) {
+    var runs = QueryRuns(run.query);
+    runs.addRun(run);
+    return runs;
   }
 
-  QueryRunsModel(this.query, {List<Results>? runs}) : runs = runs ?? [];
+  QueryRuns(this.query, {List<Run>? runs}) : runs = runs ?? [];
 
   int get items => runs.length;
 
-  Results runAt(int index) => runs.elementAt(index);
+  Run runAt(int index) => runs.elementAt(index);
 
-  Results? get latest => runs.reduce((current, next) =>
+  Run? get latest => runs.reduce((current, next) =>
       current.runDate.isAfter(next.runDate) ? current : next);
 
-  Future<void> addRun(Results run) => dbRunsService
-      .saveQueryRun(run)
+  Future<void> addRun(Run run) => dbRunsService
+      .saveRun(run)
       .then((value) => runs.add(run))
       .then((value) => notifyListeners());
 
-  removeRun(Results run) => dbRunsService
-      .removeQueryRun(run)
+  removeRun(Run run) => dbRunsService
+      .removeRun(run)
       .then((value) => runs.remove(run))
       .then((value) => notifyListeners());
 
   @override
   String toString() => 'QueryRuns(query: $query, runs: $runs)';
 
-  Results findById(RunId runId) =>
-      runs.firstWhere((value) => value.runId == runId);
+  Run findById(RunId runId) => runs.firstWhere((value) => value.id == runId);
 
-  Results nextRecentTo(Results run) =>
-      runs.fold<Results?>(
+  Run nextRecentTo(Run run) =>
+      runs.fold<Run?>(
           null,
           (closest, element) => element.runDate.isBefore(run.runDate) &&
                   (closest == null ||

@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/action/add_result.dart';
 import 'package:google_search_diff/_new/action/dispatcher.dart';
-import 'package:google_search_diff/_new/action/intent/add_result_intent.dart';
+import 'package:google_search_diff/_new/action/intent/add_result.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
-import 'package:google_search_diff/_new/provider/query_card_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
 import 'package:google_search_diff/_new/widget/header_listview.dart';
+import 'package:google_search_diff/_new/widget/query_card.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-class QueriesScaffold extends StatefulWidget {
-  const QueriesScaffold({super.key});
+class QueriesPage extends StatefulWidget {
+  const QueriesPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _QueriesScaffoldState();
+  State<StatefulWidget> createState() => _QueriesPageState();
 }
 
-class _QueriesScaffoldState extends State<QueriesScaffold> with TimerMixin {
+class _QueriesPageState extends State<QueriesPage> with TimerMixin {
   final Logger l = getLogger('QueriesScaffold');
 
   @override
   Widget build(BuildContext context) {
-    QueriesStoreModel queriesStore = context.watch<QueriesStoreModel>();
+    QueriesStore queriesStore = context.watch<QueriesStore>();
 
     return Actions(
         actions: <Type, Action<Intent>>{
@@ -76,8 +76,9 @@ class _QueriesScaffoldState extends State<QueriesScaffold> with TimerMixin {
                         ? 'Your saved queries'
                         : 'No saved queries',
                     itemBuilder: (context, index) =>
-                        QueryCardQueryModelProvider(
-                            queryRuns: queriesStore.at(index)),
+                        ChangeNotifierProvider.value(
+                            value: queriesStore.at(index),
+                            child: const SingleQueryCard()),
                     items: queriesStore.items))));
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/results.dart';
-import 'package:google_search_diff/_new/page/queries_scaffold.dart';
+import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/page/queries_page.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +15,9 @@ class TestSearchService extends SearchService {
   Query lastSearch = Query('');
 
   @override
-  Future<Results> doSearch(Query query) {
+  Future<Run> doSearch(Query query) {
     lastSearch = query;
-    return Future.value(Results(query, []));
+    return Future.value(Run(query, []));
   }
 }
 
@@ -27,19 +27,18 @@ void main() {
   });
   testWidgets('Search bar history is added, retrieved and deleted',
       (WidgetTester tester) async {
-    var searchQueriesStore = QueriesStoreModel();
+    var searchQueriesStore = QueriesStore();
     var historyService = HistoryService();
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
-        ChangeNotifierProvider<QueriesStoreModel>.value(
-            value: searchQueriesStore),
+        ChangeNotifierProvider<QueriesStore>.value(value: searchQueriesStore),
         ChangeNotifierProvider<HistoryService>.value(value: historyService),
         Provider<SearchService>.value(
           value: testSearchService,
         ),
       ],
-      scaffoldUnderTest: const QueriesScaffold(),
+      scaffoldUnderTest: const QueriesPage(),
     ));
 
     await tester.tapButtonByKey('show-searchbar-button');

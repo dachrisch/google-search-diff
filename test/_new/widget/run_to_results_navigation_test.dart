@@ -5,11 +5,11 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/results.dart';
-import 'package:google_search_diff/_new/page/result_scaffold.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/routes.dart';
 import 'package:google_search_diff/_new/theme.dart';
 import 'package:google_search_diff/_new/widget/query_card.dart';
+import 'package:google_search_diff/_new/widget/result_card.dart';
 import 'package:google_search_diff/_new/widget/run_card.dart';
 import 'package:provider/provider.dart';
 
@@ -32,9 +32,9 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
 
     Provider.debugCheckInvalidValueType = null;
-    var queriesStore = QueriesStoreModel();
-    await queriesStore.add(QueryRunsModel.fromRunModel(
-        Results(Query('Saved query 1'), [ResultModel(title: 'result 1')])));
+    var queriesStore = QueriesStore();
+    await queriesStore.add(QueryRuns.fromRun(
+        Run(Query('Saved query 1'), [Result(title: 'result 1')])));
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
     final PlatformAssetBundle testBundle = PlatformAssetBundle();

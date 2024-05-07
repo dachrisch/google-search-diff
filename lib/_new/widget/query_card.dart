@@ -25,7 +25,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
   late String lastUpdatedText;
   late String relativeCreatedString;
 
-  updateRelativeTimes(BuildContext context, QueryRunsModel queryRuns) {
+  updateRelativeTimes(BuildContext context, QueryRuns queryRuns) {
     setState(() => lastUpdatedText = queryRuns.latest != null
         ? RelativeTime(context).format(queryRuns.latest!.runDate)
         : 'N/A');
@@ -35,8 +35,8 @@ class _SingleQueryCard extends State<SingleQueryCard>
 
   @override
   Widget build(BuildContext context) {
-    QueryRunsModel queryRuns = context.watch<QueryRunsModel>();
-    QueriesStoreModel searchQueriesStore = context.watch<QueriesStoreModel>();
+    QueryRuns queryRuns = context.watch<QueryRuns>();
+    QueriesStore searchQueriesStore = context.watch<QueriesStore>();
     SearchService searchService = context.read<SearchService>();
     updateRelativeTimes(context, queryRuns);
 
@@ -105,7 +105,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
           elevation: 1.0,
           margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
           child: InkWell(
-              onTap: () => context.goRelativeWithId(queryRuns.query.queryId),
+              onTap: () => context.goRelativeWithId(queryRuns.query.id),
               child: ListTile(
                   leading: Container(
                     decoration: const BoxDecoration(
@@ -114,7 +114,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
                                 BorderSide(width: 1.0, color: Colors.white))),
                     child: AnimatedRefreshIconButton(
                         buttonKey: Key(
-                            'refresh-query-results-outside-button-${queryRuns.query.queryId.id}'),
+                            'refresh-query-results-outside-button-${queryRuns.query.id.id}'),
                         onPressed: () => searchService
                             .doSearch(queryRuns.query)
                             .then((run) => queryRuns.addRun(run))
@@ -166,8 +166,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
                         border: Border(
                             left: BorderSide(width: 1.0, color: Colors.white))),
                     child: IconButton(
-                        key: Key(
-                            'delete-search-query-${queryRuns.query.queryId}'),
+                        key: Key('delete-search-query-${queryRuns.query.id}'),
                         icon: const Icon(Icons.delete),
                         onPressed: () => searchQueriesStore.remove(queryRuns)),
                   ))),

@@ -6,11 +6,11 @@ part 'query.g.dart';
 @JsonSerializable()
 class Query {
   final String term;
-  final QueryId queryId;
+  final QueryId id;
   final DateTime createdDate;
 
-  Query(this.term, {QueryId? queryId, DateTime? createdDate})
-      : queryId = queryId ?? QueryId.withUuid(),
+  Query(this.term, {QueryId? id, DateTime? createdDate})
+      : id = id ?? QueryId.withUuid(),
         createdDate = createdDate ?? DateTime.now();
 
   @override
@@ -18,11 +18,11 @@ class Query {
 
   @override
   bool operator ==(Object other) {
-    return other is Query && other.term == term && other.queryId == queryId;
+    return other is Query && other.term == term && other.id == id;
   }
 
   @override
-  String toString() => 'Query(term: $term, queryId: $queryId)';
+  String toString() => 'Query(term: $term, queryId: $id)';
 
   factory Query.empty() => Query('');
 

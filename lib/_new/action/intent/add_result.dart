@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 
 class AddResultsIntent extends Intent {
-  final Results results;
+  final Run results;
 
   const AddResultsIntent(this.results);
 }

@@ -4,7 +4,7 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/routes.dart';
 import 'package:google_search_diff/_new/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,9 +14,9 @@ void main() async {
   // Theme from: https://material-foundation.github.io/material-theme-builder/
   var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
-  var queriesStore = QueriesStoreModel();
-  await queriesStore.add(QueryRunsModel.fromRunModel(
-      Results(Query('Saved query 1'), [ResultModel(title: 'result 1')])));
+  var queriesStore = QueriesStore();
+  await queriesStore.add(QueryRuns.fromRun(
+      Run(Query('Saved query 1'), [Result(title: 'result 1')])));
 
   SharedPreferences.getInstance()
       .then((prefs) => prefs.setInt('refreshEvery', 10))

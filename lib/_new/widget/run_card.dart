@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/comparison.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
-import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
@@ -21,12 +21,12 @@ class _RunCardState extends State<RunCard> with TimerMixin {
 
   @override
   Widget build(BuildContext context) {
-    Results run = context.read<Results>();
-    QueryRunsModel queryRuns = context.watch<QueryRunsModel>();
+    Run run = context.read<Run>();
+    QueryRuns queryRuns = context.watch<QueryRuns>();
     ResultComparison resultComparison =
         queryRuns.nextRecentTo(run).compareTo(run);
     return Dismissible(
-      key: Key(run.runId.id.toString()),
+      key: Key(run.id.id.toString()),
       direction: DismissDirection.endToStart,
       background: Container(
         margin: const EdgeInsets.all(10),
@@ -61,7 +61,7 @@ class _RunCardState extends State<RunCard> with TimerMixin {
         elevation: 1.0,
         margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
         child: InkWell(
-            onTap: () => context.goRelativeWithId(run.runId),
+            onTap: () => context.goRelativeWithId(run.id),
             child: ListTile(
               leading: const Icon(Icons.list_outlined),
               title:
@@ -106,7 +106,7 @@ class _RunCardState extends State<RunCard> with TimerMixin {
                       border: Border(
                           left: BorderSide(width: 1.0, color: Colors.white))),
                   child: IconButton(
-                    key: Key('delete-query-results-${run.runId}'),
+                    key: Key('delete-query-results-${run.id}'),
                     icon: const Icon(Icons.delete),
                     onPressed: () => queryRuns.removeRun(run),
                   )),

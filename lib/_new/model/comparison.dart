@@ -3,14 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'result.dart';
 
 class ResultComparison {
-  final List<ResultModel> added = [];
-  final List<ResultModel> existing = [];
-  final List<ResultModel> removed = [];
+  final List<Result> added = [];
+  final List<Result> existing = [];
+  final List<Result> removed = [];
 
-  ResultComparison(
-      {List<ResultModel>? added,
-      List<ResultModel>? existing,
-      List<ResultModel>? removed}) {
+  ResultComparison({List<Result>? added,
+    List<Result>? existing,
+    List<Result>? removed}) {
     this.added.addAll(added ?? []);
     this.existing.addAll(existing ?? []);
     this.removed.addAll(removed ?? []);

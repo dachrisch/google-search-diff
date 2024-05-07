@@ -1,7 +1,7 @@
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/results.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 // MAYBE: use https://github.com/darjaorlova/bunny_search_animated_searchbar/
 class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   final SearchService searchProvider;
-  final Future<void> Function(Results results) onSave;
+  final Future<void> Function(Run results) onSave;
 
   final ScrollController scrollController = ScrollController();
 
@@ -49,7 +49,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
       );
     } else {
       context.watch<HistoryService>().addQuery(Query(query));
-      return FutureBuilder<Results>(
+      return FutureBuilder<Run>(
         future: searchProvider.doSearch(Query(query)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {

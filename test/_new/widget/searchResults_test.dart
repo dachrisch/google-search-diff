@@ -12,7 +12,7 @@ void main() {
   testWidgets('Search results appear in results list',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQueriesStore = QueriesStoreModel();
+    var searchQueriesStore = QueriesStore();
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
 
     await tester.pumpWidget(RouterApp(

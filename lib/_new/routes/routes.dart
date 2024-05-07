@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/run_id.dart';
-import 'package:google_search_diff/_new/page/queries_scaffold.dart';
-import 'package:google_search_diff/_new/page/result_scaffold.dart';
-import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
+import 'package:google_search_diff/_new/page/queries_page.dart';
+import 'package:google_search_diff/_new/page/results_page.dart';
+import 'package:google_search_diff/_new/page/runs_page.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
@@ -13,17 +13,17 @@ import 'package:relative_time/relative_time.dart';
 
 class RouterApp extends StatelessWidget {
   final ThemeData theme;
-  final QueriesStoreModel queriesStore;
+  final QueriesStore queriesStore;
   final SearchService searchService;
   final HistoryService historyService;
 
   RouterApp(
       {super.key,
       required this.theme,
-      QueriesStoreModel? queriesStore,
+      QueriesStore? queriesStore,
       SearchService? searchService,
       HistoryService? historyService})
-      : queriesStore = queriesStore ?? QueriesStoreModel(),
+      : queriesStore = queriesStore ?? QueriesStore(),
         searchService = searchService ?? LoremIpsumSearchService(),
         historyService = historyService ?? HistoryService();
 
@@ -31,7 +31,7 @@ class RouterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<QueriesStoreModel>(
+        ChangeNotifierProvider<QueriesStore>(
             create: (BuildContext context) => queriesStore),
         Provider<SearchService>(
           create: (BuildContext context) => searchService,
@@ -58,7 +58,7 @@ class RouterConfigBuilder {
           GoRoute(path: '/', redirect: (context, state) => '/queries'),
           GoRoute(
               path: '/queries',
-              builder: (context, state) => const QueriesScaffold(),
+              builder: (context, state) => const QueriesPage(),
               routes: [
                 GoRoute(
                   path: ':queryId',
@@ -70,8 +70,7 @@ class RouterConfigBuilder {
                 GoRoute(
                     path: ':queryId/runs',
                     builder: (context, state) => Provider<QueryId>.value(
-                        value: QueryId.fromState(state),
-                        child: const ResultsScaffoldQueryModelProvider()),
+                        value: QueryId.fromState(state), child: RunsPage()),
                     routes: [
                       GoRoute(
                         path: ':runId',
@@ -79,7 +78,7 @@ class RouterConfigBuilder {
                           Provider<RunId>.value(value: RunId.fromState(state)),
                           Provider<QueryId>.value(
                               value: QueryId.fromState(state))
-                        ], child: ResultScaffoldResultsProvider()),
+                        ], child: ResultsPage()),
                       )
                     ])
               ]),
