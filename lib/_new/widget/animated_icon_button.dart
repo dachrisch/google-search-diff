@@ -62,8 +62,10 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
         child: IconButton(
           key: buttonKey,
           icon: const Icon(Icons.refresh_outlined),
-          onPressed: () async {
-            controller.forward();
+          onPressed: controller.isAnimating
+              ? null
+              : () async {
+                  controller.forward();
             await onPressed();
             controller.stop();
             controller.reset();
