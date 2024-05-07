@@ -1,12 +1,13 @@
-import 'package:fimber/fimber.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:localstore/localstore.dart';
+import 'package:logger/logger.dart';
 
 class DbRunsService {
   final Localstore db = Localstore.instance;
-  final FimberLog l = FimberLog('db');
+  final Logger l = getLogger('db');
   final Map<RunModel, String> queryRunsIdMap = {};
 
   late Future<void> loadFuture;

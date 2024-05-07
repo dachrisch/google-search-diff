@@ -1,5 +1,5 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
 import 'package:google_search_diff/main.dart';
@@ -10,6 +10,7 @@ import 'package:google_search_diff/view/google_search_app_bar.dart';
 import 'package:google_search_diff/view/saved_searched_badge_widget.dart';
 import 'package:google_search_diff/view/search_bar_appbar.dart';
 import 'package:google_search_diff/view/search_results_view.dart';
+import 'package:logger/logger.dart';
 
 class GoogleSearchDiffScreen extends StatefulWidget {
   final QueryRetriever queryRetriever;
@@ -29,7 +30,7 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
 
   late SearchBarController searchBarController;
 
-  final logger = FimberLog('screen');
+  final Logger l = getLogger('screen');
 
   @override
   void initState() {
@@ -48,12 +49,12 @@ class _GoogleSearchDiffScreenState extends State<GoogleSearchDiffScreen> {
     });
 
     searchBarController.addSearchResultsListener((results) {
-      logger.d('Comparing new search to existing: ${results.toJson()}');
+      l.d('Comparing new search to existing: ${results.toJson()}');
       searchResultsController.compareTo(results);
     });
 
     searchResultsController.addSearchResultsListener((results) {
-      logger.d('Got new search results: ${results.toJson()}');
+      l.d('Got new search results: ${results.toJson()}');
       setState(() {
         searchResultsController;
       });

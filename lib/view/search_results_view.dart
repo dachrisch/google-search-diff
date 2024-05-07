@@ -1,9 +1,10 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/view/search_result_list_tile.dart';
+import 'package:logger/logger.dart';
 
 class SearchResultsView extends StatefulWidget {
   final SearchResultsController searchResultsController;
@@ -19,14 +20,14 @@ class SearchResultsView extends StatefulWidget {
 }
 
 class _SearchResultsView extends State<SearchResultsView> {
-  final FimberLog logger = FimberLog('search-result');
+  final Logger l = getLogger('search-result');
 
   bool isSearching = false;
 
   @override
   void initState() {
     widget.searchBarController.addSearchListener((isSearching) {
-      logger.d(isSearching ? 'Started search' : 'Search finished');
+      l.d(isSearching ? 'Started search' : 'Search finished');
       setState(() {
         this.isSearching = isSearching;
       });
@@ -53,7 +54,7 @@ class _SearchResultsView extends State<SearchResultsView> {
                       SearchResultListTile(
                           key: Key('search-result-tile-$index'),
                           doDelete: (searchResult) {
-                            logger.d('Removing $searchResult from list');
+                            l.d('Removing $searchResult from list');
                             setState(() {
                               widget.searchResultsController
                                   .removeResult(searchResult);

@@ -1,11 +1,12 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/model/search_results.dart';
+import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchResultListTile extends StatelessWidget {
   final SearchResult searchResult;
-  final FimberLog logger = FimberLog('tile');
+  final Logger l = getLogger('tile');
 
   final void Function(dynamic e) doDelete;
 
@@ -14,7 +15,7 @@ class SearchResultListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('Drawing tile $key');
+    l.d('Drawing tile $key');
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Card(

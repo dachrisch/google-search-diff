@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:fimber/fimber.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:localstore/localstore.dart';
+import 'package:logger/logger.dart';
 
 class SearchesStore {
   final String _c = '.search';
   final Localstore _db;
-  final logger = FimberLog('db');
+  final Logger l = getLogger('db');
   StreamSubscription<Map<String, dynamic>>? _subscription;
 
   static final SearchesStore _singleton = SearchesStore._internal();
@@ -17,7 +18,7 @@ class SearchesStore {
 
   Future<Map<String, dynamic>?> findAll() =>
       _db.collection(_c).get().then((allSearches) {
-        logger.d('Reading existing searches: $allSearches');
+        l.d('Reading existing searches: $allSearches');
         return allSearches;
       });
 
@@ -25,14 +26,14 @@ class SearchesStore {
       void Function(SearchResultsMapType event) onData) {
     return _subscription =
         _db.collection(_c).stream.listen((SearchResultsMapType event) {
-      logger.d('New db event: $event');
+      l.d('New db event: $event');
       return onData(event);
     }, cancelOnError: true);
   }
 
   Future insert(SearchResultsMapType json) {
     final id = _db.collection(_c).doc().id;
-    logger.d('Storing $this with [$id]: $json');
+    l.d('Storing $this with [$id]: $json');
     return _db.collection(_c).doc(id).set(json);
   }
 
@@ -45,7 +46,7 @@ class SearchesStore {
         .then((allDocuments) => allDocuments?.entries
             .firstWhere((element) => element.value['id'] == id))
         .then((element)  {
-          logger.d('deleting $element [$id]');
+          l.d('deleting $element [$id]');
 
           return _db.collection(_c).doc(element?.key).delete();});
   }

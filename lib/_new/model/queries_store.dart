@@ -1,15 +1,16 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:google_search_diff/_new/service/db_queries_service.dart';
 import 'package:google_search_diff/_new/service/db_runs_service.dart';
+import 'package:logger/logger.dart';
 
 class QueriesStoreModel extends ChangeNotifier {
   final List<QueryRunsModel> searchQueries = [];
   final DbQueriesService dbQueryService = DbQueriesService();
   final DbRunsService dbRunsService = DbRunsService();
-  final FimberLog l = FimberLog('QueriesStore');
+  final Logger l = getLogger('QueriesStore');
   late Future<void> initFuture;
 
   QueriesStoreModel() {

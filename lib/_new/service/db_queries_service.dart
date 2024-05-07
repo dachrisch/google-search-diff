@@ -1,10 +1,11 @@
-import 'package:fimber/fimber.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:localstore/localstore.dart';
+import 'package:logger/logger.dart';
 
 class DbQueriesService {
   final Localstore db = Localstore.instance;
-  final FimberLog l = FimberLog('db');
+  final Logger l = getLogger('db');
   final Map<Query, String> queryIdMap = {};
 
   late Future<void> loadFuture;

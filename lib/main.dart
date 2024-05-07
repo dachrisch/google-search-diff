@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,6 @@ import 'package:relative_time/relative_time.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Fimber.plantTree(DebugTree());
   var apiKey = const String.fromEnvironment('GOOGLE_API_KEY');
   QueryRetriever retriever =
       apiKey == "" ? StaticRetriever() : SerapiRetriever(apiKey: apiKey);

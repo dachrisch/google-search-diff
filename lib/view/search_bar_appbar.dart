@@ -1,5 +1,5 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/actions/actions.dart';
 import 'package:google_search_diff/actions/intents.dart';
 import 'package:google_search_diff/controller/query_change.dart';
@@ -7,6 +7,7 @@ import 'package:google_search_diff/controller/search_results_controller.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/service/search_provider.dart';
 import 'package:google_search_diff/view/search_bar_textfield.dart';
+import 'package:logger/logger.dart';
 
 class SearchBarAppBar extends StatefulWidget {
   final SearchBarController searchBarController;
@@ -27,7 +28,7 @@ class SearchBarAppBar extends StatefulWidget {
 }
 
 class _SearchBarWidgetView extends State<SearchBarAppBar> {
-  final logger = FimberLog('searchbar');
+  final Logger l = getLogger('searchbar');
 
   @override
   void initState() {
@@ -81,7 +82,7 @@ class _SearchBarWidgetView extends State<SearchBarAppBar> {
                   QueryAction(widget.searchBarController)
                       .invoke(const QueryIntent());
                 }else{
-                  logger.d('Query empty, not searching.');
+                  l.d('Query empty, not searching.');
                 }
               },
             ),

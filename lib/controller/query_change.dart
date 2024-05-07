@@ -1,7 +1,8 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/model/search_results.dart';
 import 'package:google_search_diff/service/search_provider.dart';
+import 'package:logger/logger.dart';
 
 class QueryChange extends ChangeNotifier {
   String _query = '';
@@ -41,14 +42,14 @@ class SearchBarController {
   final SearchResultsChange _searchResultsChange = SearchResultsChange();
   final SearchChange _searchChange = SearchChange();
   final TextEditingController searchFieldController = TextEditingController();
-  final FimberLog logger = FimberLog('searchbar-controller');
+  final Logger l = getLogger('searchbar-controller');
   final ErrorChange errorChange = ErrorChange();
 
   final SearchProvider searchProvider;
 
   SearchBarController(this.searchProvider) {
     addQueryListener((query) {
-      logger.d('setting query to: $query');
+      l.d('setting query to: $query');
       searchFieldController.text = query;
     });
   }
@@ -80,7 +81,7 @@ class SearchBarController {
 
   Future<SearchResults> doSearch() {
     startSearch();
-    logger.d('search for: ${searchFieldController.text}');
+    l.d('search for: ${searchFieldController.text}');
     return searchProvider
         .doSearch(searchFieldController.text)
         .then((searchResults) {

@@ -1,16 +1,17 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/actions/actions.dart';
 import 'package:google_search_diff/actions/intents.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/main.dart';
 import 'package:google_search_diff/service/search_provider.dart';
+import 'package:logger/logger.dart';
 
 class SearchBarTextField extends StatelessWidget {
   final SearchBarController searchBarController;
   final QueryRetriever retriever;
 
-  final logger = FimberLog('search');
+  final Logger l = getLogger('search');
 
   SearchBarTextField(
       {super.key, required this.searchBarController, required this.retriever});

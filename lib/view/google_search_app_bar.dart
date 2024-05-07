@@ -1,8 +1,9 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
 import 'package:google_search_diff/model/search_results.dart';
+import 'package:logger/logger.dart';
 import 'package:relative_time/relative_time.dart';
 
 class GoogleSearchAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -27,7 +28,7 @@ class GoogleSearchAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _GoogleSearchAppBarState extends State<GoogleSearchAppBar> {
-  final logger = FimberLog('appbar');
+  final Logger l = getLogger('appbar');
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class _GoogleSearchAppBarState extends State<GoogleSearchAppBar> {
                       menuChildren: widget.searchResultsStore
                           .map((stored) => MenuItemButton(
                               onPressed: () {
-                                logger.d('selected $stored');
+                                l.d('selected $stored');
                                 widget.searchResultsController
                                     .informNewResults(stored);
                                 widget.searchBarController

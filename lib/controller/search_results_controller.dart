@@ -1,12 +1,13 @@
-import 'package:fimber/fimber.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/model/search_results.dart';
+import 'package:logger/logger.dart';
 
 class SearchResultsController {
   final SearchResultsChange _searchResultsChange = SearchResultsChange();
 
   SearchResults searchResults = NoSearchResults();
-  final logger = FimberLog('controller');
+  final Logger logger = getLogger('controller');
 
   int itemCount() => searchResults.count();
 

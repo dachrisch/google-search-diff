@@ -1,11 +1,12 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/controller/search_results_controller.dart';
 import 'package:google_search_diff/model/search_results.dart';
+import 'package:logger/logger.dart';
 
 class SavedSearchedBadgeWidget extends StatelessWidget {
-  final FimberLog logger = FimberLog('badge');
+  final Logger l = getLogger('badge');
   SavedSearchedBadgeWidget({
     super.key,
     required this.searchResultsController,
@@ -28,7 +29,7 @@ class SavedSearchedBadgeWidget extends StatelessWidget {
 
                 onPressed: () {
                   if (kDebugMode) {
-                    logger.d('saving ${searchResultsController.searchResults}');
+                    l.d('saving ${searchResultsController.searchResults}');
                   }
                   searchResultsController.storeNew();
                 },
@@ -40,7 +41,7 @@ class SavedSearchedBadgeWidget extends StatelessWidget {
             child: FloatingActionButton.small(
                 onPressed: () {
                   if (kDebugMode) {
-                    logger
+                    l
                         .d('deleting ${searchResultsController.searchResults}');
                   }
                   searchResultsStore

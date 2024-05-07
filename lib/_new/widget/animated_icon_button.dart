@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
+import 'package:logger/logger.dart';
 
 class AnimatedRefreshIconButton extends StatefulWidget {
   final void Function() onPressed;
@@ -45,7 +46,7 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
   final AnimationController controller;
 
   final Key buttonKey;
-  final FimberLog l = FimberLog('button');
+  final Logger l = getLogger('button');
 
    _AnimatedRefreshIconButton(
       {required this.buttonKey,

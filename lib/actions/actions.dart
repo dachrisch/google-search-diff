@@ -1,12 +1,13 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/actions/intents.dart';
 import 'package:google_search_diff/controller/query_change.dart';
 import 'package:google_search_diff/model/search_results.dart';
+import 'package:logger/logger.dart';
 
 class QueryAction extends Action<QueryIntent> {
   final SearchBarController searchBarController;
-  final FimberLog logger=FimberLog('query');
+  final Logger l=getLogger('query');
   QueryAction(this.searchBarController);
 
   @override
@@ -14,7 +15,7 @@ class QueryAction extends Action<QueryIntent> {
     searchBarController.doSearch().onError((error, stackTrace) {
       searchBarController.stopSearch();
       searchBarController.informError(error);
-      logger.e('Error while performing search', stacktrace: stackTrace);
+      l.e('Error while performing search', stackTrace: stackTrace);
       return SearchResults(query: '', timestamp: DateTime.now());
     });
     return null;
@@ -23,7 +24,7 @@ class QueryAction extends Action<QueryIntent> {
 
 class ClearAction extends Action<ClearIntent> {
   final TextEditingController searchFieldController;
-  final FimberLog logger=FimberLog('clear');
+  final Logger logger=getLogger('clear');
   ClearAction(this.searchFieldController);
 
   @override
