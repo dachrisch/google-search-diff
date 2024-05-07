@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:uuid/parsing.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/entity_id.dart';
@@ -21,5 +20,3 @@ class QueryId extends EntityId {
 
   Map<String, dynamic> toJson() => _$QueryIdToJson(this);
 }
-
-

@@ -49,8 +49,7 @@ class _RunsScaffoldState extends State<RunsScaffold> with TimerMixin {
         groupBy: (RunModel rm) {
           try {
             return TimeUnit.values.firstWhere((tu) =>
-                tu.difference(rm.runDate.difference(DateTime.now()).abs()) >
-                1);
+                tu.difference(rm.runDate.difference(DateTime.now()).abs()) > 1);
           } on StateError {
             return TimeUnit.second;
           }

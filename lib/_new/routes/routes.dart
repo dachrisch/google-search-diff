@@ -79,7 +79,7 @@ class RouterConfigBuilder {
                           Provider<RunId>.value(value: RunId.fromState(state)),
                           Provider<QueryId>.value(
                               value: QueryId.fromState(state))
-                        ], child: ResultScaffoldResultsModelProvider()),
+                        ], child: ResultScaffoldResultsProvider()),
                       )
                     ])
               ]),

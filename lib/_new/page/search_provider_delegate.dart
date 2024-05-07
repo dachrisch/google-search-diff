@@ -6,15 +6,18 @@ import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
 
+// MAYBE: use https://github.com/darjaorlova/bunny_search_animated_searchbar/
 class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   final SearchService searchProvider;
   final Future<void> Function(RunModel results) onSave;
 
   final ScrollController scrollController = ScrollController();
 
-  SearchProviderSearchDelegate(
-      {required this.searchProvider, required this.onSave})
-      : super(searchFieldLabel: 'Create search...');
+  SearchProviderSearchDelegate({required this.searchProvider,
+    required this.onSave,
+    TextStyle? textStyle})
+      : super(
+      searchFieldLabel: 'Create search...', searchFieldStyle: textStyle);
 
   @override
   List<Widget>? buildActions(BuildContext context) {

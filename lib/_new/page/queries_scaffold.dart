@@ -5,20 +5,36 @@ import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
 import 'package:google_search_diff/_new/provider/query_card_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
+import 'package:google_search_diff/_new/theme.dart';
 import 'package:google_search_diff/_new/widget/header_listview.dart';
+import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:provider/provider.dart';
 
-class QueriesScaffold extends StatelessWidget {
+class QueriesScaffold extends StatefulWidget {
   const QueriesScaffold({super.key});
 
+  @override
+  State<StatefulWidget> createState() => _QueriesScaffoldState();
+}
+
+class _QueriesScaffoldState extends State<QueriesScaffold> with TimerMixin {
   @override
   Widget build(BuildContext context) {
     QueriesStoreModel queriesStore = context.watch<QueriesStoreModel>();
 
     return Scaffold(
         appBar: AppBar(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(100))),
+          backgroundColor: MaterialTheme.lightScheme().primaryContainer,
+          leading: const SizedBox(
+            width: 10,
+          ),
           automaticallyImplyLeading: false,
-          title: const Text('SearchFlux'),
+          title: Text(
+            'SearchFlux',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           actions: [
             IconButton(
                 key: const Key('show-searchbar-button'),
@@ -26,6 +42,7 @@ class QueriesScaffold extends StatelessWidget {
                   showSearch(
                       context: context,
                       delegate: SearchProviderSearchDelegate(
+                        textStyle: Theme.of(context).textTheme.titleMedium,
                         searchProvider: context.read<SearchService>(),
                         onSave: (results) => queriesStore
                             .add(QueryRunsModel.fromRunModel(results))
@@ -45,8 +62,9 @@ class QueriesScaffold extends StatelessWidget {
             headerText: queriesStore.items > 0
                 ? 'Your saved queries'
                 : 'No saved queries',
-            itemBuilder: (context, index) =>
-                QueryCardQueryModelProvider(queryRuns: queriesStore.at(index)),
+            itemBuilder: (context, index) => QueryCardQueryModelProvider(
+                queryRuns: queriesStore.at(index),
+                lastUpdated: queriesStore.at(index).latest.runDate),
             items: queriesStore.items));
   }
 }

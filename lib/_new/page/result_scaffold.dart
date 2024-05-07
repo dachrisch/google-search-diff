@@ -8,8 +8,8 @@ import 'package:google_search_diff/_new/widget/header_listview.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ResultScaffoldResultsModelProvider extends StatelessWidget {
-  const ResultScaffoldResultsModelProvider({super.key});
+class ResultScaffoldResultsProvider extends StatelessWidget {
+  const ResultScaffoldResultsProvider({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class ResultScaffold extends StatelessWidget {
 class ResultCard extends StatelessWidget {
   final ResultModel result;
 
-  ResultCard(this.result, {super.key});
+  const ResultCard(this.result, {super.key});
 
   @override
   Widget build(BuildContext context) {

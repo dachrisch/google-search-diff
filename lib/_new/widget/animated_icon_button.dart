@@ -48,7 +48,7 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
   final Key buttonKey;
   final Logger l = getLogger('button');
 
-   _AnimatedRefreshIconButton(
+  _AnimatedRefreshIconButton(
       {required this.buttonKey,
       required this.onPressed,
       required this.animation,

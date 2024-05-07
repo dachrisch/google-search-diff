@@ -4,7 +4,6 @@ import 'package:google_search_diff/_new/model/entity_id.dart';
 
 extension RelativeGoRouter on BuildContext {
   void goRelativeWithId(EntityId id, {Object? extra}) {
-
     final state = GoRouterState.of(this);
     final currentUrl = state.uri;
     String newPath = '${currentUrl.path}/${id.id}';

@@ -5,14 +5,16 @@ import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
-import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
 class SingleQueryCard extends StatefulWidget {
+  final DateTime lastUpdated;
+
   const SingleQueryCard({
     super.key,
+    required this.lastUpdated,
   });
 
   @override
@@ -20,7 +22,7 @@ class SingleQueryCard extends StatefulWidget {
 }
 
 class _SingleQueryCard extends State<SingleQueryCard>
-    with TimerMixin, TickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final Logger l = getLogger('QueryCard');
 
   @override
@@ -116,7 +118,7 @@ class _SingleQueryCard extends State<SingleQueryCard>
                         width: 30,
                       ),
                       Text(
-                          'Updated: ${queryRuns.items > 0 ? RelativeTime(context).format(queryRuns.latest.runDate) : 'N/A'}')
+                          'Updated: ${queryRuns.items > 0 ? RelativeTime(context).format(widget.lastUpdated) : 'N/A'}')
                     ],
                   ),
                   trailing: Container(
