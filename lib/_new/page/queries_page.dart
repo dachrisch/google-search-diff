@@ -78,7 +78,7 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                     itemBuilder: (context, index) =>
                         ChangeNotifierProvider.value(
                             value: queriesStore.at(index),
-                            child: const SingleQueryCard()),
+                            child: const QueryCard()),
                     items: queriesStore.items))));
   }
 }

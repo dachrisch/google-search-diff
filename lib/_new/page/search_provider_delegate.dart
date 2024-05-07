@@ -48,7 +48,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
         itemCount: 0,
       );
     } else {
-      context.watch<HistoryService>().addQuery(Query(query));
+      context.read<HistoryService>().addQuery(Query(query));
       return FutureBuilder<Run>(
         future: searchProvider.doSearch(Query(query)),
         builder: (context, snapshot) {

@@ -39,7 +39,7 @@ void main() {
     ));
 
     expect(searchQueriesStore.items, 1);
-    expect(find.byType(SingleQueryCard), findsNWidgets(1));
+    expect(find.byType(QueryCard), findsNWidgets(1));
 
     expect(find.widgetWithText(Row, '1'), findsOneWidget);
     await tester
@@ -49,7 +49,7 @@ void main() {
     await tester.tapButtonByKey(
         'delete-search-query-${searchQueriesStore.at(0).query.id}');
     expect(searchQueriesStore.items, 0);
-    expect(find.byType(SingleQueryCard), findsNWidgets(0));
+    expect(find.byType(QueryCard), findsNWidgets(0));
   });
 
 }

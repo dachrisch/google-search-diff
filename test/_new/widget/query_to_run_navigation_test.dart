@@ -26,8 +26,8 @@ void main() {
     ));
 
     expect(queriesStore.items, 1);
-    expect(find.byType(SingleQueryCard), findsOne);
-    await tester.tap(find.byType(SingleQueryCard));
+    expect(find.byType(QueryCard), findsOne);
+    await tester.tap(find.byType(QueryCard));
     await tester.pumpAndSettle();
 
     expect(find.byType(RunCard), findsOne);

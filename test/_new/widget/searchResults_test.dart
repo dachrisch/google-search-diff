@@ -20,7 +20,7 @@ void main() {
       queriesStore: searchQueriesStore,
     ));
 
-    expect(find.byType(SingleQueryCard), findsNothing);
+    expect(find.byType(QueryCard), findsNothing);
     expect(searchQueriesStore.items, 0);
     await tester.tapButtonByKey('show-searchbar-button');
     expect(find.widgetWithText(Container, 'No recent searches'), findsOne);
@@ -34,6 +34,6 @@ void main() {
     await tester.tapButtonByKey('add-search-query-button');
     await tester.pumpAndSettle();
     expect(searchQueriesStore.items, 1);
-    expect(find.byType(SingleQueryCard), findsOne);
+    expect(find.byType(QueryCard), findsOne);
   });
 }

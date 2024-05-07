@@ -8,7 +8,7 @@ import 'package:logger/logger.dart';
 
 class QueriesStore extends ChangeNotifier {
   final List<QueryRuns> queryRuns = [];
-  final DbQueriesService dbQueryService = DbQueriesService();
+  final DbQueriesService dbQueryService = DbQueriesService('.queries');
   final DbRunsService dbRunsService = DbRunsService();
   final Logger l = getLogger('QueriesStore');
   late Future<void> initFuture;
@@ -17,7 +17,8 @@ class QueriesStore extends ChangeNotifier {
     initFuture = Future.sync(() => l.d('Loading all'))
         .then((_) => dbQueryService.fetchAllQueries().then((allQueries) async {
               for (var query in allQueries) {
-                await dbRunsService.fetchRunsForQuery(query).then((runs) => queryRuns.add(QueryRuns(query, runs: runs)));
+                await dbRunsService.fetchRunsForQuery(query).then(
+                    (runs) => queryRuns.add(QueryRuns(query, runs: runs)));
               }
               return allQueries;
             }))

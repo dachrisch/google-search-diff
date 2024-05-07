@@ -1,14 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/query.dart';
+import 'package:google_search_diff/_new/service/db_queries_service.dart';
 
 class HistoryService extends ChangeNotifier {
   final Set<Query> _queries = {};
 
-  List<Query> get queries => _queries.toList();
+  final DbQueriesService dbQueryService = DbQueriesService('.history');
+
+  HistoryService() {
+    dbQueryService
+        .fetchAllQueries()
+        .then((allQueries) => _queries.addAll(allQueries));
+  }
 
   void addQuery(Query query) {
-    _queries.add(query);
+    dbQueryService.saveQuery(query).then((_) => _queries.add(query));
   }
+
+  List<Query> get queries => _queries.toList();
 
   List<Query> getMatching(Query query) {
     return query.term.isEmpty
@@ -20,7 +29,9 @@ class HistoryService extends ChangeNotifier {
   }
 
   remove(Query query) {
-    _queries.remove(query);
-    notifyListeners();
+    dbQueryService
+        .saveQuery(query)
+        .then((_) => _queries.remove(query))
+        .then((_) => notifyListeners());
   }
 }

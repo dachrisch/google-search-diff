@@ -9,9 +9,10 @@ class DbQueriesService {
   final Map<Query, String> queryIdMap = {};
 
   late Future<void> loadFuture;
+  final String collection;
 
-  DbQueriesService._() {
-    loadFuture = db.collection('.queries').get().then((allQueriesJson) {
+  DbQueriesService._(this.collection) {
+    loadFuture = db.collection(collection).get().then((allQueriesJson) {
       l.d('Loading [${allQueriesJson?.length}] Queries');
       allQueriesJson?.entries.forEach((q) {
         var query = Query.fromJson(q.value);
@@ -21,13 +22,13 @@ class DbQueriesService {
     });
   }
 
-  factory DbQueriesService() => DbQueriesService._();
+  factory DbQueriesService(String collection) => DbQueriesService._(collection);
 
   Future<void> saveQuery(Query query) {
-    String id = db.collection('.queries').doc().id;
+    String id = db.collection(collection).doc().id;
     l.d('Saving $query with [$id]');
     return db
-        .collection('.queries')
+        .collection(collection)
         .doc(id)
         .set(query.toJson())
         .then((value) => queryIdMap.putIfAbsent(query, () => id));
@@ -36,7 +37,7 @@ class DbQueriesService {
   Future<void> removeQuery(Query query) async {
     var id = queryIdMap.remove(query);
     l.d('Deleting $query with [$id]');
-    return db.collection('.queries').doc(id).delete();
+    return db.collection(collection).doc(id).delete();
   }
 
   Future<List<Query>> fetchAllQueries() =>
