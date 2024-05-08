@@ -14,7 +14,13 @@ class QueriesStore extends ChangeNotifier {
   final DbRunsService dbRunsService;
   final Logger l = getLogger('QueriesStore');
 
-  QueriesStore({required this.dbQueryService, required this.dbRunsService});
+  QueriesStore({required this.dbQueryService, required this.dbRunsService}) {
+    for (var query in dbQueryService.fetchAll()) {
+      var runs =
+          dbRunsService.fetchAll().where((run) => run.query == query).toList();
+      queryRuns.add(QueryRuns(query, runs: runs, dbRunsService: dbRunsService));
+    }
+  }
 
   int get items => queryRuns.length;
 
