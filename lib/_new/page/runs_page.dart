@@ -48,24 +48,32 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                     child: Column(
                       children: [
                         Expanded(
-                          child: CustomScrollView(
-                            slivers: [
-                              SliverAppBar(
-                                leading: IconButton(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () => Navigator.of(context).pop(),
+                          child: RefreshIndicator(
+                            onRefresh: () => (Actions.invoke(
+                                    context, SearchIntent(queryRuns))
+                                as Future<void>),
+                            child: CustomScrollView(
+                              slivers: [
+                                SliverAppBar(
+                                  leading: IconButton(
+                                    icon: const Icon(Icons.arrow_back),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                  ),
+                                  title:
+                                      Text('Query - ${queryRuns.query.term}'),
                                 ),
-                                title: Text('Query - ${queryRuns.query.term}'),
-                              ),
-                              TimeGroupedListView(
-                                elements: queryRuns.runs,
-                                childWidgetBuilder: () => RunCard(
-                                    onDragChanged: (isDragging) => setState(() {
-                                          this.isDragging = isDragging;
-                                        })),
-                                dateForItem: (Run item) => item.runDate,
-                              ),
-                            ],
+                                TimeGroupedListView(
+                                  elements: queryRuns.runs,
+                                  childWidgetBuilder: () => RunCard(
+                                      onDragChanged: (isDragging) =>
+                                          setState(() {
+                                            this.isDragging = isDragging;
+                                          })),
+                                  dateForItem: (Run item) => item.runDate,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         AnimatedContainer(

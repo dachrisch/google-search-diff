@@ -3,6 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/action/add_result.dart';
 import 'package:google_search_diff/_new/action/dispatcher.dart';
 import 'package:google_search_diff/_new/action/intent/add_result.dart';
+import 'package:google_search_diff/_new/action/intent/remove_query_runs.dart';
+import 'package:google_search_diff/_new/action/intent/search.dart';
+import 'package:google_search_diff/_new/action/remove_query_runs.dart';
+import 'package:google_search_diff/_new/action/search_and_add_run.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
@@ -27,10 +31,15 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
   @override
   Widget build(BuildContext context) {
     QueriesStore queriesStore = context.watch<QueriesStore>();
+    SearchService searchService = context.read<SearchService>();
 
     return Actions(
         actions: <Type, Action<Intent>>{
-          AddResultsIntent: AddResultsAction(queriesStore)
+          AddResultsIntent: AddResultsAction(queriesStore),
+          RemoveQueryRunsIntent:
+              RemoveQueryRunsAction(context, queriesStore: queriesStore),
+          SearchIntent:
+              SearchAndAddRunAction(context, searchService: searchService)
         },
         dispatcher: LoggingActionDispatcher(),
         child: Builder(

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/action/intent/remove_query_runs.dart';
 import 'package:google_search_diff/_new/action/intent/search.dart';
-import 'package:google_search_diff/_new/action/remove_query_runs.dart';
-import 'package:google_search_diff/_new/action/search_and_add_run.dart';
 import 'package:google_search_diff/_new/logger.dart';
-import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
-import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -39,16 +35,10 @@ class _SingleQueryCard extends State<QueryCard> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     QueryRuns queryRuns = context.watch<QueryRuns>();
-    QueriesStore searchQueriesStore = context.watch<QueriesStore>();
-    SearchService searchService = context.read<SearchService>();
     updateRelativeTimes(context, queryRuns);
 
     return Actions(
       actions: {
-        RemoveQueryRunsIntent:
-            RemoveQueryRunsAction(context, queriesStore: searchQueriesStore),
-        SearchIntent:
-            SearchAndAddRunAction(context, searchService: searchService)
       },
       child: Builder(builder: (context) {
         return Dismissible(

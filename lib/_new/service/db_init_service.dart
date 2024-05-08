@@ -12,7 +12,7 @@ class DbInitService<T extends HasToJson> {
 
   Future<Map<T, String>> init(T Function(Map<String, dynamic> json) fromJson) =>
       localStore.collection(collection).get().then((allItemsJson) {
-        l.d('Loading [${allItemsJson?.length}] Queries from [$collection]');
+        l.d('Loading [${allItemsJson?.length}] $T from [$collection]');
         var itemIdMap = <T, String>{};
         allItemsJson?.entries.forEach((q) {
           var value = fromJson(q.value);
