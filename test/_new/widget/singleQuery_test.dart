@@ -6,6 +6,7 @@ import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/card/run_card.dart';
 import 'package:provider/provider.dart';
 
+import '../util/service_mocks.dart';
 import '../util/testProvider.dart';
 import 'search_bar_test.dart';
 import 'widget_tester_extension.dart';
@@ -14,7 +15,8 @@ void main() {
   testWidgets('Refresh adds a new result and then deletes it',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQuery = QueryRuns(Query('Test query'));
+    var searchQuery =
+        QueryRuns(Query('Test query'), dbRunsService: MockDbRunsService());
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [

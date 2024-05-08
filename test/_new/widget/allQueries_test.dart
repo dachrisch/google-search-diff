@@ -11,6 +11,7 @@ import 'package:google_search_diff/_new/widget/card/query_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/localstore_helper.dart';
+import '../util/service_mocks.dart';
 import '../util/testProvider.dart';
 import 'search_bar_test.dart';
 import 'widget_tester_extension.dart';
@@ -20,10 +21,12 @@ void main() {
 
   testWidgets('Adds a single query and removes it',
       (WidgetTester tester) async {
-    var searchQueriesStore = QueriesStore();
-    await searchQueriesStore.initFuture;
+    var searchQueriesStore = QueriesStore(
+        dbQueryService: MockDbQueriesService(),
+        dbRunsService: MockDbRunsService());
+
     var query = Query('Test query');
-    var queryRunsModel = QueryRuns(query);
+    var queryRunsModel = QueryRuns(query, dbRunsService: MockDbRunsService());
     queryRunsModel.addRun(Run(query,
         [Result(title: 'Test', source: 'T', link: 'http://example.com')]));
     searchQueriesStore.add(queryRunsModel);
@@ -51,5 +54,4 @@ void main() {
     expect(searchQueriesStore.items, 0);
     expect(find.byType(QueryCard), findsNWidgets(0));
   });
-
 }

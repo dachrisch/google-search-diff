@@ -1,30 +1,32 @@
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/run.dart';
-import 'package:localstore/localstore.dart';
+import 'package:google_search_diff/_new/service/localstore.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
+@singleton
 class DbRunsService {
-  final Localstore db = Localstore.instance;
   final Logger l = getLogger('db');
-  final Map<Run, String> runsIdMap = {};
+  final Map<Run, String> runsIdMap;
+  final LocalStoreService localStore;
 
-  late Future<void> loadFuture;
+  DbRunsService({required this.runsIdMap, required this.localStore});
 
-  DbRunsService._() {
-    loadFuture = db.collection('.runs').get().then((allQueryRunsJson) {
-      l.d('Loading [${allQueryRunsJson?.length}] Runs');
-      allQueryRunsJson?.entries.forEach((q) {
-        var run = Run.fromJson(q.value);
-        l.d('Loaded $run');
-        runsIdMap.putIfAbsent(run, () => q.key);
+  @factoryMethod
+  @preResolve
+  static Future<DbRunsService> fromDb(LocalStoreService localStore) =>
+      localStore.collection('.runs').get().then((allQueryRunsJson) {
+        final Logger l = getLogger('db');
+        l.d('Loading [${allQueryRunsJson?.length}] Runs');
+        var runsIdMap = <Run, String>{};
+        allQueryRunsJson?.entries.forEach((q) {
+          var run = Run.fromJson(q.value);
+          l.d('Loaded $run');
+          runsIdMap.putIfAbsent(run, () => q.key);
+        });
+        return DbRunsService(runsIdMap: runsIdMap, localStore: localStore);
       });
-    });
-  }
-
-  static final DbRunsService instance = DbRunsService._();
-
-  factory DbRunsService() => instance;
 
   Future<void> saveRuns(List<Run> runs) => Future.sync(() async {
         for (var element in runs) {
@@ -33,9 +35,9 @@ class DbRunsService {
       });
 
   Future<void> saveRun(Run run) {
-    String id = db.collection('.runs').doc().id;
+    String id = localStore.collection('.runs').doc().id;
     l.d('Saving $run with [$id]');
-    return db
+    return localStore
         .collection('.runs')
         .doc(id)
         .set(run.toJson())
@@ -51,14 +53,11 @@ class DbRunsService {
   Future<void> removeRun(Run run) async {
     var id = runsIdMap.remove(run);
     l.d('Deleting $run with [$id]');
-    return db.collection('.runs').doc(id).delete();
+    return localStore.collection('.runs').doc(id).delete();
   }
 
-  Future<List<Run>> fetchAllRuns() =>
-      loadFuture.then((value) => runsIdMap.keys.toList());
+  List<Run> fetchAllRuns() => runsIdMap.keys.toList();
 
-  Future<List<Run>> fetchRunsForQuery(Query query) =>
-      fetchAllRuns().then((value) => runsIdMap.keys
-          .where((element) => element.query.id == query.id)
-          .toList());
+  List<Run> fetchRunsForQuery(Query query) =>
+      fetchAllRuns().where((element) => element.query.id == query.id).toList();
 }

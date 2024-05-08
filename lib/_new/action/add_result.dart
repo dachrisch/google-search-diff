@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/action/intent/add_result.dart';
+import 'package:google_search_diff/_new/dependencies.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 
@@ -10,5 +11,5 @@ class AddResultsAction extends Action<AddResultsIntent> {
 
   @override
   Object? invoke(AddResultsIntent intent) =>
-      queriesStore.add(QueryRuns.fromRun(intent.results));
+      queriesStore.add(getIt<QueryRuns>(param1: intent.results));
 }

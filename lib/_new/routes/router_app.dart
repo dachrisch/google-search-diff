@@ -3,24 +3,24 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/routes/routes.dart';
 import 'package:google_search_diff/_new/service/history_service.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
+import 'package:google_search_diff/_new/theme.dart';
+import 'package:injectable/injectable.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
+@injectable
 class RouterApp extends StatelessWidget {
-  final ThemeData theme;
+  final MaterialTheme theme;
   final QueriesStore queriesStore;
   final SearchService searchService;
   final HistoryService historyService;
 
-  RouterApp(
+  const RouterApp(
       {super.key,
       required this.theme,
-      QueriesStore? queriesStore,
-      SearchService? searchService,
-      HistoryService? historyService})
-      : queriesStore = queriesStore ?? QueriesStore(),
-        searchService = searchService ?? LoremIpsumSearchService(),
-        historyService = historyService ?? HistoryService();
+      required this.queriesStore,
+      required this.searchService,
+      required this.historyService});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class RouterApp extends StatelessWidget {
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           RelativeTimeLocalizations.delegate,
         ],
-        theme: theme,
+        theme: theme.light(),
         routerConfig: RouterConfigBuilder.build(),
       ),
     );

@@ -5,10 +5,13 @@ import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 
+import '../util/service_mocks.dart';
+
 void main() {
   test('Finds the next recent run', () async {
     var query = Query('Test');
-    QueryRuns queryRunsModel = QueryRuns(query);
+    QueryRuns queryRunsModel =
+        QueryRuns(query, dbRunsService: MockDbRunsService());
     Run first =
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 1));
     Run second =

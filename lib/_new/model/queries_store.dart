@@ -4,26 +4,17 @@ import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:google_search_diff/_new/service/db_queries_service.dart';
 import 'package:google_search_diff/_new/service/db_runs_service.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
+@singleton
 class QueriesStore extends ChangeNotifier {
   final List<QueryRuns> queryRuns = [];
-  final DbQueriesService dbQueryService = DbQueriesService.of('.queries');
-  final DbRunsService dbRunsService = DbRunsService();
+  final DbQueriesService dbQueryService;
+  final DbRunsService dbRunsService;
   final Logger l = getLogger('QueriesStore');
-  late Future<void> initFuture;
 
-  QueriesStore() {
-    initFuture = Future.sync(() => l.d('Loading all'))
-        .then((_) => dbQueryService.fetchAllQueries().then((allQueries) async {
-              for (var query in allQueries) {
-                await dbRunsService.fetchRunsForQuery(query).then(
-                    (runs) => queryRuns.add(QueryRuns(query, runs: runs)));
-              }
-              return allQueries;
-            }))
-        .then((_) => l.d('Finished loading'));
-  }
+  QueriesStore({required this.dbQueryService, required this.dbRunsService});
 
   int get items => queryRuns.length;
 

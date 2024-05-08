@@ -3,19 +3,24 @@ import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/model/run_id.dart';
 import 'package:google_search_diff/_new/service/db_runs_service.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class QueryRuns extends ChangeNotifier {
   final Query query;
   final List<Run> runs;
-  final DbRunsService dbRunsService = DbRunsService();
+  final DbRunsService dbRunsService;
 
-  static QueryRuns fromRun(Run run) {
-    var runs = QueryRuns(run.query);
+  @factoryMethod
+  static QueryRuns fromRun(@factoryParam Run run, DbRunsService dbRunsService) {
+    assert(run != null);
+    var runs = QueryRuns(run!.query, dbRunsService: dbRunsService);
     runs.addRun(run);
     return runs;
   }
 
-  QueryRuns(this.query, {List<Run>? runs}) : runs = runs ?? [];
+  QueryRuns(this.query, {required this.dbRunsService, List<Run>? runs})
+      : runs = runs ?? [];
 
   int get items => runs.length;
 

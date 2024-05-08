@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_search_diff/_new/dependencies.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
+import 'package:google_search_diff/_new/model/query_runs.dart';
+import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/router_app.dart';
+import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
 import 'package:google_search_diff/_new/widget/card/query_card.dart';
 import 'package:provider/provider.dart';
 
+import '../util/service_mocks.dart';
 import 'widget_tester_extension.dart';
 
 void main() {
   testWidgets('Search results appear in results list',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQueriesStore = QueriesStore();
-    var theme = MaterialTheme(ThemeData.light().primaryTextTheme).light();
+    var searchQueriesStore = QueriesStore(
+        dbQueryService: MockDbQueriesService(),
+        dbRunsService: MockDbRunsService());
+
+    var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
+
+    getIt.registerFactoryParam<QueryRuns, Run, Null>(
+        (param1, param2) => QueryRuns.fromRun(param1, MockDbRunsService()));
 
     await tester.pumpWidget(RouterApp(
       theme: theme,
       queriesStore: searchQueriesStore,
+      searchService: LoremIpsumSearchService(),
+      historyService: MockHistoryService(),
     ));
 
     expect(find.byType(QueryCard), findsNothing);

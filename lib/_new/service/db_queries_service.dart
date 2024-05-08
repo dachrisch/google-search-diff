@@ -1,40 +1,54 @@
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:localstore/localstore.dart';
+import 'package:google_search_diff/_new/service/localstore.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-class DbQueriesService {
-  final Localstore db = Localstore.instance;
+@injectable
+class DbQueriesService extends _DbQueriesService {
+  DbQueriesService(
+      {required super.localStore,
+      required super.collection,
+      required super.queryIdMap});
+
+  @factoryMethod
+  static Future<DbQueriesService> fromDb(LocalStoreService localStore) =>
+      _DbQueriesService.fromDb('.queries', localStore).then((queryIdMap) =>
+          DbQueriesService(
+              localStore: localStore,
+              collection: '.queries',
+              queryIdMap: queryIdMap));
+}
+
+abstract class _DbQueriesService {
   final Logger l = getLogger('db');
-  final Map<Query, String> queryIdMap = {};
-
-  late Future<void> loadFuture;
   final String collection;
+  final LocalStoreService localStore;
+  final Map<Query, String> queryIdMap;
 
-  DbQueriesService._(this.collection) {
-    loadFuture = db.collection(collection).get().then((allQueriesJson) {
-      l.d('Loading [${allQueriesJson?.length}] Queries from [$collection]');
-      allQueriesJson?.entries.forEach((q) {
-        var query = Query.fromJson(q.value);
-        l.d('Loaded $query');
-        queryIdMap.putIfAbsent(query, () => q.key);
+  _DbQueriesService(
+      {required this.localStore,
+      required this.collection,
+      required this.queryIdMap});
+
+  static Future<Map<Query, String>> fromDb(
+          String collection, LocalStoreService localStore) =>
+      localStore.collection(collection).get().then((allQueriesJson) {
+        final Logger l = getLogger('db-init');
+        l.d('Loading [${allQueriesJson?.length}] Queries from [$collection]');
+        var queryIdMap = <Query, String>{};
+        allQueriesJson?.entries.forEach((q) {
+          var query = Query.fromJson(q.value);
+          l.d('Loaded $query');
+          queryIdMap.putIfAbsent(query, () => q.key);
+        });
+        return queryIdMap;
       });
-    });
-  }
-
-  static final Map<String, DbQueriesService> instanceMap = {};
-
-  factory DbQueriesService.of(String collection) {
-    if (!instanceMap.containsKey(collection)) {
-      instanceMap.putIfAbsent(collection, () => DbQueriesService._(collection));
-    }
-    return instanceMap[collection]!;
-  }
 
   Future<void> saveQuery(Query query) {
-    String id = db.collection(collection).doc().id;
+    String id = localStore.collection(collection).doc().id;
     l.d('Saving $query with [$id]');
-    return db
+    return localStore
         .collection(collection)
         .doc(id)
         .set(query.toJson())
@@ -44,7 +58,7 @@ class DbQueriesService {
   Future<void> removeQuery(Query query) async {
     var id = queryIdMap.remove(query);
     l.d('Deleting $query with [$id]');
-    return db
+    return localStore
         .collection(collection)
         .doc(id)
         .delete()
@@ -53,6 +67,5 @@ class DbQueriesService {
             l.e('Error deleting $id', error: error, stackTrace: stackTrace));
   }
 
-  Future<List<Query>> fetchAllQueries() =>
-      loadFuture.then((value) => queryIdMap.keys.toList());
+  List<Query> fetchAllQueries() => queryIdMap.keys.toList();
 }
