@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
 class TimeGroupedListView<T extends ChangeNotifier> extends StatelessWidget {
-  final String headerText;
 
   final List<T> elements;
   final Widget Function() childWidgetBuilder;
@@ -14,7 +13,6 @@ class TimeGroupedListView<T extends ChangeNotifier> extends StatelessWidget {
   const TimeGroupedListView({
     super.key,
     required this.elements,
-    required this.headerText,
     required this.childWidgetBuilder,
     required this.dateForItem,
   });

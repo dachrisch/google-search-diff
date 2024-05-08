@@ -56,11 +56,41 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                           ),
                           actions: const [_SearchButton(), SizedBox(width: 16)],
                         ),
-                        TimeGroupedListView(
-                            elements: queriesStore.queryRuns,
-                            headerText: 'Your saved queries',
-                            childWidgetBuilder: () => const QueryCard(),
-                            dateForItem: (item) => item.query.createdDate),
+                        SliverList.list(children: [
+                          Center(
+                              child: Text(
+                            'Your saved queries',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ))
+                        ]),
+                        queriesStore.items > 0
+                            ? TimeGroupedListView(
+                                elements: queriesStore.queryRuns,
+                                childWidgetBuilder: () => const QueryCard(),
+                                dateForItem: (item) => item.query.createdDate)
+                            : SliverFillRemaining(
+                                child: Center(
+                                  child: Center(
+                                    child: Wrap(
+                                      direction: Axis.vertical,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap: () => showSearchPage(context),
+                                          child: Image.asset('assets/logo.png',
+                                              fit: BoxFit.scaleDown),
+                                        ),
+                                        Text('No queries saved.',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(color: Colors.grey))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -75,21 +105,23 @@ class _SearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         key: const Key('show-searchbar-button'),
-        onPressed: () {
-          showSearch(
-              context: context,
-              delegate: SearchProviderSearchDelegate(
-                  textStyle: Theme.of(context).textTheme.titleMedium,
-                  searchProvider: context.read<SearchService>(),
-                  onSave: (results) => (Actions.invoke<AddResultsIntent>(
-                              context, AddResultsIntent(results)) as Future)
-                          .then((_) {
-                        if (GoRouter.maybeOf(context) != null) {
-                          // avoid context pop when used standalone (in tests)
-                          context.pop();
-                        }
-                      })));
-        },
+        onPressed: () => showSearchPage(context),
         icon: const Icon(Icons.search));
   }
+}
+
+void showSearchPage(BuildContext context) {
+  showSearch(
+      context: context,
+      delegate: SearchProviderSearchDelegate(
+          textStyle: Theme.of(context).textTheme.titleMedium,
+          searchProvider: context.read<SearchService>(),
+          onSave: (results) => (Actions.invoke<AddResultsIntent>(
+                      context, AddResultsIntent(results)) as Future)
+                  .then((_) {
+                if (GoRouter.maybeOf(context) != null) {
+                  // avoid context pop when used standalone (in tests)
+                  context.pop();
+                }
+              })));
 }

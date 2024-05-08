@@ -59,7 +59,6 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                               ),
                               TimeGroupedListView(
                                 elements: queryRuns.runs,
-                                headerText: 'Your query runs',
                                 childWidgetBuilder: () => RunCard(
                                     onDragChanged: (isDragging) => setState(() {
                                           this.isDragging = isDragging;
