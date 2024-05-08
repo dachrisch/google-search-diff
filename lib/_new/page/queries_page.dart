@@ -28,15 +28,15 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
   Widget build(BuildContext context) {
     QueriesStore queriesStore = context.watch<QueriesStore>();
 
-    return SafeArea(
-      child: Actions(
-          actions: <Type, Action<Intent>>{
-            AddResultsIntent: AddResultsAction(queriesStore)
-          },
-          dispatcher: LoggingActionDispatcher(),
-          child: Builder(
-              builder: (context) => Scaffold(
-                      body: Padding(
+    return Actions(
+        actions: <Type, Action<Intent>>{
+          AddResultsIntent: AddResultsAction(queriesStore)
+        },
+        dispatcher: LoggingActionDispatcher(),
+        child: Builder(
+            builder: (context) => Scaffold(
+                    body: SafeArea(
+                  child: Padding(
                     padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
                     child: CustomScrollView(
                       slivers: [
@@ -63,8 +63,8 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                             dateForItem: (item) => item.query.createdDate),
                       ],
                     ),
-                  )))),
-    );
+                  ),
+                ))));
   }
 }
 

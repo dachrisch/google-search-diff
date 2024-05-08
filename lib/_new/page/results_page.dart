@@ -18,16 +18,16 @@ class ResultsPageScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Run results = context.read<Run>();
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          title: Text('Result - ${results.query.term}'),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: ListViewWithHeader(
+        title: Text('Result - ${results.query.term}'),
+      ),
+      body: SafeArea(
+        child: ListViewWithHeader(
           items: results.items,
           itemBuilder: (context, index) => ResultCard(results[index]),
           headerText: 'Results',

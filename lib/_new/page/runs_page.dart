@@ -37,15 +37,15 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
   Widget build(BuildContext context) {
     QueryRuns queryRuns = context.watch<QueryRuns>();
     SearchService searchService = context.read<SearchService>();
-    return SafeArea(
-      child: Actions(
-          actions: {
-            SearchIntent:
-                SearchAndAddRunAction(context, searchService: searchService)
-          },
-          child: Builder(
-              builder: (context) => Scaffold(
-                    body: Column(
+    return Actions(
+        actions: {
+          SearchIntent:
+              SearchAndAddRunAction(context, searchService: searchService)
+        },
+        child: Builder(
+            builder: (context) => Scaffold(
+                  body: SafeArea(
+                    child: Column(
                       children: [
                         Expanded(
                           child: CustomScrollView(
@@ -82,15 +82,15 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                         )
                       ],
                     ),
-                    floatingActionButton: FloatingActionButton(
-                        onPressed: () {},
-                        child: AnimatedRefreshIconButton(
-                          buttonKey: const Key('refresh-query-results-button'),
-                          onPressed: () =>
-                              Actions.invoke(context, SearchIntent(queryRuns)),
-                        )),
-                  ))),
-    );
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                      onPressed: () {},
+                      child: AnimatedRefreshIconButton(
+                        buttonKey: const Key('refresh-query-results-button'),
+                        onPressed: () =>
+                            Actions.invoke(context, SearchIntent(queryRuns)),
+                      )),
+                )));
   }
 }
 
