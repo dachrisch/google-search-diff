@@ -37,54 +37,56 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
   Widget build(BuildContext context) {
     QueryRuns queryRuns = context.watch<QueryRuns>();
     SearchService searchService = context.read<SearchService>();
-    return Actions(
-        actions: {
-          SearchIntent:
-              SearchAndAddRunAction(context, searchService: searchService)
-        },
-        child: Builder(
-            builder: (context) => Scaffold(
-                  appBar: AppBar(
-                    leading: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    title: Text('Query - ${queryRuns.query.term}'),
-                  ),
-                  body: Column(
-                    children: [
-                      Expanded(
-                        child: TimeGroupedListView(
-                          elements: queryRuns.runs,
-                          headerText: 'Your query runs',
-                          childWidgetBuilder: () => RunCard(
-                              onDragChanged: (isDragging) => setState(() {
-                                    this.isDragging = isDragging;
-                                  })),
-                          dateForItem: (Run item) => item.runDate,
-                        ),
+    return SafeArea(
+      child: Actions(
+          actions: {
+            SearchIntent:
+                SearchAndAddRunAction(context, searchService: searchService)
+          },
+          child: Builder(
+              builder: (context) => Scaffold(
+                    appBar: AppBar(
+                      leading: IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: () => Navigator.of(context).pop(),
                       ),
-                      AnimatedContainer(
-                        height: isDragging ? 100 : 0,
-                        duration: const Duration(milliseconds: 200),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            RunDragTarget(),
-                            RunDragTarget(),
-                          ],
+                      title: Text('Query - ${queryRuns.query.term}'),
+                    ),
+                    body: Column(
+                      children: [
+                        Expanded(
+                          child: TimeGroupedListView(
+                            elements: queryRuns.runs,
+                            headerText: 'Your query runs',
+                            childWidgetBuilder: () => RunCard(
+                                onDragChanged: (isDragging) => setState(() {
+                                      this.isDragging = isDragging;
+                                    })),
+                            dateForItem: (Run item) => item.runDate,
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                  floatingActionButton: FloatingActionButton(
-                      onPressed: () {},
-                      child: AnimatedRefreshIconButton(
-                        buttonKey: const Key('refresh-query-results-button'),
-                        onPressed: () =>
-                            Actions.invoke(context, SearchIntent(queryRuns)),
-                      )),
-                )));
+                        AnimatedContainer(
+                          height: isDragging ? 100 : 0,
+                          duration: const Duration(milliseconds: 200),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              RunDragTarget(),
+                              RunDragTarget(),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    floatingActionButton: FloatingActionButton(
+                        onPressed: () {},
+                        child: AnimatedRefreshIconButton(
+                          buttonKey: const Key('refresh-query-results-button'),
+                          onPressed: () =>
+                              Actions.invoke(context, SearchIntent(queryRuns)),
+                        )),
+                  ))),
+    );
   }
 }
 

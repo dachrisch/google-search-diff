@@ -121,14 +121,15 @@ class _SingleQueryCard extends State<QueryCard> with TickerProviderStateMixin {
                           const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Created:'),
-                                Text('Updated:'),
+                                Icon(Icons.create_new_folder_outlined),
+                                Icon(Icons.autorenew_outlined),
                               ]),
                           const SizedBox(
                             width: 8,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(relativeCreatedString),
                               Text(lastUpdatedText)
@@ -141,7 +142,7 @@ class _SingleQueryCard extends State<QueryCard> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(''),
-                                Text('Results:'),
+                                Icon(Icons.notes_outlined),
                               ]),
                           const SizedBox(
                             width: 8,

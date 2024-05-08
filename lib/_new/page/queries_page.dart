@@ -29,32 +29,35 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
   Widget build(BuildContext context) {
     QueriesStore queriesStore = context.watch<QueriesStore>();
 
-    return Actions(
-        actions: <Type, Action<Intent>>{
-          AddResultsIntent: AddResultsAction(queriesStore)
-        },
-        dispatcher: LoggingActionDispatcher(),
-        child: Builder(
-            builder: (context) => Scaffold(
-                appBar: AppBar(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(100))),
-                  backgroundColor: MaterialTheme.lightScheme().primaryContainer,
-                  leading:
-                      Image.asset('assets/logo.png', fit: BoxFit.scaleDown),
-                  automaticallyImplyLeading: false,
-                  title: Text(
-                    'SearchFlux',
-                    style: Theme.of(context).textTheme.titleLarge,
+    return SafeArea(
+      child: Actions(
+          actions: <Type, Action<Intent>>{
+            AddResultsIntent: AddResultsAction(queriesStore)
+          },
+          dispatcher: LoggingActionDispatcher(),
+          child: Builder(
+              builder: (context) => Scaffold(
+                  appBar: AppBar(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(100))),
+                    backgroundColor:
+                        MaterialTheme.lightScheme().primaryContainer,
+                    leading:
+                        Image.asset('assets/logo.png', fit: BoxFit.scaleDown),
+                    automaticallyImplyLeading: false,
+                    title: Text(
+                      'SearchFlux',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    actions: const [_SearchButton(), SizedBox(width: 16)],
                   ),
-                  actions: const [_SearchButton(), SizedBox(width: 16)],
-                ),
-                body: TimeGroupedListView(
-                  headerText: 'Your saved queries',
-                  elements: queriesStore.queryRuns,
-                  childWidgetBuilder: () => const QueryCard(),
-                  dateForItem: (QueryRuns item) => item.query.createdDate,
-                ))));
+                  body: TimeGroupedListView(
+                    headerText: 'Your saved queries',
+                    elements: queriesStore.queryRuns,
+                    childWidgetBuilder: () => const QueryCard(),
+                    dateForItem: (QueryRuns item) => item.query.createdDate,
+                  )))),
+    );
   }
 }
 
