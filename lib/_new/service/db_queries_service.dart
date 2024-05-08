@@ -37,7 +37,13 @@ class DbQueriesService {
   Future<void> removeQuery(Query query) async {
     var id = queryIdMap.remove(query);
     l.d('Deleting $query with [$id]');
-    return db.collection(collection).doc(id).delete();
+    return db
+        .collection(collection)
+        .doc(id)
+        .delete()
+        .then((value) => l.d('Deleted $id, $value'))
+        .onError((error, stackTrace) =>
+            l.e('Error deleting $id', error: error, stackTrace: stackTrace));
   }
 
   Future<List<Query>> fetchAllQueries() =>
