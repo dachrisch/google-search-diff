@@ -6,7 +6,7 @@ import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
-import 'package:google_search_diff/_new/routes/routes.dart';
+import 'package:google_search_diff/_new/routes/router_app.dart';
 import 'package:google_search_diff/_new/theme.dart';
 import 'package:google_search_diff/_new/widget/card/query_card.dart';
 import 'package:google_search_diff/_new/widget/card/result_card.dart';

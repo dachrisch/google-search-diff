@@ -1,55 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/run_id.dart';
 import 'package:google_search_diff/_new/page/queries_page.dart';
 import 'package:google_search_diff/_new/page/results_page.dart';
 import 'package:google_search_diff/_new/page/runs_page.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
-import 'package:google_search_diff/_new/service/history_service.dart';
-import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
-import 'package:relative_time/relative_time.dart';
-
-class RouterApp extends StatelessWidget {
-  final ThemeData theme;
-  final QueriesStore queriesStore;
-  final SearchService searchService;
-  final HistoryService historyService;
-
-  RouterApp(
-      {super.key,
-      required this.theme,
-      QueriesStore? queriesStore,
-      SearchService? searchService,
-      HistoryService? historyService})
-      : queriesStore = queriesStore ?? QueriesStore(),
-        searchService = searchService ?? LoremIpsumSearchService(),
-        historyService = historyService ?? HistoryService();
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<QueriesStore>(
-            create: (BuildContext context) => queriesStore),
-        Provider<SearchService>(
-          create: (BuildContext context) => searchService,
-        ),
-        ChangeNotifierProvider<HistoryService>(
-          create: (BuildContext context) => historyService,
-        )
-      ],
-      child: MaterialApp.router(
-        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          RelativeTimeLocalizations.delegate,
-        ],
-        theme: theme,
-        routerConfig: RouterConfigBuilder.build(),
-      ),
-    );
-  }
-}
 
 class RouterConfigBuilder {
   static build() => GoRouter(
@@ -70,7 +25,8 @@ class RouterConfigBuilder {
                 GoRoute(
                     path: ':queryId/runs',
                     builder: (context, state) => Provider<QueryId>.value(
-                        value: QueryId.fromState(state), child: RunsPage()),
+                        value: QueryId.fromState(state),
+                        child: const RunsPage()),
                     routes: [
                       GoRoute(
                         path: ':runId',
@@ -78,7 +34,7 @@ class RouterConfigBuilder {
                           Provider<RunId>.value(value: RunId.fromState(state)),
                           Provider<QueryId>.value(
                               value: QueryId.fromState(state))
-                        ], child: ResultsPage()),
+                        ], child: const ResultsPage()),
                       )
                     ])
               ]),

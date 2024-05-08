@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/action/intent/remove_query_runs.dart';
+import 'package:google_search_diff/_new/action/intent/search.dart';
 import 'package:google_search_diff/_new/action/remove_query_runs.dart';
+import 'package:google_search_diff/_new/action/search_and_add_run.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
@@ -44,7 +46,9 @@ class _SingleQueryCard extends State<QueryCard> with TickerProviderStateMixin {
     return Actions(
       actions: {
         RemoveQueryRunsIntent:
-            RemoveQueryRunsAction(context, queriesStore: searchQueriesStore)
+            RemoveQueryRunsAction(context, queriesStore: searchQueriesStore),
+        SearchIntent:
+            SearchAndAddRunAction(context, searchService: searchService)
       },
       child: Builder(builder: (context) {
         return Dismissible(
@@ -79,15 +83,8 @@ class _SingleQueryCard extends State<QueryCard> with TickerProviderStateMixin {
             confirmDismiss: (direction) => direction ==
                     DismissDirection.endToStart
                 ? Future<bool>.value(true)
-                : searchService
-                    .doSearch(queryRuns.query)
-                    .then((run) => queryRuns.addRun(run))
-                    .then((value) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content:
-                          Text('Performing new run "${queryRuns.query.term}"'),
-                    ));
-                  }).then((_) => false),
+                : (Actions.invoke(context, SearchIntent(queryRuns)) as Future)
+                    .then((_) => false),
             onDismissed: (direction) {
               // https://www.dhiwise.com/post/how-to-implement-flutter-swipe-action-cell-in-mobile-app
               if (direction == DismissDirection.startToEnd) {
@@ -112,9 +109,8 @@ class _SingleQueryCard extends State<QueryCard> with TickerProviderStateMixin {
                         child: AnimatedRefreshIconButton(
                             buttonKey: Key(
                                 'refresh-query-results-outside-button-${queryRuns.query.id.id}'),
-                            onPressed: () => searchService
-                                .doSearch(queryRuns.query)
-                                .then((run) => queryRuns.addRun(run))
+                            onPressed: () => (Actions.invoke(
+                                    context, SearchIntent(queryRuns)) as Future)
                                 .then((value) =>
                                     updateRelativeTimes(context, queryRuns))),
                       ),

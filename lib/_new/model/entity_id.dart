@@ -4,7 +4,7 @@ abstract class EntityId {
   final String id;
 
   @override
-  String toString() => 'EntityId(id: $id)';
+  String toString() => id;
 
   @override
   int get hashCode => id.hashCode;

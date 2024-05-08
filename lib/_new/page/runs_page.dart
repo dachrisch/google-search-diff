@@ -39,7 +39,8 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
     SearchService searchService = context.read<SearchService>();
     return Actions(
         actions: {
-          SearchIntent: SearchAndAddRunAction(searchService: searchService)
+          SearchIntent:
+              SearchAndAddRunAction(context, searchService: searchService)
         },
         child: Builder(
             builder: (context) => Scaffold(
@@ -52,10 +53,6 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                   ),
                   body: Column(
                     children: [
-                      Text(
-                        'Query runs',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
                       Expanded(
                         child: TimeGroupedListView(
                           elements: queryRuns.runs,

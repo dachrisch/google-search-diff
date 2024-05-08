@@ -21,15 +21,18 @@ class QueryRuns extends ChangeNotifier {
 
   Run runAt(int index) => runs.elementAt(index);
 
-  Run? get latest => runs.reduce((current, next) =>
-      current.runDate.isAfter(next.runDate) ? current : next);
+  Run? get latest => runs.isNotEmpty
+      ? runs.reduce((current, next) =>
+          current.runDate.isAfter(next.runDate) ? current : next)
+      : null;
 
-  Future<void> addRun(Run run) => dbRunsService
+  Future<Run> addRun(Run run) => dbRunsService
       .saveRun(run)
       .then((value) => runs.add(run))
-      .then((value) => notifyListeners());
+      .then((value) => notifyListeners())
+      .then((_) => run);
 
-  removeRun(Run run) => dbRunsService
+  Future<void> removeRun(Run run) => dbRunsService
       .removeRun(run)
       .then((value) => runs.remove(run))
       .then((value) => notifyListeners());
