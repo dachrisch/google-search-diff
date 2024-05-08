@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/action/intent/remove_run.dart';
 import 'package:google_search_diff/_new/model/comparison.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/run.dart';
@@ -70,7 +71,8 @@ class RunCardListTile extends StatelessWidget {
                 child: IconButton(
                   key: Key('delete-query-results-${run.id}'),
                   icon: const Icon(Icons.delete),
-                  onPressed: () => queryRuns.removeRun(run),
+                  onPressed: () =>
+                      Actions.invoke(context, RemoveRunIntent(run: run)),
                 )),
           )),
     );
