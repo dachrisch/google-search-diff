@@ -66,10 +66,10 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
               ? null
               : () async {
                   controller.forward();
-            await onPressed();
-            controller.stop();
-            controller.reset();
-          },
+                  await onPressed();
+                  controller.stop();
+                  controller.reset();
+                },
         ));
   }
 }

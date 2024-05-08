@@ -13,8 +13,7 @@ class QueryRuns extends ChangeNotifier {
 
   @factoryMethod
   static QueryRuns fromRun(@factoryParam Run run, DbRunsService dbRunsService) {
-    assert(run != null);
-    var runs = QueryRuns(run!.query, dbRunsService: dbRunsService);
+    var runs = QueryRuns(run.query, dbRunsService: dbRunsService);
     runs.addRun(run);
     return runs;
   }

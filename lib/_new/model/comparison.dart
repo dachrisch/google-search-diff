@@ -7,9 +7,8 @@ class ResultComparison {
   final List<Result> existing = [];
   final List<Result> removed = [];
 
-  ResultComparison({List<Result>? added,
-    List<Result>? existing,
-    List<Result>? removed}) {
+  ResultComparison(
+      {List<Result>? added, List<Result>? existing, List<Result>? removed}) {
     this.added.addAll(added ?? []);
     this.existing.addAll(existing ?? []);
     this.removed.addAll(removed ?? []);

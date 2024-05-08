@@ -13,11 +13,12 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
 
   final ScrollController scrollController = ScrollController();
 
-  SearchProviderSearchDelegate({required this.searchProvider,
-    required this.onSave,
-    TextStyle? textStyle})
+  SearchProviderSearchDelegate(
+      {required this.searchProvider,
+      required this.onSave,
+      TextStyle? textStyle})
       : super(
-      searchFieldLabel: 'Create search...', searchFieldStyle: textStyle);
+            searchFieldLabel: 'Create search...', searchFieldStyle: textStyle);
 
   @override
   List<Widget>? buildActions(BuildContext context) {
