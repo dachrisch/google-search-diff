@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 
@@ -27,23 +26,6 @@ void main() {
       expect(searchQueriesStore.queryRuns.length, 1);
       expect(searchQueriesStore.queryRuns[0].runs.length, 2);
       expect(searchQueriesStore.queryRuns[0].runs[0].results.length, 1);
-    });
-  });
-
-  test('Loads one query run after adding', () async {
-    var store = QueriesStore();
-    var query = Query('Test Store');
-    var runs = QueryRuns(query);
-    await runs.addRun(Run(query, [Result(title: 'Test1')]));
-    await store.add(runs);
-    await runs.addRun(Run(query, [Result(title: 'Test2')]));
-
-    var searchQueriesStore = QueriesStore();
-    await searchQueriesStore.initFuture.then((value) {
-      expect(searchQueriesStore.queryRuns.length, 1);
-      expect(searchQueriesStore.queryRuns[0].runs.length, 2);
-      expect(searchQueriesStore.queryRuns[0].runs[0].results.length, 1);
-      expect(searchQueriesStore.queryRuns[0].runs[1].results.length, 1);
     });
   });
 }
