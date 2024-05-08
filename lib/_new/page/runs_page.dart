@@ -45,24 +45,28 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
           },
           child: Builder(
               builder: (context) => Scaffold(
-                    appBar: AppBar(
-                      leading: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                      title: Text('Query - ${queryRuns.query.term}'),
-                    ),
                     body: Column(
                       children: [
                         Expanded(
-                          child: TimeGroupedListView(
-                            elements: queryRuns.runs,
-                            headerText: 'Your query runs',
-                            childWidgetBuilder: () => RunCard(
-                                onDragChanged: (isDragging) => setState(() {
-                                      this.isDragging = isDragging;
-                                    })),
-                            dateForItem: (Run item) => item.runDate,
+                          child: CustomScrollView(
+                            slivers: [
+                              SliverAppBar(
+                                leading: IconButton(
+                                  icon: const Icon(Icons.arrow_back),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                title: Text('Query - ${queryRuns.query.term}'),
+                              ),
+                              TimeGroupedListView(
+                                elements: queryRuns.runs,
+                                headerText: 'Your query runs',
+                                childWidgetBuilder: () => RunCard(
+                                    onDragChanged: (isDragging) => setState(() {
+                                          this.isDragging = isDragging;
+                                        })),
+                                dateForItem: (Run item) => item.runDate,
+                              ),
+                            ],
                           ),
                         ),
                         AnimatedContainer(

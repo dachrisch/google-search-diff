@@ -5,7 +5,6 @@ import 'package:google_search_diff/_new/action/dispatcher.dart';
 import 'package:google_search_diff/_new/action/intent/add_result.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
-import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
@@ -37,25 +36,33 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
           dispatcher: LoggingActionDispatcher(),
           child: Builder(
               builder: (context) => Scaffold(
-                  appBar: AppBar(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(100))),
-                    backgroundColor:
-                        MaterialTheme.lightScheme().primaryContainer,
-                    leading:
-                        Image.asset('assets/logo.png', fit: BoxFit.scaleDown),
-                    automaticallyImplyLeading: false,
-                    title: Text(
-                      'SearchFlux',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      body: Padding(
+                    padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverAppBar(
+                          pinned: true,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100))),
+                          backgroundColor:
+                              MaterialTheme.lightScheme().primaryContainer,
+                          leading: Image.asset('assets/logo.png',
+                              fit: BoxFit.scaleDown),
+                          automaticallyImplyLeading: false,
+                          title: Text(
+                            'SearchFlux',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          actions: const [_SearchButton(), SizedBox(width: 16)],
+                        ),
+                        TimeGroupedListView(
+                            elements: queriesStore.queryRuns,
+                            headerText: 'Your saved queries',
+                            childWidgetBuilder: () => const QueryCard(),
+                            dateForItem: (item) => item.query.createdDate),
+                      ],
                     ),
-                    actions: const [_SearchButton(), SizedBox(width: 16)],
-                  ),
-                  body: TimeGroupedListView(
-                    headerText: 'Your saved queries',
-                    elements: queriesStore.queryRuns,
-                    childWidgetBuilder: () => const QueryCard(),
-                    dateForItem: (QueryRuns item) => item.query.createdDate,
                   )))),
     );
   }
