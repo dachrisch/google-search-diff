@@ -13,7 +13,6 @@ class DocumentMock implements DocumentRef {
 
   @override
   CollectionRef collection(String id) {
-    // TODO: implement collection
     throw UnimplementedError();
   }
 
@@ -25,16 +24,13 @@ class DocumentMock implements DocumentRef {
 
   @override
   Future<Map<String, dynamic>?> get() {
-    // TODO: implement get
     throw UnimplementedError();
   }
 
   @override
-  // TODO: implement id
   String get id => key;
 
   @override
-  // TODO: implement path
   String get path => throw UnimplementedError();
 
   @override
@@ -51,13 +47,10 @@ class CollectionMock implements CollectionRef {
   final bool checking;
 
   @override
-  void addCondition(field, String operator, value) {
-    // TODO: implement addCondition
-  }
+  void addCondition(field, String operator, value) {}
 
   @override
   Future<void> delete() {
-    // TODO: implement delete
     throw UnimplementedError();
   }
 
@@ -70,20 +63,16 @@ class CollectionMock implements CollectionRef {
   Future<Map<String, dynamic>?> get() => Future.value(keyToJsonMap);
 
   @override
-  // TODO: implement parent
   CollectionRef? get parent => throw UnimplementedError();
 
   @override
-  // TODO: implement path
   String get path => throw UnimplementedError();
 
   @override
-  // TODO: implement stream
   Stream<Map<String, dynamic>> get stream => throw UnimplementedError();
 
   @override
   CollectionRef where(field, {isEqualTo}) {
-    // TODO: implement where
     throw UnimplementedError();
   }
 }
