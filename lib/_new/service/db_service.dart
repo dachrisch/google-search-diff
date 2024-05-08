@@ -8,9 +8,12 @@ abstract class DbService<T extends HasToJson> {
   final Logger l;
   final String collection;
   final LocalStoreService localStore;
-  final Map<T, String> itemToIdMap = {};
+  final Map<T, String> itemToIdMap;
 
-  DbService({required this.localStore, required this.collection})
+  DbService(
+      {required this.itemToIdMap,
+      required this.localStore,
+      required this.collection})
       : l = getLogger('db-$T[$collection]');
 
   Future<void> save(T item) {

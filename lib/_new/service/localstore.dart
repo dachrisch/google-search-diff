@@ -5,5 +5,5 @@ import 'package:localstore/localstore.dart';
 class LocalStoreService {
   final Localstore _db = Localstore.instance;
 
-  CollectionRef collection(String collection) => _db.collection(collection);
+  CollectionRefImpl collection(String collection) => _db.collection(collection);
 }

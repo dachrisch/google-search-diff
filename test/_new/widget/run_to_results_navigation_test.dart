@@ -19,7 +19,6 @@ import '../util/service_mocks.dart';
 class TestImageProvider extends ImageProvider {
   @override
   Future<Object> obtainKey(ImageConfiguration configuration) {
-    // TODO: implement obtainKey
     throw UnimplementedError();
   }
 

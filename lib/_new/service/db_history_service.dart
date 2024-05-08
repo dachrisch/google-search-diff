@@ -7,15 +7,19 @@ import 'db_service.dart';
 
 @injectable
 class DbHistoryService extends DbService<Query> {
-  DbHistoryService({required super.localStore, required super.collection});
+  DbHistoryService(
+      {required super.localStore,
+      required super.collection,
+      required super.itemToIdMap});
 
   @factoryMethod
   @preResolve
   static Future<DbHistoryService> fromDb(LocalStoreService localStore) =>
-      DbInitService(collection: '.history', localStore: localStore)
+      DbInitService<Query>(collection: '.history', localStore: localStore)
           .init((json) => Query.fromJson(json))
           .then((queryIdMap) => DbHistoryService(
                 localStore: localStore,
                 collection: '.history',
+                itemToIdMap: queryIdMap,
               ));
 }
