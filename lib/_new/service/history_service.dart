@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/service/db_history_service.dart';
@@ -5,7 +7,10 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class HistoryService extends ChangeNotifier {
-  final Set<Query> _queries = {};
+  final HashSet<Query> _queries = HashSet(
+    equals: (p0, p1) => p0.term == p1.term,
+    hashCode: (p0) => p0.term.hashCode,
+  );
 
   final DbHistoryService dbHistoryService;
 
@@ -13,9 +18,8 @@ class HistoryService extends ChangeNotifier {
     _queries.addAll(dbHistoryService.fetchAll());
   }
 
-  void addQuery(Query query) {
-    dbHistoryService.save(query).then((_) => _queries.add(query));
-  }
+  Future<void> addQuery(Query query) async =>
+      dbHistoryService.save(query).then((_) => _queries.add(query));
 
   List<Query> get queries => _queries.toList();
 
@@ -28,10 +32,8 @@ class HistoryService extends ChangeNotifier {
             .toList();
   }
 
-  remove(Query query) {
-    dbHistoryService
-        .save(query)
-        .then((_) => _queries.remove(query))
-        .then((_) => notifyListeners());
-  }
+  Future<void> remove(Query query) => dbHistoryService
+      .save(query)
+      .then((_) => _queries.remove(query))
+      .then((_) => notifyListeners());
 }

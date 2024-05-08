@@ -15,7 +15,7 @@ class Query implements HasToJson {
         createdDate = createdDate ?? DateTime.now();
 
   @override
-  int get hashCode => term.hashCode;
+  int get hashCode => Object.hashAll([term.hashCode, id.hashCode]);
 
   @override
   bool operator ==(Object other) {
