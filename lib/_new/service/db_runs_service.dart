@@ -22,7 +22,9 @@ class DbRunsService {
     });
   }
 
-  factory DbRunsService() => DbRunsService._();
+  static final DbRunsService instance = DbRunsService._();
+
+  factory DbRunsService() => instance;
 
   Future<void> saveRuns(List<Run> runs) => Future.sync(() async {
         for (var element in runs) {

@@ -5,7 +5,7 @@ import 'package:google_search_diff/_new/service/db_queries_service.dart';
 class HistoryService extends ChangeNotifier {
   final Set<Query> _queries = {};
 
-  final DbQueriesService dbQueryService = DbQueriesService('.history');
+  final DbQueriesService dbQueryService = DbQueriesService.of('.history');
 
   HistoryService() {
     dbQueryService

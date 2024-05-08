@@ -8,7 +8,7 @@ import 'package:logger/logger.dart';
 
 class QueriesStore extends ChangeNotifier {
   final List<QueryRuns> queryRuns = [];
-  final DbQueriesService dbQueryService = DbQueriesService('.queries');
+  final DbQueriesService dbQueryService = DbQueriesService.of('.queries');
   final DbRunsService dbRunsService = DbRunsService();
   final Logger l = getLogger('QueriesStore');
   late Future<void> initFuture;

@@ -13,7 +13,7 @@ class DbQueriesService {
 
   DbQueriesService._(this.collection) {
     loadFuture = db.collection(collection).get().then((allQueriesJson) {
-      l.d('Loading [${allQueriesJson?.length}] Queries');
+      l.d('Loading [${allQueriesJson?.length}] Queries from [$collection]');
       allQueriesJson?.entries.forEach((q) {
         var query = Query.fromJson(q.value);
         l.d('Loaded $query');
@@ -22,7 +22,14 @@ class DbQueriesService {
     });
   }
 
-  factory DbQueriesService(String collection) => DbQueriesService._(collection);
+  static final Map<String, DbQueriesService> instanceMap = {};
+
+  factory DbQueriesService.of(String collection) {
+    if (!instanceMap.containsKey(collection)) {
+      instanceMap.putIfAbsent(collection, () => DbQueriesService._(collection));
+    }
+    return instanceMap[collection]!;
+  }
 
   Future<void> saveQuery(Query query) {
     String id = db.collection(collection).doc().id;
