@@ -33,7 +33,7 @@ class HistoryService extends ChangeNotifier {
   }
 
   Future<void> remove(Query query) => dbHistoryService
-      .save(query)
+      .remove(query)
       .then((_) => _queries.remove(query))
       .then((_) => notifyListeners());
 }

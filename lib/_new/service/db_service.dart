@@ -36,7 +36,7 @@ abstract class DbService<T extends HasToJson> {
         .collection(collection)
         .doc(id)
         .delete()
-        .then((value) => l.d('Deleted $id, $value'))
+        .then((_) => l.d('Deleted [$id]'))
         .onError((error, stackTrace) =>
             l.e('Error deleting $id', error: error, stackTrace: stackTrace));
   }

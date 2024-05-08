@@ -34,4 +34,30 @@ void main() {
       expect(searchQueriesStore.queryRuns[0].runs[0].results.length, 1);
     };
   });
+
+  test('Deletes the actual file from db', () async {
+    Directory('.queries').createSync();
+    var query = Query('Test Store');
+    var testFile = File('.queries/123456789');
+    testFile.writeAsStringSync(jsonEncode(query));
+    var localStoreService = LocalStoreService();
+    var dbQueriesService = await DbQueriesService.fromDb(localStoreService);
+    expect(dbQueriesService.fetchAll().length, 1);
+    await dbQueriesService.remove(query);
+    expect(dbQueriesService.fetchAll().length, 0);
+    expect(testFile.existsSync(), false);
+  });
+
+  test('Deletes the actual file when added', () async {
+    Directory('.queries').createSync();
+    var query = Query('Test Store');
+    var localStoreService = LocalStoreService();
+    var dbQueriesService = await DbQueriesService.fromDb(localStoreService);
+    await dbQueriesService.save(query);
+    expect(dbQueriesService.fetchAll().length, 1);
+    expect(Directory('.queries').listSync().length, 1);
+    await dbQueriesService.remove(query);
+    expect(dbQueriesService.fetchAll().length, 0);
+    expect(Directory('.queries').listSync().length, 0);
+  });
 }
