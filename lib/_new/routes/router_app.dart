@@ -15,12 +15,12 @@ class RouterApp extends StatelessWidget {
   final SearchService searchService;
   final HistoryService historyService;
 
-  const RouterApp(
-      {super.key,
-      required this.theme,
+  RouterApp(
+      {required this.theme,
       required this.queriesStore,
       required this.searchService,
-      required this.historyService});
+      required this.historyService})
+      : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {

@@ -31,7 +31,8 @@ void main() {
     var searchQueriesStore = QueriesStore(
         dbQueryService: MockDbQueriesService(),
         dbRunsService: MockDbRunsService());
-    var historyService = HistoryService(dbQueryService: MockDbQueriesService());
+    var historyService =
+        HistoryService(dbHistoryService: MockDbHistoryService());
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [

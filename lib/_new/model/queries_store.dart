@@ -20,14 +20,14 @@ class QueriesStore extends ChangeNotifier {
 
   Future<void> add(QueryRuns runs) {
     return Future.sync(() => queryRuns.add(runs))
-        .then((_) => dbQueryService.saveQuery(runs.query))
+        .then((_) => dbQueryService.save(runs.query))
         .then((value) => notifyListeners());
   }
 
   Future<void> remove(QueryRuns runs) =>
       Future.sync(() => queryRuns.remove(runs))
-          .then((_) => dbQueryService.removeQuery(runs.query))
-          .then((_) => dbRunsService.removeRuns(runs.runs))
+          .then((_) => dbQueryService.remove(runs.query))
+          .then((_) => dbRunsService.removeAll(runs.runs))
           .then((value) => notifyListeners());
 
   QueryRuns at(int index) => queryRuns[index];

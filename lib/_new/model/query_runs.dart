@@ -31,13 +31,13 @@ class QueryRuns extends ChangeNotifier {
       : null;
 
   Future<Run> addRun(Run run) => dbRunsService
-      .saveRun(run)
+      .save(run)
       .then((value) => runs.add(run))
       .then((value) => notifyListeners())
       .then((_) => run);
 
   Future<void> removeRun(Run run) => dbRunsService
-      .removeRun(run)
+      .remove(run)
       .then((value) => runs.remove(run))
       .then((value) => notifyListeners());
 

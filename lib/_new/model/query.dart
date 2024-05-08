@@ -1,10 +1,11 @@
+import 'package:google_search_diff/_new/model/has_to_json.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'query.g.dart';
 
-@JsonSerializable()
-class Query {
+@JsonSerializable(checked: true)
+class Query implements HasToJson {
   final String term;
   final QueryId id;
   final DateTime createdDate;
@@ -28,5 +29,6 @@ class Query {
 
   factory Query.fromJson(Map<String, dynamic> json) => _$QueryFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$QueryToJson(this);
 }

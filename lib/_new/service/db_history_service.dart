@@ -6,16 +6,16 @@ import 'db_init_service.dart';
 import 'db_service.dart';
 
 @injectable
-class DbQueriesService extends DbService<Query> {
-  DbQueriesService({required super.localStore, required super.collection});
+class DbHistoryService extends DbService<Query> {
+  DbHistoryService({required super.localStore, required super.collection});
 
   @factoryMethod
   @preResolve
-  static Future<DbQueriesService> fromDb(LocalStoreService localStore) =>
-      DbInitService(collection: '.queries', localStore: localStore)
+  static Future<DbHistoryService> fromDb(LocalStoreService localStore) =>
+      DbInitService(collection: '.history', localStore: localStore)
           .init((json) => Query.fromJson(json))
-          .then((queryIdMap) => DbQueriesService(
+          .then((queryIdMap) => DbHistoryService(
                 localStore: localStore,
-                collection: '.queries',
+                collection: '.history',
               ));
 }

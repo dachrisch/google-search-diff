@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:google_search_diff/_new/model/has_to_json.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run_id.dart';
@@ -8,8 +9,8 @@ import 'comparison.dart';
 
 part 'run.g.dart';
 
-@JsonSerializable()
-class Run extends ChangeNotifier {
+@JsonSerializable(checked: true)
+class Run extends ChangeNotifier implements HasToJson {
   final DateTime runDate;
   final RunId id;
   final Query query;
