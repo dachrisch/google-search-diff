@@ -21,6 +21,13 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
             searchFieldLabel: 'Create search...', searchFieldStyle: textStyle);
 
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    return super
+        .appBarTheme(context)
+        .copyWith(appBarTheme: Theme.of(context).appBarTheme);
+  }
+
+  @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
@@ -87,32 +94,35 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
     var historyService = context.watch<HistoryService>();
     var suggestions = historyService.getMatching(Query(query));
 
-    return Container(
-        margin: const EdgeInsets.only(left: 10, right: 10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: suggestions.isEmpty
-                ? const Text('No recent searches')
-                : const Text('Recent searches'),
-          ),
-          Expanded(
-              child: ListView.builder(
-                  controller: scrollController,
-                  itemBuilder: (context, index) => ListTile(
-                      leading: const Icon(Icons.history),
-                      title: Text(suggestions[index].term),
-                      trailing: IconButton(
-                        key: Key('delete-search-$index-button'),
-                        icon: const Icon(Icons.clear_outlined),
-                        onPressed: () =>
-                            historyService.remove(suggestions[index]),
-                      ),
-                      onTap: () {
-                        query = suggestions[index].term;
-                        showResults(context);
-                      }),
-                  itemCount: suggestions.length))
-        ]));
+    return SafeArea(
+      child: Container(
+          margin: const EdgeInsets.only(left: 10, right: 10),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: suggestions.isEmpty
+                  ? const Text('No recent searches')
+                  : const Text('Recent searches'),
+            ),
+            Expanded(
+                child: ListView.builder(
+                    controller: scrollController,
+                    itemBuilder: (context, index) => ListTile(
+                        leading: const Icon(Icons.history),
+                        title: Text(suggestions[index].term),
+                        trailing: IconButton(
+                          key: Key('delete-search-$index-button'),
+                          icon: const Icon(Icons.clear_outlined),
+                          onPressed: () =>
+                              historyService.remove(suggestions[index]),
+                        ),
+                        onTap: () {
+                          query = suggestions[index].term;
+                          showResults(context);
+                        }),
+                    itemCount: suggestions.length))
+          ])),
+    );
   }
 }
