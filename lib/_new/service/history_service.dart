@@ -18,8 +18,9 @@ class HistoryService extends ChangeNotifier {
     _queries.addAll(dbHistoryService.fetchAll());
   }
 
-  Future<void> addQuery(Query query) async =>
-      dbHistoryService.save(query).then((_) => _queries.add(query));
+  Future<Query?> addQuery(Query query) async =>
+      Future.sync(() => _queries.add(query))
+          .then((result) => result ? dbHistoryService.save(query) : null);
 
   List<Query> get queries => _queries.toList();
 

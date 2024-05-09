@@ -10,10 +10,9 @@ import '../util/service_mocks.dart';
 void main() {
   test('Finds the next recent run', () async {
     var query = Query('Test');
-    QueryRuns queryRunsModel =
-        QueryRuns(query, dbRunsService: MockDbRunsService());
     Run first =
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 1));
+    QueryRuns queryRunsModel = QueryRuns.fromRun(first, MockDbRunsService());
     Run second =
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 2));
     await queryRunsModel.addRun(first);
@@ -37,7 +36,7 @@ void main() {
     Run first =
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 1));
     Run second = Run(query, [Result(title: 'test1'), Result(title: 'test2')],
-        runDate:  DateTime(2000, 1, 2));
+        runDate: DateTime(2000, 1, 2));
     expect(
         first.compareTo(second),
         ResultComparison(
@@ -49,7 +48,7 @@ void main() {
     Run first =
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 1));
     Run second = Run(query, [Result(title: 'test1'), Result(title: 'test2')],
-        runDate:  DateTime(2000, 1, 2));
+        runDate: DateTime(2000, 1, 2));
     expect(
         second.compareTo(first),
         ResultComparison(

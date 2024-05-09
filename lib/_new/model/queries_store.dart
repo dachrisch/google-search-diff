@@ -18,13 +18,13 @@ class QueriesStore extends ChangeNotifier {
     for (var query in dbQueryService.fetchAll()) {
       var runs =
           dbRunsService.fetchAll().where((run) => run.query == query).toList();
-      queryRuns.add(QueryRuns(query, runs: runs, dbRunsService: dbRunsService));
+      queryRuns.add(QueryRuns.fromTransientRuns(query, runs, dbRunsService));
     }
   }
 
   int get items => queryRuns.length;
 
-  Future<void> add(QueryRuns runs) {
+  Future<void> save(QueryRuns runs) {
     return Future.sync(() => queryRuns.add(runs))
         .then((_) => dbQueryService.save(runs.query))
         .then((value) => notifyListeners());

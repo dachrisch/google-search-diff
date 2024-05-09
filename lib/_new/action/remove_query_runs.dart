@@ -21,6 +21,6 @@ class RemoveQueryRunsAction extends Action<RemoveQueryRunsIntent> {
           actionLabel: 'Undo',
           onPressed: () async {
             l.d('Restore $intent.queryRuns');
-            queriesStore.add(intent.queryRuns);
+            queriesStore.save(intent.queryRuns);
           }));
 }

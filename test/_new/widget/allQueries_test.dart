@@ -26,10 +26,11 @@ void main() {
         dbRunsService: MockDbRunsService());
 
     var query = Query('Test query');
-    var queryRunsModel = QueryRuns(query, dbRunsService: MockDbRunsService());
-    queryRunsModel.addRun(Run(query,
-        [Result(title: 'Test', source: 'T', link: 'http://example.com')]));
-    searchQueriesStore.add(queryRunsModel);
+    var queryRunsModel = QueryRuns.fromRun(
+        Run(query,
+            [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
+        MockDbRunsService());
+    searchQueriesStore.save(queryRunsModel);
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [

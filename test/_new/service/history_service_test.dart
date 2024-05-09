@@ -11,5 +11,6 @@ void main() {
     await history.addQuery(Query('Test 2'));
     await history.addQuery(Query('Test 1'));
     expect(history.queries.length, 2);
+    expect(history.dbHistoryService.itemToIdMap.keys.length, 2);
   });
 }

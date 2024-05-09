@@ -21,11 +21,7 @@ class TestImageProvider extends ImageProvider {
   Future<Object> obtainKey(ImageConfiguration configuration) {
     throw UnimplementedError();
   }
-
 }
-
-
-
 
 void main() {
   testWidgets('Transitions from Query to Result View',
@@ -37,7 +33,7 @@ void main() {
         dbQueryService: MockDbQueriesService(),
         dbRunsService: MockDbRunsService());
 
-    await queriesStore.add(QueryRuns.fromRun(
+    await queriesStore.save(QueryRuns.fromRun(
         Run(Query('Saved query 1'), [Result(title: 'result 1')]),
         MockDbRunsService()));
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
@@ -45,8 +41,10 @@ void main() {
     final PlatformAssetBundle testBundle = PlatformAssetBundle();
     testBundle.load('assets/logo.png');
 
-    await tester.pumpWidget(DefaultAssetBundle(bundle: testBundle, child: RouterApp(
-      theme: theme,
+    await tester.pumpWidget(DefaultAssetBundle(
+        bundle: testBundle,
+        child: RouterApp(
+          theme: theme,
           queriesStore: queriesStore,
           searchService: LoremIpsumSearchService(),
           historyService: MockHistoryService(),

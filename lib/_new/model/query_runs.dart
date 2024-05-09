@@ -13,12 +13,19 @@ class QueryRuns extends ChangeNotifier {
 
   @factoryMethod
   static QueryRuns fromRun(@factoryParam Run run, DbRunsService dbRunsService) {
-    var runs = QueryRuns(run.query, dbRunsService: dbRunsService);
-    runs.addRun(run);
-    return runs;
+    var queryRuns = QueryRuns._(run.query, dbRunsService: dbRunsService);
+    queryRuns.addRun(run);
+    return queryRuns;
   }
 
-  QueryRuns(this.query, {required this.dbRunsService, List<Run>? runs})
+  static QueryRuns fromTransientRuns(
+      Query query, List<Run> runs, DbRunsService dbRunsService) {
+    var queryRuns = QueryRuns._(query, dbRunsService: dbRunsService);
+    queryRuns.runs.addAll(runs);
+    return queryRuns;
+  }
+
+  QueryRuns._(this.query, {required this.dbRunsService, List<Run>? runs})
       : runs = runs ?? [];
 
   int get items => runs.length;
@@ -35,6 +42,8 @@ class QueryRuns extends ChangeNotifier {
       .then((value) => runs.add(run))
       .then((value) => notifyListeners())
       .then((_) => run);
+
+  void addRuns(List<Run> runs) => Future.forEach(runs, (run) => addRun(run));
 
   Future<void> removeRun(Run run) => dbRunsService
       .remove(run)

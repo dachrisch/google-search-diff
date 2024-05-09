@@ -15,8 +15,8 @@ void main() {
   testWidgets('Refresh adds a new result and then deletes it',
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-    var searchQuery =
-        QueryRuns(Query('Test query'), dbRunsService: MockDbRunsService());
+    var searchQuery = QueryRuns.fromTransientRuns(
+        Query('Test query'), [], MockDbRunsService());
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
