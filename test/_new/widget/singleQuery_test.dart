@@ -31,7 +31,8 @@ void main() {
     expect(find.byType(RunCard), findsNWidgets(0));
     expect(searchQuery.items, 0);
 
-    await tester.tapButtonByKey('refresh-query-results-button');
+    await tester.dragFrom(const Offset(50, 100), const Offset(0, 300));
+    await tester.pumpAndSettle();
     expect(searchQuery.items, 1);
     expect(find.byType(RunCard), findsNWidgets(1));
 
