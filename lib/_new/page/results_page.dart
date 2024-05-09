@@ -26,12 +26,10 @@ class ResultsPageScaffold extends StatelessWidget {
         ),
         title: Text('Result - ${results.query.term}'),
       ),
-      body: SafeArea(
-        child: ListViewWithHeader(
-          items: results.items,
-          itemBuilder: (context, index) => ResultCard(results[index]),
-          headerText: 'Results',
-        ),
+      body: ListViewWithHeader(
+        items: results.items,
+        itemBuilder: (context, index) => ResultCard(results[index]),
+        headerText: 'Results',
       ),
     );
   }

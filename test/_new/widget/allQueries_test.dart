@@ -7,7 +7,7 @@ import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/page/queries_page.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
-import 'package:google_search_diff/_new/widget/card/query_card.dart';
+import 'package:google_search_diff/_new/widget/card/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/localstore_helper.dart';
@@ -42,7 +42,7 @@ void main() {
     ));
 
     expect(searchQueriesStore.items, 1);
-    expect(find.byType(QueryCard), findsNWidgets(1));
+    expect(find.byType(QueryRunsCard), findsNWidgets(1));
 
     expect(find.widgetWithText(Row, '1'), findsOneWidget);
     await tester
@@ -52,6 +52,6 @@ void main() {
     await tester.tapButtonByKey(
         'delete-search-query-${searchQueriesStore.at(0).query.id}');
     expect(searchQueriesStore.items, 0);
-    expect(find.byType(QueryCard), findsNWidgets(0));
+    expect(find.byType(QueryRunsCard), findsNWidgets(0));
   });
 }

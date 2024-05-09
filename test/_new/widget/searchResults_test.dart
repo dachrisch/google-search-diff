@@ -7,7 +7,7 @@ import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/router_app.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
-import 'package:google_search_diff/_new/widget/card/query_card.dart';
+import 'package:google_search_diff/_new/widget/card/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';
@@ -33,7 +33,7 @@ void main() {
       historyService: MockHistoryService(),
     ));
 
-    expect(find.byType(QueryCard), findsNothing);
+    expect(find.byType(QueryRunsCard), findsNothing);
     expect(searchQueriesStore.items, 0);
     await tester.tapButtonByKey('show-searchbar-button');
     expect(find.widgetWithText(Container, 'No recent searches'), findsOne);
@@ -47,6 +47,6 @@ void main() {
     await tester.tapButtonByKey('add-search-query-button');
     await tester.pumpAndSettle();
     expect(searchQueriesStore.items, 1);
-    expect(find.byType(QueryCard), findsOne);
+    expect(find.byType(QueryRunsCard), findsOne);
   });
 }

@@ -12,8 +12,8 @@ import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-class RunsPage extends StatelessWidget {
-  const RunsPage({super.key});
+class QueryRunsPage extends StatelessWidget {
+  const QueryRunsPage({super.key});
 
   @override
   Widget build(BuildContext context) =>
@@ -49,35 +49,40 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                     child: Column(
                       children: [
                         Expanded(
-                          child: RefreshIndicator(
-                            onRefresh: () => (Actions.invoke(
-                                    context, SearchIntent(queryRuns))
-                                as Future<void>),
-                            child: CustomScrollView(
-                              slivers: [
-                                SliverAppBar(
-                                  pinned: true,
-                                  leading: IconButton(
-                                    icon: const Icon(Icons.arrow_back),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                  ),
-                                  title:
-                                      Text('Query - ${queryRuns.query.term}'),
-                                ),
-                                TimeGroupedListView(
-                                  elements: queryRuns.runs,
-                                  childWidgetBuilder: () => RunCard(
-                                      onDragChanged: (isDragging) =>
-                                          setState(() {
-                                            l.d('isDragging = $isDragging');
-                                            this.isDragging = isDragging;
-                                          })),
-                                  dateForItem: (Run item) => item.runDate,
-                                ),
-                              ],
-                            ),
-                          ),
+                          child: Builder(builder: (context) {
+                            var maxHeight =
+                                Scaffold.of(context).appBarMaxHeight;
+                            return RefreshIndicator(
+                                edgeOffset: maxHeight ?? 80,
+                                onRefresh: () => (Actions.invoke(
+                                        context, SearchIntent(queryRuns))
+                                    as Future<void>),
+                                child: CustomScrollView(
+                                  slivers: [
+                                    SliverAppBar(
+                                      pinned: true,
+                                      leading: IconButton(
+                                        icon: const Icon(Icons.arrow_back),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                      ),
+                                      title: Text(
+                                          'Query - ${queryRuns.query.term}'),
+                                    ),
+                                    TimeGroupedListView(
+                                      elements: queryRuns.runs,
+                                      childWidgetBuilder: () => RunCard(
+                                          onDragChanged: (isDragging) =>
+                                              setState(() {
+                                                l.d('isDragging = $isDragging');
+                                                this.isDragging = isDragging;
+                                              })),
+                                      dateForItem: (Run item) => item.runDate,
+                                      type: GroupListType.sliver,
+                                    ),
+                                  ],
+                                ));
+                          }),
                         ),
                         AnimatedContainer(
                           height: isDragging ? 150 : 150,

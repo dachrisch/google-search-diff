@@ -12,7 +12,7 @@ import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/page/search_provider_delegate.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
-import 'package:google_search_diff/_new/widget/card/query_card.dart';
+import 'package:google_search_diff/_new/widget/card/query_runs_card.dart';
 import 'package:google_search_diff/_new/widget/time_grouped_list_view.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
@@ -45,6 +45,8 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
         child: Builder(
             builder: (context) => Scaffold(
                     body: SafeArea(
+                  bottom: false,
+                  top: true,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
                     child: CustomScrollView(
@@ -75,8 +77,10 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                         queriesStore.items > 0
                             ? TimeGroupedListView(
                                 elements: queriesStore.queryRuns,
-                                childWidgetBuilder: () => const QueryCard(),
-                                dateForItem: (item) => item.query.createdDate)
+                                childWidgetBuilder: () => const QueryRunsCard(),
+                                dateForItem: (item) => item.query.createdDate,
+                                type: GroupListType.sliver,
+                              )
                             : SliverFillRemaining(
                                 child: Center(
                                   child: Center(

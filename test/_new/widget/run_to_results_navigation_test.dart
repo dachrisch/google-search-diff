@@ -9,7 +9,7 @@ import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/routes/router_app.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/theme.dart';
-import 'package:google_search_diff/_new/widget/card/query_card.dart';
+import 'package:google_search_diff/_new/widget/card/query_runs_card.dart';
 import 'package:google_search_diff/_new/widget/card/result_card.dart';
 import 'package:google_search_diff/_new/widget/card/run_card.dart';
 import 'package:provider/provider.dart';
@@ -53,9 +53,9 @@ void main() {
         )));
 
     expect(queriesStore.items, 1);
-    expect(find.byType(QueryCard), findsOne);
+    expect(find.byType(QueryRunsCard), findsOne);
 
-    await tester.tap(find.byType(QueryCard));
+    await tester.tap(find.byType(QueryRunsCard));
     await tester.pumpAndSettle();
     await tester.tap(find.byType(RunCard));
     await tester.pumpAndSettle();

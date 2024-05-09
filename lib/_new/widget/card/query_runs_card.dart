@@ -9,8 +9,8 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 
-class QueryCard extends StatefulWidget {
-  const QueryCard({
+class QueryRunsCard extends StatefulWidget {
+  const QueryRunsCard({
     super.key,
   });
 
@@ -18,7 +18,8 @@ class QueryCard extends StatefulWidget {
   State<StatefulWidget> createState() => _SingleQueryCard();
 }
 
-class _SingleQueryCard extends State<QueryCard> with TickerProviderStateMixin {
+class _SingleQueryCard extends State<QueryRunsCard>
+    with TickerProviderStateMixin {
   final Logger l = getLogger('QueryCard');
 
   late String lastUpdatedText;
