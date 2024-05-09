@@ -6,7 +6,6 @@ import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
-import 'package:google_search_diff/_new/widget/animated_icon_button.dart';
 import 'package:google_search_diff/_new/widget/card/run_card.dart';
 import 'package:google_search_diff/_new/widget/time_grouped_list_view.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
@@ -31,7 +30,9 @@ class RunsPageScaffold extends StatefulWidget {
 }
 
 class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
+  final Logger l = getLogger('RunsPage');
   bool isDragging = false;
+  final ComparisonViewModel comparisonViewModel = ComparisonViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +56,7 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                             child: CustomScrollView(
                               slivers: [
                                 SliverAppBar(
+                                  pinned: true,
                                   leading: IconButton(
                                     icon: const Icon(Icons.arrow_back),
                                     onPressed: () =>
@@ -68,6 +70,7 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                                   childWidgetBuilder: () => RunCard(
                                       onDragChanged: (isDragging) =>
                                           setState(() {
+                                            l.d('isDragging = $isDragging');
                                             this.isDragging = isDragging;
                                           })),
                                   dateForItem: (Run item) => item.runDate,
@@ -77,40 +80,67 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                           ),
                         ),
                         AnimatedContainer(
-                          height: isDragging ? 100 : 0,
+                          height: isDragging ? 150 : 150,
                           duration: const Duration(milliseconds: 200),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          child: Column(
                             children: [
-                              RunDragTarget(),
-                              RunDragTarget(),
+                              Text(
+                                'Compare runs',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  RunDragTarget((data) =>
+                                      comparisonViewModel.dropBase(data)),
+                                  Icon(Icons.compare_arrows_outlined),
+                                  RunDragTarget((data) =>
+                                      comparisonViewModel.dropCurrent(data)),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         )
                       ],
                     ),
                   ),
-                  floatingActionButton: FloatingActionButton(
-                      onPressed: () {},
-                      child: AnimatedRefreshIconButton(
-                        buttonKey: const Key('refresh-query-results-button'),
-                        onPressed: () =>
-                            Actions.invoke(context, SearchIntent(queryRuns)),
-                      )),
                 )));
+  }
+}
+
+class ComparisonViewModel {
+  Run? base;
+  Run? current;
+
+  void dropCurrent(Run run) {
+    current = run;
+  }
+
+  void dropBase(Run run) {
+    base = run;
   }
 }
 
 class RunDragTarget extends StatelessWidget {
   final Logger l = getLogger('RunDragTarget');
+  final void Function(Run data) acceptData;
 
-  RunDragTarget({
+  RunDragTarget(
+    this.acceptData, {
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return DragTarget<Run>(
+      onAcceptWithDetails: (details) => acceptData(details.data),
       builder: (context, candidateData, rejectedData) {
         return SizedBox(
             height: 100.0,
@@ -121,10 +151,10 @@ class RunDragTarget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20)),
               color:
                   candidateData.isEmpty ? Colors.grey[100] : Colors.grey[600],
-              child: const Center(
-                child: Text(
-                  'DROP_ITEMS_HERE',
-                  style: TextStyle(color: Colors.black, fontSize: 22.0),
+              child: Center(
+                child: Icon(
+                  Icons.select_all,
+                  color: Colors.grey[600],
                 ),
               ),
             ));

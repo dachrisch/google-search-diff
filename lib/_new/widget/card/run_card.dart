@@ -39,14 +39,19 @@ class _RunCardState extends State<RunCard> with TimerMixin {
           builder: (context) => LongPressDraggable<Run>(
               data: run,
               dragAnchorStrategy: (draggable, context, position) =>
-                  const Offset(50, 50),
+                  const Offset(170, 70),
               onDragStarted: () => widget.onDragChanged(true),
               onDragEnd: (details) => widget.onDragChanged(false),
+              onDragCompleted: () => widget.onDragChanged(false),
+              onDraggableCanceled: (velocity, offset) =>
+                  widget.onDragChanged(false),
               feedback: SizedBox(
-                  width: 100,
+                  width: 200,
                   height: 100,
                   child: Card(
                     elevation: 8.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
