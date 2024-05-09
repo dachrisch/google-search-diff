@@ -9,7 +9,7 @@ import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';
-import '../util/testProvider.dart';
+import '../util/test_provider.dart';
 import 'widget_tester_extension.dart';
 
 class TestSearchService extends SearchService {

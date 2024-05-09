@@ -39,7 +39,7 @@ class _SingleQueryCard extends State<QueryRunsCard>
     updateRelativeTimes(context, queryRuns);
 
     return Actions(
-      actions: {},
+      actions: const {},
       child: Builder(builder: (context) {
         return Dismissible(
             key: Key(queryRuns.hashCode.toString()),
@@ -126,9 +126,7 @@ class _SingleQueryCard extends State<QueryRunsCard>
 }
 
 class _RefreshDismissableContainer extends StatelessWidget {
-  const _RefreshDismissableContainer({
-    super.key,
-  });
+  const _RefreshDismissableContainer();
 
   @override
   Widget build(BuildContext context) {
@@ -147,9 +145,7 @@ class _RefreshDismissableContainer extends StatelessWidget {
 }
 
 class _DeleteDismissableContainer extends StatelessWidget {
-  const _DeleteDismissableContainer({
-    super.key,
-  });
+  const _DeleteDismissableContainer();
 
   @override
   Widget build(BuildContext context) {

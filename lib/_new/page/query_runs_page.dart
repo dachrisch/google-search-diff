@@ -97,15 +97,15 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 20,
                                   ),
                                   RunDragTarget((data) =>
                                       comparisonViewModel.dropBase(data)),
-                                  Icon(Icons.compare_arrows_outlined),
+                                  const Icon(Icons.compare_arrows_outlined),
                                   RunDragTarget((data) =>
                                       comparisonViewModel.dropCurrent(data)),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 20,
                                   ),
                                 ],

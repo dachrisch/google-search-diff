@@ -24,15 +24,13 @@ void main() {
     File('.runs/987654322').writeAsStringSync(
         jsonEncode(Run(query, [Result(title: 'Test title 2')])));
 
-    await () async {
-      var localStoreService = LocalStoreService();
-      var searchQueriesStore = QueriesStore(
-          dbQueryService: await DbQueriesService.fromDb(localStoreService),
-          dbRunsService: await DbRunsService.fromDb(localStoreService));
-      expect(searchQueriesStore.queryRuns.length, 1);
-      expect(searchQueriesStore.queryRuns[0].runs.length, 2);
-      expect(searchQueriesStore.queryRuns[0].runs[0].results.length, 1);
-    };
+    var localStoreService = LocalStoreService();
+    var searchQueriesStore = QueriesStore(
+        dbQueryService: await DbQueriesService.fromDb(localStoreService),
+        dbRunsService: await DbRunsService.fromDb(localStoreService));
+    expect(searchQueriesStore.queryRuns.length, 1);
+    expect(searchQueriesStore.queryRuns[0].runs.length, 2);
+    expect(searchQueriesStore.queryRuns[0].runs[0].results.length, 1);
   });
 
   test('Deletes the actual file from db', () async {

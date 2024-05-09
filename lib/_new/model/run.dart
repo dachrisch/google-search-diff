@@ -36,6 +36,7 @@ class Run extends ChangeNotifier implements HasToJson {
 
   factory Run.fromJson(Map<String, dynamic> json) => _$RunFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$RunToJson(this);
 
   ResultComparison compareTo(Run run) {

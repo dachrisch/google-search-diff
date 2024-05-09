@@ -7,7 +7,7 @@ import 'package:google_search_diff/_new/widget/card/run_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';
-import '../util/testProvider.dart';
+import '../util/test_provider.dart';
 import 'search_bar_test.dart';
 import 'widget_tester_extension.dart';
 
