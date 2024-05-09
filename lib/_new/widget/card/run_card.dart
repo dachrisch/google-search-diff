@@ -6,6 +6,7 @@ import 'package:google_search_diff/_new/model/comparison.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/run.dart';
 import 'package:google_search_diff/_new/widget/card/run_card_list_tile.dart';
+import 'package:google_search_diff/_new/widget/comparison/run_feedback_card.dart';
 import 'package:google_search_diff/_new/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -45,27 +46,7 @@ class _RunCardState extends State<RunCard> with TimerMixin {
               onDragCompleted: () => widget.onDragChanged(false),
               onDraggableCanceled: (velocity, offset) =>
                   widget.onDragChanged(false),
-              feedback: SizedBox(
-                  width: 200,
-                  height: 100,
-                  child: Card(
-                    elevation: 8.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              '${run.items} items',
-                            ),
-                            const Icon(Icons.notes_sharp),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )),
+              feedback: RunFeedbackCard(run: run),
               child: Dismissible(
                 key: Key(run.id.id.toString()),
                 direction: DismissDirection.endToStart,
