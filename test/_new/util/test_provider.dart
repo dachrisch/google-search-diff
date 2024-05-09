@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:relative_time/relative_time.dart';
@@ -40,6 +41,7 @@ class ScaffoldMultiProviderTestApp extends StatelessWidget {
     return MultiProvider(
         providers: providers,
         child: MaterialApp(
+          theme: LightTheme().light(),
           home: scaffoldUnderTest,
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
             RelativeTimeLocalizations.delegate,

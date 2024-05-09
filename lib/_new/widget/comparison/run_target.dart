@@ -20,6 +20,7 @@ class RunDragTarget extends StatefulWidget {
 }
 
 class _RunDragTargetState extends State<RunDragTarget> {
+  final Logger l = getLogger('RunDragTarget');
   Run? acceptedRun;
 
   bool get hasRun => acceptedRun != null;
@@ -28,24 +29,28 @@ class _RunDragTargetState extends State<RunDragTarget> {
   Widget build(BuildContext context) {
     return DragTarget<Run>(
       onAcceptWithDetails: (details) {
+        l.d('accepting $details');
         acceptedRun = details.data;
         widget.onAcceptRun(details.data);
       },
-      onWillAcceptWithDetails: (details) =>
-          !hasRun && widget.willAcceptRun(details.data),
+      onWillAcceptWithDetails: (details) {
+        l.d('Check to accept: $details');
+        return !hasRun && widget.willAcceptRun(details.data);
+      },
       builder: (context, candidateData, rejectedData) {
+        l.d('Drop has: $candidateData, $rejectedData');
         return hasRun
-            ? _TargetWithRun(run: acceptedRun!)
-            : _EmptyTarget(isHighlighted: candidateData.isEmpty);
+            ? TargetWithRun(run: acceptedRun!)
+            : EmptyTarget(isHighlighted: candidateData.isEmpty);
       },
     );
   }
 }
 
-class _TargetWithRun extends StatelessWidget {
+class TargetWithRun extends StatelessWidget {
   final Run run;
 
-  const _TargetWithRun({required this.run});
+  const TargetWithRun({required this.run});
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +84,10 @@ class _TargetWithRun extends StatelessWidget {
   }
 }
 
-class _EmptyTarget extends StatelessWidget {
+class EmptyTarget extends StatelessWidget {
   final bool isHighlighted;
 
-  const _EmptyTarget({
+  const EmptyTarget({
     required this.isHighlighted,
   });
 

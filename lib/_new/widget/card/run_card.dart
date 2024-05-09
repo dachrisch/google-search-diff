@@ -46,6 +46,9 @@ class _RunCardState extends State<RunCard> with TimerMixin {
               onDragCompleted: () => widget.onDragChanged(false),
               onDraggableCanceled: (velocity, offset) =>
                   widget.onDragChanged(false),
+              onDragUpdate: (details) {
+                l.d('drag update $details');
+              },
               feedback: RunFeedbackCard(run: run),
               child: Dismissible(
                 key: Key(run.id.id.toString()),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/widget/comparison/run_target.dart';
 import 'package:google_search_diff/_new/widget/model/comparison.dart';
+import 'package:logger/logger.dart';
 
 class RunComparisonContainer extends StatefulWidget {
   final bool isActive;
 
-  RunComparisonContainer({super.key, required this.isActive});
+  const RunComparisonContainer({super.key, required this.isActive});
 
   @override
   State<StatefulWidget> createState() => _RunComparisonContainerState();
@@ -13,10 +15,13 @@ class RunComparisonContainer extends StatefulWidget {
 
 class _RunComparisonContainerState extends State<RunComparisonContainer>
     with TickerProviderStateMixin {
+  final Logger l = getLogger('run-comparison');
   final ComparisonViewModel comparisonViewModel = ComparisonViewModel();
 
   late final AnimationController _controller;
   late final Animation<double> fadeInAnimation;
+
+  bool get containerOpen => widget.isActive || comparisonViewModel.isNotEmpty;
 
   @override
   void initState() {
@@ -35,14 +40,16 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
   Widget build(BuildContext context) {
     if (widget.isActive) {
       _controller.forward();
+      l.d('Drop Container opened');
     } else if (comparisonViewModel.isEmpty) {
+      l.d('Drop Container closed');
       _controller.stop();
       _controller.reset();
     }
     return FadeTransition(
       opacity: fadeInAnimation,
       child: SizedBox(
-        height: 150,
+        height: containerOpen ? 150 : 0,
         child: Column(
           children: [
             Text(

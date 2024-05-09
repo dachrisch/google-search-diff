@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/run.dart';
+import 'package:logger/logger.dart';
 import 'package:relative_time/relative_time.dart';
 
 class RunFeedbackCard extends StatelessWidget {
+  final Logger l = getLogger('feedback-card');
   final Run run;
 
-  const RunFeedbackCard({super.key, required this.run});
+  RunFeedbackCard({super.key, required this.run});
 
   @override
   Widget build(BuildContext context) {
+    l.d('Grabbed card with $run');
     return SizedBox(
         width: 200,
         height: 100,

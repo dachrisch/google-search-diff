@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/queries_store.dart';
 import 'package:google_search_diff/_new/model/query.dart';
@@ -38,17 +37,12 @@ void main() {
         MockDbRunsService()));
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
 
-    final PlatformAssetBundle testBundle = PlatformAssetBundle();
-    testBundle.load('assets/logo.png');
-
-    await tester.pumpWidget(DefaultAssetBundle(
-        bundle: testBundle,
-        child: RouterApp(
-          theme: theme,
-          queriesStore: queriesStore,
-          searchService: LoremIpsumSearchService(),
-          historyService: MockHistoryService(),
-        )));
+    await tester.pumpWidget(RouterApp(
+      theme: theme,
+      queriesStore: queriesStore,
+      searchService: LoremIpsumSearchService(),
+      historyService: MockHistoryService(),
+    ));
 
     expect(queriesStore.items, 1);
     expect(find.byType(QueryRunsCard), findsOne);
