@@ -44,28 +44,8 @@ class _SingleQueryCard extends State<QueryRunsCard>
         return Dismissible(
             key: Key(queryRuns.hashCode.toString()),
             direction: DismissDirection.horizontal,
-            background: Container(
-              margin: const EdgeInsets.all(10),
-              color: Colors.amber,
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(width: 8),
-                  Icon(Icons.refresh_outlined, color: Colors.white),
-                ],
-              ),
-            ),
-            secondaryBackground: Container(
-              margin: const EdgeInsets.all(10),
-              color: Colors.red,
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Icon(Icons.delete_outline, color: Colors.white),
-                  SizedBox(width: 8)
-                ],
-              ),
-            ),
+            background: const _RefreshDismissableContainer(),
+            secondaryBackground: const _DeleteDismissableContainer(),
             dismissThresholds: const {
               DismissDirection.endToStart: .2,
               DismissDirection.startToEnd: .2
@@ -105,41 +85,23 @@ class _SingleQueryCard extends State<QueryRunsCard>
                                     updateRelativeTimes(context, queryRuns))),
                       ),
                       title: Text(queryRuns.query.term),
-                      subtitle: Row(
-                        verticalDirection: VerticalDirection.up,
+                      subtitle: Column(
                         children: [
-                          const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.create_new_folder_outlined),
-                                Icon(Icons.autorenew_outlined),
-                              ]),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Row(
                             children: [
-                              Text(relativeCreatedString),
-                              Text(lastUpdatedText)
+                              const Icon(Icons.create_new_folder_outlined),
+                              const SizedBox(width: 8),
+                              Text(relativeCreatedString)
                             ],
                           ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(''),
-                                Icon(Icons.notes_outlined),
-                              ]),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Column(
+                          Row(
                             children: [
-                              const Text(''),
+                              const Icon(Icons.autorenew_outlined),
+                              const SizedBox(width: 8),
+                              Text(lastUpdatedText),
+                              const SizedBox(width: 12),
+                              const Icon(Icons.notes_outlined),
+                              const SizedBox(width: 8),
                               Text(queryRuns.items.toString())
                             ],
                           )
@@ -159,6 +121,48 @@ class _SingleQueryCard extends State<QueryRunsCard>
                       ))),
             ));
       }),
+    );
+  }
+}
+
+class _RefreshDismissableContainer extends StatelessWidget {
+  const _RefreshDismissableContainer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      color: Colors.amber,
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(width: 8),
+          Icon(Icons.refresh_outlined, color: Colors.white),
+        ],
+      ),
+    );
+  }
+}
+
+class _DeleteDismissableContainer extends StatelessWidget {
+  const _DeleteDismissableContainer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      color: Colors.red,
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Icon(Icons.delete_outline, color: Colors.white),
+          SizedBox(width: 8)
+        ],
+      ),
     );
   }
 }

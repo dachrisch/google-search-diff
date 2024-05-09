@@ -45,8 +45,6 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
         child: Builder(
             builder: (context) => Scaffold(
                     body: SafeArea(
-                  bottom: false,
-                  top: true,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
                     child: CustomScrollView(
