@@ -39,8 +39,7 @@ class _SingleQueryCard extends State<QueryRunsCard>
     updateRelativeTimes(context, queryRuns);
 
     return Actions(
-      actions: {
-      },
+      actions: {},
       child: Builder(builder: (context) {
         return Dismissible(
             key: Key(queryRuns.hashCode.toString()),

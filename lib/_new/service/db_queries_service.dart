@@ -18,7 +18,7 @@ class DbQueriesService extends DbService<Query> {
       DbInitService<Query>(collection: '.queries', localStore: localStore)
           .init((json) => Query.fromJson(json))
           .then((queryIdMap) => DbQueriesService(
-                localStore: localStore,
-                collection: '.queries',
+              localStore: localStore,
+              collection: '.queries',
               itemToIdMap: queryIdMap));
 }
