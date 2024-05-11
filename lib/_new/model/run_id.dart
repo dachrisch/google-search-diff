@@ -9,10 +9,10 @@ part 'run_id.g.dart';
 class RunId extends EntityId {
   RunId(super.id);
 
-  static withUuid() => RunId(const Uuid().v4());
+  RunId.fromState(GoRouterState state, String parameterName)
+      : super(state.pathParameters[parameterName]!);
 
-  static fromState(GoRouterState state) =>
-      RunId(state.pathParameters['runId']!);
+  factory RunId.withUuid() => RunId(const Uuid().v4());
 
   factory RunId.fromJson(Map<String, dynamic> json) => _$RunIdFromJson(json);
 

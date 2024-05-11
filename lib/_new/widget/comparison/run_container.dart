@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/_new/logger.dart';
+import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
 import 'package:google_search_diff/_new/widget/comparison/run_target.dart';
 import 'package:google_search_diff/_new/widget/model/comparison.dart';
 import 'package:logger/logger.dart';
@@ -16,12 +17,12 @@ class RunComparisonContainer extends StatefulWidget {
 class _RunComparisonContainerState extends State<RunComparisonContainer>
     with TickerProviderStateMixin {
   final Logger l = getLogger('run-comparison');
-  final ComparisonViewModel comparisonViewModel = ComparisonViewModel();
+  final ComparisonViewModel compareModel = ComparisonViewModel();
 
   late final AnimationController _controller;
   late final Animation<double> fadeInAnimation;
 
-  bool get containerOpen => widget.isActive || comparisonViewModel.isNotEmpty;
+  bool get containerOpen => widget.isActive || compareModel.isNotEmpty;
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
     if (widget.isActive) {
       _controller.forward();
       l.d('Drop Container opened');
-    } else if (comparisonViewModel.isEmpty) {
+    } else if (compareModel.isEmpty) {
       l.d('Drop Container closed');
       _controller.stop();
       _controller.reset();
@@ -63,16 +64,18 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
                   width: 20,
                 ),
                 RunDragTarget(
-                    willAcceptRun: (run) =>
-                        comparisonViewModel.notContains(run),
+                    willAcceptRun: (run) => compareModel.notContains(run),
                     onAcceptRun: (run) =>
-                        setState(() => comparisonViewModel.dropBase(run))),
-                const Icon(Icons.compare_arrows_outlined),
+                        setState(() => compareModel.dropBase(run))),
+                IconButton(
+                    onPressed: compareModel.isComplete
+                        ? () => context.goToComparison(compareModel)
+                        : null,
+                    icon: const Icon(Icons.compare_arrows_outlined)),
                 RunDragTarget(
-                    willAcceptRun: (run) =>
-                        comparisonViewModel.notContains(run),
+                    willAcceptRun: (run) => compareModel.notContains(run),
                     onAcceptRun: (run) =>
-                        setState(() => comparisonViewModel.dropCurrent(run))),
+                        setState(() => compareModel.dropCurrent(run))),
                 const SizedBox(
                   width: 20,
                 ),
