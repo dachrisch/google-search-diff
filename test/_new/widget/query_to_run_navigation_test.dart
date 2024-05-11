@@ -22,7 +22,7 @@ void main() {
         dbQueryService: MockDbQueriesService(),
         dbRunsService: MockDbRunsService());
 
-    await queriesStore.save(QueryRuns.fromRun(
+    await queriesStore.add(QueryRuns.fromRun(
         Run(Query('Saved query 1'), [Result(title: 'result 1')]),
         MockDbRunsService()));
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);

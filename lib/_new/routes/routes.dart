@@ -42,11 +42,13 @@ class RouterConfigBuilder {
                     ])
               ]),
           GoRoute(
+              path: '/ct', builder: (context, state) => ComparisonPageTest()),
+          GoRoute(
             path: '/compare/:baseId/with/:currentId',
             builder: (context, state) => MultiProvider(providers: [
               Provider<BaseRunId>.value(value: BaseRunId(state)),
               Provider<CurrentRunId>.value(value: CurrentRunId(state))
-            ], child: ComparisonPage()),
+            ], child: ComparisonPageProvider()),
           )
         ],
       );

@@ -57,9 +57,9 @@ class RunCardListTile extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(resultComparison.added.length.toString()),
-                        Text(resultComparison.existing.length.toString()),
-                        Text(resultComparison.removed.length.toString()),
+                        Text(resultComparison.added.toString()),
+                        Text(resultComparison.existing.toString()),
+                        Text(resultComparison.removed.toString()),
                       ],
                     ),
                   ],

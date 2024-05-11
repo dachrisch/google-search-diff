@@ -28,8 +28,8 @@ void main() {
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 1));
     Run second =
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 2));
-    expect(first.compareTo(second),
-        ResultComparison(existing: [Result(title: 'test1')]));
+    expect(first.compareTo(second).compared,
+        contains(ExistingResult(Result(title: 'test1'))));
   });
   test('Compares two runs: One added', () {
     var query = Query('Test');
@@ -37,11 +37,10 @@ void main() {
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 1));
     Run second = Run(query, [Result(title: 'test1'), Result(title: 'test2')],
         runDate: DateTime(2000, 1, 2));
-    expect(
-        first.compareTo(second),
-        ResultComparison(
-            existing: [Result(title: 'test1')],
-            added: [Result(title: 'test2')]));
+    expect(first.compareTo(second).compared,
+        contains(ExistingResult(Result(title: 'test1'))));
+    expect(first.compareTo(second).compared,
+        contains(AddedResult(Result(title: 'test2'))));
   });
   test('Compares two runs: One removed', () {
     var query = Query('Test');
@@ -49,10 +48,9 @@ void main() {
         Run(query, [Result(title: 'test1')], runDate: DateTime(2000, 1, 1));
     Run second = Run(query, [Result(title: 'test1'), Result(title: 'test2')],
         runDate: DateTime(2000, 1, 2));
-    expect(
-        second.compareTo(first),
-        ResultComparison(
-            existing: [Result(title: 'test1')],
-            removed: [Result(title: 'test2')]));
+    expect(first.compareTo(second).compared,
+        contains(ExistingResult(Result(title: 'test1'))));
+    expect(first.compareTo(second).compared,
+        contains(RemovedResult(Result(title: 'test2'))));
   });
 }

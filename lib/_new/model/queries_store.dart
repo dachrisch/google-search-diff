@@ -24,7 +24,7 @@ class QueriesStore extends ChangeNotifier {
 
   int get items => queryRuns.length;
 
-  Future<void> save(QueryRuns runs) {
+  Future<void> add(QueryRuns runs) {
     return Future.sync(() => queryRuns.add(runs))
         .then((_) => dbQueryService.save(runs.query))
         .then((value) => notifyListeners());

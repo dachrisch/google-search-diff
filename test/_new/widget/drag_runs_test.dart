@@ -29,7 +29,7 @@ void main() {
 
     QueryId queryId = QueryId.withUuid();
     var query = Query('Saved query 1', id: queryId);
-    await queriesStore.save(QueryRuns.fromRun(
+    await queriesStore.add(QueryRuns.fromRun(
         Run(query, [Result(title: 'result 1')]), MockDbRunsService()));
     await queriesStore.queryRuns[0]
         .addRun(Run(query, [Result(title: 'result 2')]));

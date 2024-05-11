@@ -11,5 +11,5 @@ class AddResultsAction extends Action<AddResultsIntent> {
 
   @override
   Object? invoke(AddResultsIntent intent) =>
-      queriesStore.save(getIt<QueryRuns>(param1: intent.results));
+      queriesStore.add(getIt<QueryRuns>(param1: intent.results));
 }

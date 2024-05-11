@@ -28,7 +28,7 @@ void main() {
     var query = Query('test12');
     var queryRuns =
         QueryRuns.fromRun(Run(query, [Result(title: 'Test1')]), runsService);
-    await store.save(queryRuns);
+    await store.add(queryRuns);
     expect(store.items, 1);
     expect(runsService.fetchAll().length, 1);
     await store.remove(queryRuns);

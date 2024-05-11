@@ -1,4 +1,5 @@
 import 'package:google_search_diff/_new/model/run.dart';
+import 'package:google_search_diff/_new/model/run_id.dart';
 import 'package:google_search_diff/_new/service/localstore.dart';
 import 'package:injectable/injectable.dart';
 
@@ -22,4 +23,6 @@ class DbRunsService extends DbService<Run> {
                 collection: '.runs',
                 itemToIdMap: runToIdMap,
               ));
+
+  runById(RunId runId) => itemToIdMap.keys.firstWhere((run) => run.id == runId);
 }

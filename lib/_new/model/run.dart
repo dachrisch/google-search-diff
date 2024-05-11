@@ -39,20 +39,5 @@ class Run extends ChangeNotifier implements HasToJson {
   @override
   Map<String, dynamic> toJson() => _$RunToJson(this);
 
-  ResultComparison compareTo(Run run) {
-    ResultComparison resultComparison = ResultComparison();
-    for (var result in run.results) {
-      if (results.contains(result)) {
-        resultComparison.existing.add(result);
-      } else {
-        resultComparison.added.add(result);
-      }
-    }
-    for (var result in results) {
-      if (!run.results.contains(result)) {
-        resultComparison.removed.add(result);
-      }
-    }
-    return resultComparison;
-  }
+  ResultComparison compareTo(Run run) => ResultComparison(this, run);
 }

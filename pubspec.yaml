@@ -52,6 +52,7 @@ dependencies:
   sticky_grouped_list: ^3.1.0
   injectable: ^2.4.1
   get_it: ^7.7.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
