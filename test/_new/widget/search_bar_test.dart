@@ -68,4 +68,47 @@ void main() {
     await tester.pumpAndSettle();
     expect(historyService.queries.length, 0);
   });
+
+  testWidgets('Click the appbar will open search', (tester) async {
+    var searchQueriesStore = QueriesStore(
+        dbQueryService: MockDbQueriesService(),
+        dbRunsService: MockDbRunsService());
+    var historyService =
+        HistoryService(dbHistoryService: MockDbHistoryService());
+    var testSearchService = TestSearchService();
+    await tester.pumpWidget(ScaffoldMultiProviderTestApp(
+      providers: [
+        ChangeNotifierProvider<QueriesStore>.value(value: searchQueriesStore),
+        ChangeNotifierProvider<HistoryService>.value(value: historyService),
+        Provider<SearchService>.value(
+          value: testSearchService,
+        ),
+      ],
+      scaffoldUnderTest: const QueriesPage(),
+    ));
+
+    await tester.tap(find.byWidgetPredicate(
+        (widget) => widget is Text && widget.data == 'SearchFlux'));
+    await tester.pumpAndSettle();
+    expect(
+        find.byWidgetPredicate((widget) =>
+            widget is Semantics &&
+            widget.properties.label == 'Create search...'),
+        findsOneWidget);
+
+    await tester.tap(find.byWidgetPredicate((widget) =>
+        widget is IconButton &&
+        widget.icon is Icon &&
+        (widget.icon as Icon).icon == Icons.arrow_back));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+        find.descendant(of: find.byType(AppBar), matching: find.byType(Image)));
+    await tester.pumpAndSettle();
+    expect(
+        find.byWidgetPredicate((widget) =>
+            widget is Semantics &&
+            widget.properties.label == 'Create search...'),
+        findsOneWidget);
+  });
 }

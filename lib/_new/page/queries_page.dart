@@ -56,12 +56,18 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                                   BorderRadius.all(Radius.circular(100))),
                           backgroundColor:
                               MaterialTheme.lightScheme().primaryContainer,
-                          leading: Image.asset('assets/logo.png',
-                              fit: BoxFit.scaleDown),
+                          leading: InkWell(
+                            onTap: () => showSearchPage(context),
+                            child: Image.asset('assets/logo.png',
+                                fit: BoxFit.scaleDown),
+                          ),
                           automaticallyImplyLeading: false,
-                          title: Text(
-                            'SearchFlux',
-                            style: Theme.of(context).textTheme.titleLarge,
+                          title: InkWell(
+                            onTap: () => showSearchPage(context),
+                            child: Text(
+                              'SearchFlux',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           ),
                           actions: const [_SearchButton(), SizedBox(width: 16)],
                         ),
