@@ -67,20 +67,27 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
                   width: 20,
                 ),
                 RunDragTarget(
-                    initialRun: compareModel.base,
-                    willAcceptRun: (run) => compareModel.notContains(run),
-                    onAcceptRun: (run) =>
-                        setState(() => compareModel.dropBase(run))),
+                  acceptedRun: compareModel.base,
+                  willAcceptRun: (run) => compareModel.notContains(run),
+                  onAcceptRun: (run) =>
+                      setState(() => compareModel.dropBase(run)),
+                  onRemoveRun: () => setState(() {
+                    compareModel.removeBase();
+                  }),
+                ),
                 IconButton(
                     onPressed: compareModel.isComplete
                         ? () => context.goToComparison(compareModel)
                         : null,
                     icon: const Icon(Icons.compare_arrows_outlined)),
                 RunDragTarget(
-                    initialRun: compareModel.current,
+                    acceptedRun: compareModel.current,
                     willAcceptRun: (run) => compareModel.notContains(run),
                     onAcceptRun: (run) =>
-                        setState(() => compareModel.dropCurrent(run))),
+                        setState(() => compareModel.dropCurrent(run)),
+                    onRemoveRun: () => setState(() {
+                          compareModel.removeCurrent();
+                        })),
                 const SizedBox(
                   width: 20,
                 ),

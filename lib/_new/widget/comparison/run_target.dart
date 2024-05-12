@@ -8,13 +8,16 @@ class RunDragTarget extends StatefulWidget {
   final Logger l = getLogger('RunDragTarget');
   final void Function(Run run) onAcceptRun;
   final bool Function(Run run) willAcceptRun;
-  final Run? initialRun;
+  final void Function() onRemoveRun;
+
+  final Run? acceptedRun;
 
   RunDragTarget({
-    required this.onAcceptRun,
     super.key,
+    this.acceptedRun,
     required this.willAcceptRun,
-    this.initialRun,
+    required this.onAcceptRun,
+    required this.onRemoveRun,
   });
 
   @override
@@ -23,22 +26,14 @@ class RunDragTarget extends StatefulWidget {
 
 class _RunDragTargetState extends State<RunDragTarget> {
   final Logger l = getLogger('RunDragTarget');
-  Run? acceptedRun;
 
-  bool get hasRun => acceptedRun != null;
-
-  @override
-  void initState() {
-    acceptedRun = widget.initialRun;
-    super.initState();
-  }
+  bool get hasRun => widget.acceptedRun != null;
 
   @override
   Widget build(BuildContext context) {
     return DragTarget<Run>(
       onAcceptWithDetails: (details) {
         l.d('accepting $details');
-        acceptedRun = details.data;
         widget.onAcceptRun(details.data);
       },
       onWillAcceptWithDetails: (details) {
@@ -46,10 +41,15 @@ class _RunDragTargetState extends State<RunDragTarget> {
         return !hasRun && widget.willAcceptRun(details.data);
       },
       builder: (context, candidateData, rejectedData) {
-        l.d('Drop has: $candidateData, $rejectedData');
+        l.d('Drop has already $widget.acceptedRun and is receiving $candidateData, $rejectedData');
         return hasRun
-            ? TargetWithRun(run: acceptedRun!)
-            : EmptyTarget(isHighlighted: candidateData.isEmpty);
+            ? TargetWithRun(
+                run: widget.acceptedRun!,
+                onRemoveRun: () => setState(() {
+                      l.d('removing run $widget.acceptedRun');
+                      widget.onRemoveRun();
+                    }))
+            : EmptyTarget(isHighlighted: candidateData.isNotEmpty);
       },
     );
   }
@@ -57,8 +57,10 @@ class _RunDragTargetState extends State<RunDragTarget> {
 
 class TargetWithRun extends StatelessWidget {
   final Run run;
+  final void Function() onRemoveRun;
 
-  const TargetWithRun({super.key, required this.run});
+  const TargetWithRun(
+      {super.key, required this.run, required this.onRemoveRun});
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +68,14 @@ class TargetWithRun extends StatelessWidget {
     return Stack(
       children: [
         SizedBox(
-            height: 100.0,
-            width: 100.0,
+            height: 120.0,
+            width: 120.0,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: themeData.cardColor,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,6 +93,13 @@ class TargetWithRun extends StatelessWidget {
                 ),
               ),
             )),
+        Positioned(
+            top: 0,
+            right: 0,
+            child: InkWell(
+              onTap: onRemoveRun,
+              child: const Icon(Icons.cancel_rounded),
+            ))
       ],
     );
   }
@@ -107,13 +116,13 @@ class EmptyTarget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 100.0,
-        width: 100.0,
+        height: 120.0,
+        width: 120.0,
         child: Card(
-          elevation: isHighlighted ? 4 : 12,
+          elevation: isHighlighted ? 12 : 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          color: isHighlighted ? Colors.grey[100] : Colors.grey[600],
+          color: isHighlighted ? Colors.grey[600] : Colors.grey[100],
           child: Center(
             child: Icon(
               Icons.select_all,

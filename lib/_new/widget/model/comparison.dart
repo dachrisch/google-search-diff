@@ -47,6 +47,14 @@ class ComparisonViewModel {
   ResultComparison get compareResult => isComplete
       ? base!.compareTo(current!)
       : throw ArgumentError('Comparison is not complete');
+
+  void removeBase() {
+    base = null;
+  }
+
+  void removeCurrent() {
+    current = null;
+  }
 }
 
 class BaseRunId extends RunId {
