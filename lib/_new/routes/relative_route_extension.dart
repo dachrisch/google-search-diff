@@ -21,6 +21,6 @@ extension RelativeGoRouter on BuildContext {
   void goToComparison(ComparisonViewModel compareModel) {
     assert(compareModel.base != null);
     assert(compareModel.current != null);
-    go('/compare/${compareModel.base!.id}/with/${compareModel.current!.id}');
+    push('/compare/${compareModel.base!.id}/with/${compareModel.current!.id}');
   }
 }

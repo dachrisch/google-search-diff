@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/action/add_result.dart';
 import 'package:google_search_diff/_new/action/dispatcher.dart';
 import 'package:google_search_diff/_new/action/intent/add_result.dart';
@@ -99,6 +100,10 @@ class ComparisonPage extends StatelessWidget {
                     child: CustomScrollView(
                       slivers: [
                         SliverAppBar(
+                          leading: IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () => context.pop(),
+                          ),
                           title: Text(
                             'Run Comparison',
                             style: Theme.of(context).textTheme.titleLarge,

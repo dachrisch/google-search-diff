@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/_new/action/intent/search.dart';
 import 'package:google_search_diff/_new/action/search_and_add_run.dart';
 import 'package:google_search_diff/_new/logger.dart';
@@ -63,8 +64,7 @@ class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
                                       pinned: true,
                                       leading: IconButton(
                                         icon: const Icon(Icons.arrow_back),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
+                                        onPressed: () => context.pop(),
                                       ),
                                       title: Text(
                                           'Query - ${queryRuns.query.term}'),
