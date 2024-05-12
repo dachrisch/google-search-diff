@@ -8,11 +8,13 @@ class RunDragTarget extends StatefulWidget {
   final Logger l = getLogger('RunDragTarget');
   final void Function(Run run) onAcceptRun;
   final bool Function(Run run) willAcceptRun;
+  final Run? initialRun;
 
   RunDragTarget({
     required this.onAcceptRun,
     super.key,
     required this.willAcceptRun,
+    this.initialRun,
   });
 
   @override
@@ -24,6 +26,12 @@ class _RunDragTargetState extends State<RunDragTarget> {
   Run? acceptedRun;
 
   bool get hasRun => acceptedRun != null;
+
+  @override
+  void initState() {
+    acceptedRun = widget.initialRun;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,37 +58,41 @@ class _RunDragTargetState extends State<RunDragTarget> {
 class TargetWithRun extends StatelessWidget {
   final Run run;
 
-  const TargetWithRun({required this.run});
+  const TargetWithRun({super.key, required this.run});
 
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    return SizedBox(
-        height: 100.0,
-        width: 100.0,
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          color: themeData.cardColor,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    RelativeTime(context).format(run.runDate),
-                    style: themeData.textTheme.bodySmall,
-                    textAlign: TextAlign.center,
+    return Stack(
+      children: [
+        SizedBox(
+            height: 100.0,
+            width: 100.0,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: themeData.cardColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        RelativeTime(context).format(run.runDate),
+                        style: themeData.textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                      ),
+                      const Icon(Icons.notes_sharp),
+                      Text('${run.items} items',
+                          style: themeData.textTheme.bodySmall),
+                    ],
                   ),
-                  const Icon(Icons.notes_sharp),
-                  Text('${run.items} items',
-                      style: themeData.textTheme.bodySmall),
-                ],
+                ),
               ),
-            ),
-          ),
-        ));
+            )),
+      ],
+    );
   }
 }
 
@@ -88,6 +100,7 @@ class EmptyTarget extends StatelessWidget {
   final bool isHighlighted;
 
   const EmptyTarget({
+    super.key,
     required this.isHighlighted,
   });
 

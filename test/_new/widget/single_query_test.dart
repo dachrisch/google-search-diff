@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
-import 'package:google_search_diff/_new/page/query_runs_page.dart';
+import 'package:google_search_diff/_new/page/query_runs.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/card/run_card.dart';
+import 'package:google_search_diff/_new/widget/model/comparison.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';
@@ -20,12 +21,13 @@ void main() {
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
+        Provider.value(value: ComparisonViewModel()),
         ChangeNotifierProvider.value(value: searchQuery),
         Provider<SearchService>.value(
           value: testSearchService,
         ),
       ],
-      scaffoldUnderTest: const RunsPageScaffold(),
+      scaffoldUnderTest: const QueryRunsPageScaffold(),
     ));
 
     expect(find.byType(RunCard), findsNWidgets(0));

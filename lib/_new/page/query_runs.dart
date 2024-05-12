@@ -5,7 +5,7 @@ import 'package:google_search_diff/_new/action/search_and_add_run.dart';
 import 'package:google_search_diff/_new/logger.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/run.dart';
-import 'package:google_search_diff/_new/provider/results_scaffold_model.dart';
+import 'package:google_search_diff/_new/provider/query_runs_page.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/card/run_card.dart';
 import 'package:google_search_diff/_new/widget/comparison/run_container.dart';
@@ -19,19 +19,20 @@ class QueryRunsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      const QueryRunsProvider(child: RunsPageScaffold());
+      const QueryRunsPageProvider(child: QueryRunsPageScaffold());
 }
 
-class RunsPageScaffold extends StatefulWidget {
-  const RunsPageScaffold({
+class QueryRunsPageScaffold extends StatefulWidget {
+  const QueryRunsPageScaffold({
     super.key,
   });
 
   @override
-  State<StatefulWidget> createState() => _RunsPageScaffoldState();
+  State<StatefulWidget> createState() => _QueryRunsPageScaffoldState();
 }
 
-class _RunsPageScaffoldState extends State<RunsPageScaffold> with TimerMixin {
+class _QueryRunsPageScaffoldState extends State<QueryRunsPageScaffold>
+    with TimerMixin {
   final Logger l = getLogger('RunsPage');
   bool isDragging = false;
 

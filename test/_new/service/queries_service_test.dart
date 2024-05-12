@@ -28,10 +28,10 @@ void main() {
     var query = Query('test12');
     var queryRuns =
         QueryRuns.fromRun(Run(query, [Result(title: 'Test1')]), runsService);
-    await store.add(queryRuns);
+    await store.addQueryRuns(queryRuns);
     expect(store.items, 1);
     expect(runsService.fetchAll().length, 1);
-    await store.remove(queryRuns);
+    await store.removeQueryRuns(queryRuns);
     expect(store.items, 0);
     expect(runsService.fetchAll().length, 0);
   });

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/_new/action/add_result.dart';
+import 'package:google_search_diff/_new/action/add_query_runs.dart';
 import 'package:google_search_diff/_new/action/dispatcher.dart';
-import 'package:google_search_diff/_new/action/intent/add_result.dart';
+import 'package:google_search_diff/_new/action/intent/add_run_to_query_runs.dart';
 import 'package:google_search_diff/_new/action/intent/remove_query_runs.dart';
 import 'package:google_search_diff/_new/action/intent/search.dart';
 import 'package:google_search_diff/_new/action/remove_query_runs.dart';
@@ -35,7 +35,7 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
 
     return Actions(
         actions: <Type, Action<Intent>>{
-          AddResultsIntent: AddResultsAction(queriesStore),
+          AddRunToQueryRunsIntent: AddQueryRunsAction(queriesStore),
           RemoveQueryRunsIntent:
               RemoveQueryRunsAction(context, queriesStore: queriesStore),
           SearchIntent:
@@ -133,8 +133,8 @@ void showSearchPage(BuildContext context) {
       delegate: SearchProviderSearchDelegate(
           textStyle: Theme.of(context).textTheme.titleMedium,
           searchProvider: context.read<SearchService>(),
-          onSave: (results) => (Actions.invoke<AddResultsIntent>(
-                      context, AddResultsIntent(results)) as Future)
+          onSave: (results) => (Actions.invoke<AddRunToQueryRunsIntent>(
+                      context, AddRunToQueryRunsIntent(results)) as Future)
                   .then((_) {
                 if (GoRouter.maybeOf(context) != null) {
                   // avoid context pop when used standalone (in tests)

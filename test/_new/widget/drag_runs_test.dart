@@ -5,7 +5,7 @@ import 'package:google_search_diff/_new/model/query.dart';
 import 'package:google_search_diff/_new/model/query_runs.dart';
 import 'package:google_search_diff/_new/model/result.dart';
 import 'package:google_search_diff/_new/model/run.dart';
-import 'package:google_search_diff/_new/page/query_runs_page.dart';
+import 'package:google_search_diff/_new/page/query_runs.dart';
 import 'package:google_search_diff/_new/routes/query_id.dart';
 import 'package:google_search_diff/_new/service/search_service.dart';
 import 'package:google_search_diff/_new/widget/card/run_card.dart';
@@ -29,7 +29,7 @@ void main() {
 
     QueryId queryId = QueryId.withUuid();
     var query = Query('Saved query 1', id: queryId);
-    await queriesStore.add(QueryRuns.fromRun(
+    await queriesStore.addQueryRuns(QueryRuns.fromRun(
         Run(query, [Result(title: 'result 1')]), MockDbRunsService()));
     await queriesStore.queryRuns[0]
         .addRun(Run(query, [Result(title: 'result 2')]));

@@ -4,6 +4,7 @@ import 'package:google_search_diff/_new/routes/relative_route_extension.dart';
 import 'package:google_search_diff/_new/widget/comparison/run_target.dart';
 import 'package:google_search_diff/_new/widget/model/comparison.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 class RunComparisonContainer extends StatefulWidget {
   final bool isActive;
@@ -17,7 +18,7 @@ class RunComparisonContainer extends StatefulWidget {
 class _RunComparisonContainerState extends State<RunComparisonContainer>
     with TickerProviderStateMixin {
   final Logger l = getLogger('run-comparison');
-  final ComparisonViewModel compareModel = ComparisonViewModel();
+  late ComparisonViewModel compareModel;
 
   late final AnimationController _controller;
   late final Animation<double> fadeInAnimation;
@@ -35,11 +36,13 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
       parent: _controller,
       curve: Curves.easeIn,
     );
+
+    compareModel = context.read<ComparisonViewModel>();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isActive) {
+    if (widget.isActive || compareModel.isNotEmpty) {
       _controller.forward();
       l.d('Drop Container opened');
     } else if (compareModel.isEmpty) {
@@ -64,6 +67,7 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
                   width: 20,
                 ),
                 RunDragTarget(
+                    initialRun: compareModel.base,
                     willAcceptRun: (run) => compareModel.notContains(run),
                     onAcceptRun: (run) =>
                         setState(() => compareModel.dropBase(run))),
@@ -73,6 +77,7 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
                         : null,
                     icon: const Icon(Icons.compare_arrows_outlined)),
                 RunDragTarget(
+                    initialRun: compareModel.current,
                     willAcceptRun: (run) => compareModel.notContains(run),
                     onAcceptRun: (run) =>
                         setState(() => compareModel.dropCurrent(run))),

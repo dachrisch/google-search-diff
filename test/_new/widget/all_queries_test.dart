@@ -30,7 +30,7 @@ void main() {
         Run(query,
             [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
         MockDbRunsService());
-    searchQueriesStore.add(queryRunsModel);
+    searchQueriesStore.addQueryRuns(queryRunsModel);
     var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
