@@ -72,5 +72,5 @@ jobs:
         with:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: com.yourapp.package
-          releaseFiles: ${{ build/app/outputs/bundle/release/app-release.aab }}
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: internal
