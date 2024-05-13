@@ -113,6 +113,7 @@ jobs:
       - name: Get package name
         id: package
         run: echo "name=$(grep applicationId android/app/build.gradle|cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
+        # https://medium.com/lodgify-technology-blog/deploy-your-flutter-app-to-google-play-with-github-actions-f13a11c4492e
       - name: Deploy to Play Store (Internal testing)
         uses: r0adkll/upload-google-play@v1
         with:
