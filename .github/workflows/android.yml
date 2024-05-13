@@ -29,12 +29,12 @@ jobs:
           channel: stable
           flutter-version-file: pubspec.yaml # path to pubspec.yaml
           cache: true
-      - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
       - name: Flutter infos
         run: flutter doctor -v
       - name: Get Flutter dependencies
         run: flutter pub get
+      - name: Run code generation
+        run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter test
       - uses: actions/setup-java@v4
         with:
