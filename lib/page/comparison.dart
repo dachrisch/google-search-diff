@@ -4,11 +4,11 @@ import 'package:google_search_diff/action/dispatcher.dart';
 import 'package:google_search_diff/dependencies.dart';
 import 'package:google_search_diff/model/comparison.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
+import 'package:google_search_diff/widget/card/result_card.dart';
 import 'package:google_search_diff/widget/model/comparison.dart';
 import 'package:grouped_list/sliver_grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ComparisonPageProvider extends StatelessWidget {
   const ComparisonPageProvider({super.key});
@@ -68,46 +68,12 @@ class ComparisonPage extends StatelessWidget {
                               element.runtimeType,
                           itemComparator: (element1, element2) =>
                               element1.title.compareTo(element2.title),
-                          itemBuilder: (context, element) => Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Card(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading: compareResultProperties[
-                                              element.runtimeType]
-                                          ?.icon,
-                                      title: Text(element.title),
-                                      subtitle: Text(element.source),
-                                    ),
-                                    Row(
-                                      children: element.snippet == null
-                                          ? []
-                                          : <Widget>[
-                                              Expanded(
-                                            child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                      child: Text(
-                                                          element.snippet!)))
-                                            ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: <Widget>[
-                                        TextButton(
-                                          child: const Text('Visit'),
-                                          onPressed: () => launchUrl(
-                                              Uri.parse(element.link)),
-                                        ),
-                                        const SizedBox(width: 8),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )),
+                          itemBuilder: (context, element) => ResultCard(
+                            result: element,
+                            iconData:
+                                compareResultProperties[element.runtimeType]
+                                    ?.icon,
+                          ),
                           groupSeparatorBuilder: (value) =>
                               Text(value.toString()),
                           groupComparator: (value1, value2) =>

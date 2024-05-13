@@ -4,6 +4,7 @@ import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/service/history_service.dart';
 import 'package:google_search_diff/service/search_service.dart';
+import 'package:google_search_diff/widget/card/result_card.dart';
 import 'package:provider/provider.dart';
 
 // MAYBE: use https://github.com/darjaorlova/bunny_search_animated_searchbar/
@@ -63,11 +64,8 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
                 body: ListView.builder(
-                    itemBuilder: (context, index) => Card(
-                          child: ListTile(
-                            title: Text(snapshot.data![index].title),
-                          ),
-                        ),
+                    itemBuilder: (context, index) =>
+                        ResultCard(result: snapshot.data![index]),
                     itemCount: snapshot.data!.items),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerFloat,

@@ -8,12 +8,14 @@ class Result {
   final String source;
   final String link;
   final String? snippet;
+  final String? favicon;
 
   Result(
       {required this.title,
       this.source = '',
       this.link = '',
-      this.snippet = ''});
+      this.snippet,
+      this.favicon});
 
   Map<String, dynamic> toJson() => _$ResultToJson(this);
 

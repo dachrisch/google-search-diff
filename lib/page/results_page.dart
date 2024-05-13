@@ -28,7 +28,7 @@ class ResultsPageScaffold extends StatelessWidget {
       ),
       body: ListViewWithHeader(
         items: results.items,
-        itemBuilder: (context, index) => ResultCard(results[index]),
+        itemBuilder: (context, index) => ResultCard(result: results[index]),
         headerText: 'Results',
       ),
     );

@@ -85,7 +85,8 @@ class SerapiSearchService implements SearchService {
                     title: item['title'],
                     link: item['link'],
                     source: item['source'],
-                    snippet: item['snippet']))
+                    snippet: item['snippet'],
+                    favicon: item['favicon']))
                 .toList()))
         .onError((error, stackTrace) {
           l.e('Failed to $query', error: error, stackTrace: stackTrace);

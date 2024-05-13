@@ -4,8 +4,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ResultCard extends StatelessWidget {
   final Result result;
+  final IconData? iconData;
 
-  const ResultCard(this.result, {super.key});
+  const ResultCard({super.key, required this.result, this.iconData});
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,12 @@ class ResultCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
+                leading: iconData == null ? null : Icon(iconData),
                 title: Text(result.title),
                 subtitle: Text(result.source),
+                trailing: result.favicon == null
+                    ? null
+                    : Image.network(result.favicon!),
               ),
               Row(
                 children: result.snippet == null
