@@ -40,6 +40,7 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: ${{ env.JAVA_VERSION }}
+          # noinspection YAMLIncompatibleTypes
           cache: 'gradle'
       - name: Save the keystore
         env:
