@@ -122,4 +122,4 @@ jobs:
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: internal
           status: inProgress
-          userFraction: 0.9
+          userFraction: 0.99
