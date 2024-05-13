@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_search_diff/dependencies.dart';
 import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/routes/router_app.dart';
 import 'package:google_search_diff/search/search_service.dart';
@@ -45,6 +46,8 @@ class Mocked {
 extension MockedApp on WidgetTester {
   Future<Mocked> pumpMockedApp(Mocked mocked) async {
     await initializeDateFormatting();
+
+    getIt.registerSingleton<DbRunsService>(mocked.dbRunsService);
 
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
 
