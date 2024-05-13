@@ -11,7 +11,7 @@ import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';
-import 'widget_tester_extension.dart';
+import '../widget/widget_tester_extension.dart';
 
 void main() {
   testWidgets('Search results appear in results list',

@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/routes/router_app.dart';
-import 'package:google_search_diff/search/search_service.dart';
-import 'package:google_search_diff/theme.dart';
 import 'package:google_search_diff/widget/result/result_card.dart';
 import 'package:google_search_diff/widget/run/run_card.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
-import 'package:provider/provider.dart';
 
-import '../util/service_mocks.dart';
+import '../service/widget_tester_extension.dart';
 
 class TestImageProvider extends ImageProvider {
   @override
@@ -27,24 +22,13 @@ void main() {
       (WidgetTester tester) async {
     TestWidgetsFlutterBinding.ensureInitialized();
 
-    Provider.debugCheckInvalidValueType = null;
-    var queriesStore = QueriesStore(
-        dbQueryService: MockDbQueriesService(),
-        dbRunsService: MockDbRunsService());
+    var mocked = await tester.pumpMockedApp(Mocked());
+    var query = Query('Saved query 1');
+    mocked.queriesStore.addQueryRuns(QueryRuns.fromRun(
+        Run(query, [Result(title: 'result 1')]), mocked.dbRunsService));
+    await tester.pumpAndSettle();
 
-    await queriesStore.addQueryRuns(QueryRuns.fromRun(
-        Run(Query('Saved query 1'), [Result(title: 'result 1')]),
-        MockDbRunsService()));
-    var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
-
-    await tester.pumpWidget(RouterApp(
-      theme: theme,
-      queriesStore: queriesStore,
-      searchService: LoremIpsumSearchService(),
-      historyService: MockHistoryService(),
-    ));
-
-    expect(queriesStore.items, 1);
+    expect(mocked.queriesStore.items, 1);
     expect(find.byType(QueryRunsCard), findsOne);
 
     await tester.tap(find.byType(QueryRunsCard));

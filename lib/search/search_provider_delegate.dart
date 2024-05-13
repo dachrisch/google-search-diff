@@ -61,7 +61,20 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
         future: searchProvider.doSearch(Query(query)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return SearchResultsView(run: snapshot.data!, onSave: onSave);
+            if (snapshot.hasError) {
+              Future.delayed(
+                  Durations.short1,
+                  () => showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                          title: Text('Error while fetching query: ${query}'),
+                          content: Text(snapshot.error.toString()))));
+              return Center(
+                child: Text('Error'),
+              );
+            } else {
+              return SearchResultsView(run: snapshot.data!, onSave: onSave);
+            }
           } else {
             return const Center(child: CircularProgressIndicator());
           }

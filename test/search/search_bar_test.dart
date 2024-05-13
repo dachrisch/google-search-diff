@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';
 import '../util/test_provider.dart';
-import 'widget_tester_extension.dart';
+import '../widget/widget_tester_extension.dart';
 
 class TestSearchService extends SearchService {
   Query lastSearch = Query('');
