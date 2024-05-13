@@ -69,7 +69,7 @@ jobs:
           generate_release_notes: true
       - name: Get package name
         id: package
-        run: echo "name=$(grep applicationId android/app/build.gradle|cut -d'\"' -f2)" >> "$GITHUB_OUTPUT"
+        run: echo "name=$(grep applicationId android/app/build.gradle|cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
       - name: Deploy to Play Store (Internal testing)
         uses: r0adkll/upload-google-play@v1
         with:
