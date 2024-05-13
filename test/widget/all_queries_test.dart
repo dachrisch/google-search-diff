@@ -10,7 +10,7 @@ import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
-import '..//util/localstore_helper.dart';
+import '../util/localstore_helper.dart';
 import '../util/service_mocks.dart';
 import '../util/test_provider.dart';
 import 'search_bar_test.dart';
