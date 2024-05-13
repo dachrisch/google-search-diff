@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/service/history_service.dart';
+import 'package:google_search_diff/model/query.dart';
+import 'package:google_search_diff/service/history_service.dart';
 
 import '../util/service_mocks.dart';
 

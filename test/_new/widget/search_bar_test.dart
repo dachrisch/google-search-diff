@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_search_diff/_new/model/queries_store.dart';
-import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/run.dart';
-import 'package:google_search_diff/_new/page/queries_page.dart';
-import 'package:google_search_diff/_new/service/history_service.dart';
-import 'package:google_search_diff/_new/service/search_service.dart';
+import 'package:google_search_diff/model/queries_store.dart';
+import 'package:google_search_diff/model/query.dart';
+import 'package:google_search_diff/model/run.dart';
+import 'package:google_search_diff/page/queries_page.dart';
+import 'package:google_search_diff/service/history_service.dart';
+import 'package:google_search_diff/service/search_service.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';

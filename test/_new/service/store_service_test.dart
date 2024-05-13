@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_search_diff/_new/model/queries_store.dart';
-import 'package:google_search_diff/_new/model/query.dart';
-import 'package:google_search_diff/_new/model/result.dart';
-import 'package:google_search_diff/_new/model/run.dart';
-import 'package:google_search_diff/_new/service/db_queries_service.dart';
-import 'package:google_search_diff/_new/service/db_runs_service.dart';
-import 'package:google_search_diff/_new/service/localstore.dart';
+import 'package:google_search_diff/model/queries_store.dart';
+import 'package:google_search_diff/model/query.dart';
+import 'package:google_search_diff/model/result.dart';
+import 'package:google_search_diff/model/run.dart';
+import 'package:google_search_diff/service/db_queries_service.dart';
+import 'package:google_search_diff/service/db_runs_service.dart';
+import 'package:google_search_diff/service/localstore.dart';
 
 import '../util/localstore_helper.dart';
 

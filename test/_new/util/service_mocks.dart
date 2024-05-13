@@ -1,8 +1,8 @@
-import 'package:google_search_diff/_new/service/db_history_service.dart';
-import 'package:google_search_diff/_new/service/db_queries_service.dart';
-import 'package:google_search_diff/_new/service/db_runs_service.dart';
-import 'package:google_search_diff/_new/service/history_service.dart';
-import 'package:google_search_diff/_new/service/localstore.dart';
+import 'package:google_search_diff/service/db_history_service.dart';
+import 'package:google_search_diff/service/db_queries_service.dart';
+import 'package:google_search_diff/service/db_runs_service.dart';
+import 'package:google_search_diff/service/history_service.dart';
+import 'package:google_search_diff/service/localstore.dart';
 import 'package:localstore/localstore.dart';
 
 class DocumentMock implements DocumentRef {

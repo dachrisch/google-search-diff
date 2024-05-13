@@ -9,7 +9,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_search_diff/_new/logger.dart';
+import 'package:google_search_diff/logger.dart';
 import 'package:logger/logger.dart';
 
 extension ButtonTap on WidgetTester {
