@@ -43,17 +43,9 @@ class QueryRuns extends ChangeNotifier {
       .then((value) => notifyListeners())
       .then((_) => run);
 
-  void addRuns(List<Run> runs) => Future.sync(() {
-        runs.forEach((Run run) async {
-          await addRun(run);
-        });
-      });
+  void addRuns(List<Run> runs) => runs.forEach(addRun);
 
-  Future<void> removeAllRuns() => Future.sync(() {
-        runs.forEach((Run run) async {
-          await removeRun(run);
-        });
-      });
+  void removeAllRuns() => runs.forEach(removeRun);
 
   Future<void> removeRun(Run run) => dbRunsService
       .remove(run)

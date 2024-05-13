@@ -93,7 +93,7 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                                         WrapCrossAlignment.center,
                                     children: [
                                       InkWell(
-                                        key: Key(
+                                        key: const Key(
                                             'no-queries-show-search-button'),
                                         onTap: () => showSearchPage(context),
                                         child: Image.asset('assets/logo.png',

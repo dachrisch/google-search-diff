@@ -67,9 +67,9 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
                   () => showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                          title: Text('Error while fetching query: ${query}'),
+                          title: Text('Error while fetching query: $query'),
                           content: Text(snapshot.error.toString()))));
-              return Center(
+              return const Center(
                 child: Text('Error'),
               );
             } else {

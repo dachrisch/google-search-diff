@@ -25,7 +25,7 @@ void main() {
   testWidgets('Alert dialog when search fails', (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
 
-    var mocked = (await tester.pumpMockedApp(Mocked(
+    (await tester.pumpMockedApp(Mocked(
         searchService:
             FailingSearchService(e: ClientException('Test error')))));
 
