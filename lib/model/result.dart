@@ -7,7 +7,7 @@ class Result {
   final String title;
   final String source;
   final String link;
-  final String snippet;
+  final String? snippet;
 
   Result(
       {required this.title,

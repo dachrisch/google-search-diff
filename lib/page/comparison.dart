@@ -83,13 +83,16 @@ class ComparisonPage extends StatelessWidget {
                                       subtitle: Text(element.source),
                                     ),
                                     Row(
-                                      children: <Widget>[
-                                        Expanded(
+                                      children: element.snippet == null
+                                          ? []
+                                          : <Widget>[
+                                              Expanded(
                                             child: Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 10),
-                                                child: Text(element.snippet)))
-                                      ],
+                                                      child: Text(
+                                                          element.snippet!)))
+                                            ],
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,

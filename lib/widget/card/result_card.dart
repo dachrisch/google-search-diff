@@ -20,12 +20,14 @@ class ResultCard extends StatelessWidget {
                 subtitle: Text(result.source),
               ),
               Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Text(result.snippet)))
-                ],
+                children: result.snippet == null
+                    ? []
+                    : <Widget>[
+                        Expanded(
+                            child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(result.snippet!)))
+                      ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
