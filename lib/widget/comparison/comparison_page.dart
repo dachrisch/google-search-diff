@@ -70,9 +70,8 @@ class ComparisonPage extends StatelessWidget {
                               element1.title.compareTo(element2.title),
                           itemBuilder: (context, element) => ResultCard(
                             result: element,
-                            iconData:
-                                compareResultProperties[element.runtimeType]
-                                    ?.icon,
+                            icon: compareResultProperties[element.runtimeType]
+                                ?.icon,
                           ),
                           groupSeparatorBuilder: (value) =>
                               Text(value.toString()),

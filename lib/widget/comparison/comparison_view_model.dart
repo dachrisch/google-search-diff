@@ -19,7 +19,7 @@ class ComparedResultViewProperties {
 
   ComparedResultViewProperties(this.iconData, this.color);
 
-  get icon => Icon(iconData, color: color);
+  Icon get icon => Icon(iconData, color: color);
 }
 
 class ComparisonViewModel {

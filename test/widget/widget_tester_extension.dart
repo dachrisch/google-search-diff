@@ -10,6 +10,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/logger.dart';
+import 'package:google_search_diff/widget/comparison/run_feedback_card.dart';
+import 'package:google_search_diff/widget/comparison/run_target.dart';
 import 'package:logger/logger.dart';
 
 extension ButtonTap on WidgetTester {
@@ -40,5 +42,44 @@ extension Grab on WidgetTester {
     await gesture.up();
     await pumpAndSettle();
     return dropTarget;
+  }
+}
+
+enum DropTarget { first, second }
+
+enum DropTargetExpect {
+  bothEmpty(2, 1),
+  oneEmpty(1, 2),
+  bothComplete(0, 0);
+
+  final int expectedEmpty;
+  final int expectedFilledAfter;
+
+  const DropTargetExpect(this.expectedEmpty, this.expectedFilledAfter);
+}
+
+extension DragCard on WidgetTester {
+  Future<Finder> dragTo<T extends Widget>(
+      DropTarget target, DropTargetExpect dropTargetExpect) async {
+    // drag base
+    TestGesture baseGesture = await grabCard<T>(
+        (found) => target == DropTarget.first ? found.first : found.last);
+    // expect feedback
+    expect(find.byType(EmptyTarget),
+        findsNWidgets(dropTargetExpect.expectedEmpty));
+    expect(find.byType(RunFeedbackCard), findsOneWidget);
+    var baseDropTarget = await moveCardToTarget<RunDragTarget, EmptyTarget>(
+        baseGesture,
+        (found) => target == DropTarget.first ? found.first : found.last);
+    // expect dropped
+    expect(
+        find.descendant(
+            of: baseDropTarget, matching: find.byType(TargetWithRun)),
+        findsOneWidget);
+    expect(find.byType(EmptyTarget),
+        findsNWidgets(dropTargetExpect.expectedEmpty - 1));
+    expect(find.byType(TargetWithRun),
+        findsNWidgets(dropTargetExpect.expectedFilledAfter));
+    return baseDropTarget;
   }
 }

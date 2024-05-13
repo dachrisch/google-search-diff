@@ -7,7 +7,6 @@ import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/routes/query_id.dart';
 import 'package:google_search_diff/search/search_service.dart';
-import 'package:google_search_diff/widget/comparison/run_feedback_card.dart';
 import 'package:google_search_diff/widget/comparison/run_target.dart';
 import 'package:google_search_diff/widget/run/run_card.dart';
 import 'package:google_search_diff/widget/runs/query_runs_page.dart';
@@ -49,20 +48,8 @@ void main() {
 
     expect(find.byType(RunCard), findsNWidgets(2));
 
-    TestGesture baseGesture =
-        await tester.grabCard<RunCard>((found) => found.first);
-    // expect feedback
-    expect(find.byType(EmptyTarget), findsNWidgets(2));
-    expect(find.byType(RunFeedbackCard), findsOneWidget);
-    var baseDropTarget =
-        await tester.moveCardToTarget<RunDragTarget, EmptyTarget>(
-            baseGesture, (found) => found.first);
-    // expect dropped
-    var dropTarget = find.descendant(
-        of: baseDropTarget, matching: find.byType(TargetWithRun));
-    expect(dropTarget, findsOneWidget);
-    expect(find.byType(EmptyTarget), findsNWidgets(1));
-    expect(find.byType(TargetWithRun), findsNWidgets(1));
+    var dropTarget = await tester.dragTo<RunCard>(
+        DropTarget.first, DropTargetExpect.bothEmpty);
 
     // remove item
     await tester

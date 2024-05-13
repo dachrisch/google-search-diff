@@ -76,6 +76,7 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
                   }),
                 ),
                 IconButton(
+                    key: const Key('compare-runs-button'),
                     onPressed: compareModel.isComplete
                         ? () => context.goToComparison(compareModel)
                         : null,
