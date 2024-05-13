@@ -87,24 +87,24 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                               )
                             : SliverFillRemaining(
                                 child: Center(
-                                  child: Center(
-                                    child: Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          onTap: () => showSearchPage(context),
-                                          child: Image.asset('assets/logo.png',
-                                              fit: BoxFit.scaleDown),
-                                        ),
-                                        Text('No queries saved.',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium
-                                                ?.copyWith(color: Colors.grey))
-                                      ],
-                                    ),
+                                  child: Wrap(
+                                    direction: Axis.vertical,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        key: Key(
+                                            'no-queries-show-search-button'),
+                                        onTap: () => showSearchPage(context),
+                                        child: Image.asset('assets/logo.png',
+                                            fit: BoxFit.scaleDown),
+                                      ),
+                                      Text('No queries saved.',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(color: Colors.grey))
+                                    ],
                                   ),
                                 ),
                               ),
