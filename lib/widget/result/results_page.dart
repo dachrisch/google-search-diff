@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/provider/result_page.dart';
-import 'package:google_search_diff/widget/card/result_card.dart';
 import 'package:google_search_diff/widget/header_listview.dart';
+import 'package:google_search_diff/widget/result/result_card.dart';
+import 'package:google_search_diff/widget/result/result_page_provider.dart';
 import 'package:provider/provider.dart';
 
 class ResultsPage extends StatelessWidget {

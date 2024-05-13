@@ -5,12 +5,12 @@ import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/page/queries_page.dart';
-import 'package:google_search_diff/service/search_service.dart';
-import 'package:google_search_diff/widget/card/query_runs_card.dart';
+import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/widget/queries/queries_page.dart';
+import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
-import '../util/localstore_helper.dart';
+import '..//util/localstore_helper.dart';
 import '../util/service_mocks.dart';
 import '../util/test_provider.dart';
 import 'search_bar_test.dart';

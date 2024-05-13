@@ -8,7 +8,7 @@ import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/routes/relative_route_extension.dart';
-import 'package:google_search_diff/widget/model/comparison.dart';
+import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:provider/provider.dart';

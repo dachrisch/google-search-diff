@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/model/entity_id.dart';
-import 'package:google_search_diff/widget/model/comparison.dart';
+import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 
 extension RelativeGoRouter on BuildContext {
   void goRelativeWithId(EntityId id, {Object? extra}) {

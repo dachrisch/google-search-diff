@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/routes/relative_route_extension.dart';
+import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 import 'package:google_search_diff/widget/comparison/run_target.dart';
-import 'package:google_search_diff/widget/model/comparison.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 

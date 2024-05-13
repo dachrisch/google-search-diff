@@ -1,13 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/model/run_id.dart';
-import 'package:google_search_diff/page/comparison.dart';
-import 'package:google_search_diff/page/comparison_test.dart';
-import 'package:google_search_diff/page/queries_page.dart';
-import 'package:google_search_diff/page/query_runs.dart';
-import 'package:google_search_diff/page/query_runs_test.dart';
-import 'package:google_search_diff/page/results_page.dart';
 import 'package:google_search_diff/routes/query_id.dart';
-import 'package:google_search_diff/widget/model/comparison.dart';
+import 'package:google_search_diff/widget/comparison/comparison_page.dart';
+import 'package:google_search_diff/widget/comparison/comparison_test.dart';
+import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
+import 'package:google_search_diff/widget/queries/queries_page.dart';
+import 'package:google_search_diff/widget/result/results_page.dart';
+import 'package:google_search_diff/widget/runs/query_runs_page.dart';
+import 'package:google_search_diff/widget/runs/query_runs_test.dart';
 import 'package:provider/provider.dart';
 
 class RouterConfigBuilder {

@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
-import 'package:google_search_diff/page/query_runs.dart';
-import 'package:google_search_diff/service/search_service.dart';
-import 'package:google_search_diff/widget/card/run_card.dart';
-import 'package:google_search_diff/widget/model/comparison.dart';
+import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
+import 'package:google_search_diff/widget/run/run_card.dart';
+import 'package:google_search_diff/widget/runs/query_runs_page.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';

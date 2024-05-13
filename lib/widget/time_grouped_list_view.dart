@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_search_diff/page/time_groups.dart';
+import 'package:google_search_diff/widget/comparison/time_groups.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:grouped_list/sliver_grouped_list.dart';
 import 'package:provider/provider.dart';

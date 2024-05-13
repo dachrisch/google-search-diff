@@ -1,10 +1,9 @@
-import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/run.dart';
+import 'package:google_search_diff/search/search_result_view.dart';
+import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/service/history_service.dart';
-import 'package:google_search_diff/service/search_service.dart';
-import 'package:google_search_diff/widget/card/result_card.dart';
 import 'package:provider/provider.dart';
 
 // MAYBE: use https://github.com/darjaorlova/bunny_search_animated_searchbar/
@@ -62,23 +61,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
         future: searchProvider.doSearch(Query(query)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Scaffold(
-                body: ListView.builder(
-                    itemBuilder: (context, index) =>
-                        ResultCard(result: snapshot.data![index]),
-                    itemCount: snapshot.data!.items),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerFloat,
-                floatingActionButton: AsyncButtonBuilder(
-                    child: const Icon(Icons.add_outlined),
-                    onPressed: () async => await onSave(snapshot.data!),
-                    builder: (context, child, callback, buttonState) {
-                      return FloatingActionButton.extended(
-                          key: const Key('add-search-query-button'),
-                          onPressed: callback,
-                          icon: child,
-                          label: const Text('Save Query'));
-                    }));
+            return SearchResultsView(run: snapshot.data!, onSave: onSave);
           } else {
             return const Center(child: CircularProgressIndicator());
           }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/routes/query_id.dart';
-import 'package:google_search_diff/widget/model/comparison.dart';
+import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 import 'package:provider/provider.dart';
 
 class QueryRunsPageProvider extends StatelessWidget {

@@ -1,6 +1,8 @@
 import 'dart:io';
 
-void cleanupBefore() {
-  var directory = Directory('.search');
-  if (directory.existsSync()) directory.deleteSync(recursive: true);
+void cleanupBefore(List<String> dirs) {
+  for (String dir in dirs) {
+    var directory = Directory(dir);
+    if (directory.existsSync()) directory.deleteSync(recursive: true);
+  }
 }

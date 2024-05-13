@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/model/run_id.dart';
-import 'package:google_search_diff/page/results_page.dart';
 import 'package:google_search_diff/routes/query_id.dart';
+import 'package:google_search_diff/widget/result/results_page.dart';
 import 'package:provider/provider.dart';
 
 class ResultsPageResultsProvider extends StatelessWidget {

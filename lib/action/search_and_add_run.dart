@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/action/intent/search.dart';
-import 'package:google_search_diff/service/search_service.dart';
+import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/widget/snackbar.dart';
 
 class SearchAndAddRunAction extends Action<SearchIntent> {

@@ -10,7 +10,7 @@ import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
 import 'package:google_search_diff/service/localstore.dart';
 
-import '../util/localstore_helper.dart';
+import '..//util/localstore_helper.dart';
 
 void main() {
   setUp(() => cleanupBefore(['.queries', '.runs']));

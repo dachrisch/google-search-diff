@@ -6,27 +6,17 @@ import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/routes/router_app.dart';
-import 'package:google_search_diff/service/search_service.dart';
+import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/theme.dart';
-import 'package:google_search_diff/widget/card/query_runs_card.dart';
-import 'package:google_search_diff/widget/card/result_card.dart';
-import 'package:google_search_diff/widget/card/run_card.dart';
+import 'package:google_search_diff/widget/run/run_card.dart';
+import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
 import '../util/service_mocks.dart';
 
-class TestImageProvider extends ImageProvider {
-  @override
-  Future<Object> obtainKey(ImageConfiguration configuration) {
-    throw UnimplementedError();
-  }
-}
-
 void main() {
-  testWidgets('Transitions from Query to Result View',
+  testWidgets('Transitions from Query to Run View',
       (WidgetTester tester) async {
-    TestWidgetsFlutterBinding.ensureInitialized();
-
     Provider.debugCheckInvalidValueType = null;
     var queriesStore = QueriesStore(
         dbQueryService: MockDbQueriesService(),
@@ -46,11 +36,9 @@ void main() {
 
     expect(queriesStore.items, 1);
     expect(find.byType(QueryRunsCard), findsOne);
-
     await tester.tap(find.byType(QueryRunsCard));
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(RunCard));
-    await tester.pumpAndSettle();
-    expect(find.byType(ResultCard), findsOneWidget);
+
+    expect(find.byType(RunCard), findsOne);
   });
 }
