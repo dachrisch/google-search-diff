@@ -13,6 +13,7 @@ permissions:
 
 env:
   JAVA_VERSION: 19
+  SERVICE_ACCOUNT_PATH: service_account.json
 
 jobs:
   build-release_apk:
@@ -42,6 +43,12 @@ jobs:
           BASE64_KEYSTORE: ${{ secrets.BASE64_KEYSTORE }}
         run: |
           echo $BASE64_KEYSTORE | base64 --decode > keystore.jks
+      - name: Service Account json
+        env:
+          BASE64_SERVICE_ACCOUNT_JSON: ${{ secrets.BASE64_SERVICE_ACCOUNT_JSON}}
+          SERVICE_ACCOUNT_PATH: ${{ env.SERVICE_ACCOUNT_PATH }}
+        run: |
+          echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode > $SERVICE_ACCOUNT_PATH
       - name: Create local.properties
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -53,8 +60,17 @@ jobs:
           echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
       - name: Build APK
         run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release
+      - name: Build AppBundle
+        run: flutter build appbundle --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: build/app/outputs/flutter-apk/app-release.apk
           generate_release_notes: true
+      - name: Deploy to Play Store (Internal testing)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
+          packageName: com.yourapp.package
+          releaseFiles: ${{ build/app/outputs/bundle/release/app-release.aab }}
+          track: internal
