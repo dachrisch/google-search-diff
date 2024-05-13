@@ -121,5 +121,5 @@ jobs:
           packageName: ${{ steps.package.outputs.name }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: internal
-          status: inProgress
-          userFraction: 0.99
+          status: draft
+          #userFraction: 0.99
