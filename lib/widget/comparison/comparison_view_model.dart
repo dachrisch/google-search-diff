@@ -6,20 +6,31 @@ import 'package:google_search_diff/model/run_id.dart';
 
 Map<Type, ComparedResultViewProperties> compareResultProperties = {
   AddedResult: ComparedResultViewProperties(
-      Icons.keyboard_double_arrow_right_outlined, Colors.green),
+      name: 'Added result',
+      iconData: Icons.keyboard_double_arrow_right_outlined,
+      color: Colors.green),
   RemovedResult: ComparedResultViewProperties(
-      Icons.keyboard_double_arrow_left_outlined, Colors.red),
-  ExistingResult:
-      ComparedResultViewProperties(Icons.compare_arrows_outlined, Colors.grey)
+      name: 'Removed result',
+      iconData: Icons.keyboard_double_arrow_left_outlined,
+      color: Colors.red),
+  ExistingResult: ComparedResultViewProperties(
+      name: 'Existing result',
+      iconData: Icons.compare_arrows_outlined,
+      color: Colors.grey)
 };
 
 class ComparedResultViewProperties {
   final IconData iconData;
   final MaterialColor color;
+  final String name;
 
-  ComparedResultViewProperties(this.iconData, this.color);
+  ComparedResultViewProperties(
+      {required this.iconData, required this.color, required this.name});
 
   Icon get icon => Icon(iconData, color: color);
+
+  static ComparedResultViewProperties of(ComparedResult element) =>
+      compareResultProperties[element.runtimeType]!;
 }
 
 class ComparisonViewModel {

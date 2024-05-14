@@ -62,16 +62,15 @@ class ComparisonPage extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleMedium,
                           ))
                         ]),
-                        SliverGroupedListView<ComparedResult, Type>(
+                        SliverGroupedListView<ComparedResult, String>(
                           elements: compareResult.compared,
                           groupBy: (ComparedResult element) =>
-                              element.runtimeType,
+                              ComparedResultViewProperties.of(element).name,
                           itemComparator: (element1, element2) =>
                               element1.title.compareTo(element2.title),
                           itemBuilder: (context, element) => ResultCard(
                             result: element,
-                            icon: compareResultProperties[element.runtimeType]
-                                ?.icon,
+                            icon: ComparedResultViewProperties.of(element).icon,
                           ),
                           groupSeparatorBuilder: (value) =>
                               Text(value.toString()),

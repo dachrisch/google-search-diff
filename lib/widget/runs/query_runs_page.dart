@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/action/intent/search.dart';
@@ -35,6 +36,8 @@ class _QueryRunsPageScaffoldState extends State<QueryRunsPageScaffold>
     with TimerMixin {
   final Logger l = getLogger('RunsPage');
   bool isDragging = false;
+  final ScrollBehavior scrollBehavior = MaterialScrollBehavior().copyWith(
+      dragDevices: [PointerDeviceKind.mouse, PointerDeviceKind.touch].toSet());
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +63,7 @@ class _QueryRunsPageScaffoldState extends State<QueryRunsPageScaffold>
                                         context, SearchIntent(queryRuns))
                                     as Future<void>),
                                 child: CustomScrollView(
+                                  scrollBehavior: scrollBehavior,
                                   slivers: [
                                     SliverAppBar(
                                       pinned: true,
