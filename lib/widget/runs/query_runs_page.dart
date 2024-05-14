@@ -36,8 +36,8 @@ class _QueryRunsPageScaffoldState extends State<QueryRunsPageScaffold>
     with TimerMixin {
   final Logger l = getLogger('RunsPage');
   bool isDragging = false;
-  final ScrollBehavior scrollBehavior = MaterialScrollBehavior().copyWith(
-      dragDevices: [PointerDeviceKind.mouse, PointerDeviceKind.touch].toSet());
+  final ScrollBehavior scrollBehavior = const MaterialScrollBehavior().copyWith(
+      dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch});
 
   @override
   Widget build(BuildContext context) {
