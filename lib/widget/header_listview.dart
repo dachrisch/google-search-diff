@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ListViewWithHeader extends StatelessWidget {
+class ListViewWithHeader<T extends Object> extends StatelessWidget {
   final String headerText;
-  final NullableIndexedWidgetBuilder itemBuilder;
+  final IndexedWidgetBuilder itemBuilder;
+  final Widget filterWidget;
 
   final int items;
 
@@ -10,7 +11,8 @@ class ListViewWithHeader extends StatelessWidget {
       {super.key,
       required this.headerText,
       required this.itemBuilder,
-      required this.items});
+      required this.items,
+      required this.filterWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,12 @@ class ListViewWithHeader extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.w100,
                   fontSize: 16,
-                )))
+                ))),
+        const SizedBox(),
+        filterWidget,
+        const SizedBox(
+          width: 20,
+        )
       ]),
       Expanded(
           child: ListView.builder(
