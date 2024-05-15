@@ -123,3 +123,5 @@ jobs:
           track: internal
           status: draft
           #userFraction: 0.99
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+          debugSymbols: build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
