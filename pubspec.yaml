@@ -20,7 +20,7 @@ version: 2.2.2
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
-  flutter: 3.19.5
+  flutter: 3.22.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -50,10 +50,11 @@ dependencies:
   grouped_list: ^5.1.2
   logger: ^2.2.0
   sticky_grouped_list: ^3.1.0
-  injectable: ^2.4.1
   get_it: ^7.7.0
-  intl: ^0.18.1
   choice: ^2.3.2
+  # removed version pinning while updating to newer flutter
+  injectable:
+  intl:
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
