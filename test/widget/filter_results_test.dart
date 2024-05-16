@@ -42,7 +42,7 @@ void main() {
 
     expect(find.byType(ResultCard), findsNWidgets(3));
     await tester.tapButtonByKey('open-filter-button');
-    expect(find.byType(CheckboxListTile), findsNWidgets(3));
+    expect(find.byType(CheckboxListTile), findsNWidgets(4));
     var checkboxFinder = find.byType(Checkbox);
     var checkbox = tester.firstWidget<Checkbox>(checkboxFinder);
     expect(checkbox.value, true);
