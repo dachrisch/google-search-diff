@@ -56,17 +56,23 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                                   BorderRadius.all(Radius.circular(100))),
                           backgroundColor:
                               MaterialTheme.lightScheme().primaryContainer,
-                          leading: InkWell(
-                            onTap: () => showSearchPage(context),
-                            child: Image.asset('assets/logo.png',
-                                fit: BoxFit.scaleDown),
+                          leading: Semantics(
+                            label: 'Open search page',
+                            child: InkWell(
+                              onTap: () => showSearchPage(context),
+                              child: Image.asset('assets/logo.png',
+                                  fit: BoxFit.scaleDown),
+                            ),
                           ),
                           automaticallyImplyLeading: false,
-                          title: InkWell(
-                            onTap: () => showSearchPage(context),
-                            child: Text(
-                              'SearchFlux',
-                              style: Theme.of(context).textTheme.titleLarge,
+                          title: Semantics(
+                            label: 'Open search page',
+                            child: InkWell(
+                              onTap: () => showSearchPage(context),
+                              child: Text(
+                                'SearchFlux',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
                             ),
                           ),
                           actions: const [_SearchButton(), SizedBox(width: 16)],
@@ -122,6 +128,7 @@ class _SearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         key: const Key('show-searchbar-button'),
+        tooltip: 'Open search page',
         onPressed: () => showSearchPage(context),
         icon: const Icon(Icons.search));
   }
