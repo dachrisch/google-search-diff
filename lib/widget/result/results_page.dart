@@ -68,7 +68,5 @@ class _ResultsPageScaffoldState extends State<ResultsPageScaffold> {
       ),
     );
   }
-
-  void openFilterList(BuildContext context) async {}
 }
 

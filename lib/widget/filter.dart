@@ -68,6 +68,14 @@ class _FilterChoiceState extends State<FilterChoice> {
           ChoiceModal.createSpacer(width: 20),
         ],
       ),
+      modalFooterBuilder: (state) {
+        return CheckboxListTile(
+          value: state.selectedMany(sortedFilter),
+          onChanged: state.onSelectedMany(sortedFilter),
+          tristate: true,
+          title: const Text('Select All'),
+        );
+      },
       promptDelegate: ChoicePrompt.delegateNewPage(),
     );
   }
