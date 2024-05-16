@@ -1,30 +1,31 @@
 import 'package:choice/choice.dart';
 import 'package:flutter/material.dart';
 
-class FilterChoice extends StatefulWidget {
-  final List<String> initialFilterValues;
+class PromptFilterChoice extends StatefulWidget {
+  final Map<String, int> filterOptions;
   final void Function(List<String> newFilterList) onFilterChanged;
   final Widget title;
 
-  const FilterChoice(
-      {super.key,
-      required this.initialFilterValues,
-      required this.onFilterChanged,
-      required this.title});
+  const PromptFilterChoice({
+    super.key,
+    required this.title,
+    required this.filterOptions,
+    required this.onFilterChanged,
+  });
 
   @override
-  State<StatefulWidget> createState() => _FilterChoiceState();
+  State<StatefulWidget> createState() => _PromptFilterChoiceState();
 }
 
-class _FilterChoiceState extends State<FilterChoice> {
-  List<String> sortedFilter = [];
+class _PromptFilterChoiceState extends State<PromptFilterChoice> {
+  List<String> sortedFilterOptions = [];
   final List<String> selectedFilterValues = [];
 
   @override
   void initState() {
-    sortedFilter.addAll(widget.initialFilterValues);
-    sortedFilter.sort();
-    selectedFilterValues.addAll(sortedFilter);
+    sortedFilterOptions.addAll(widget.filterOptions.keys);
+    sortedFilterOptions.sort();
+    selectedFilterValues.addAll(sortedFilterOptions);
 
     super.initState();
   }
@@ -37,7 +38,7 @@ class _FilterChoiceState extends State<FilterChoice> {
       clearable: true,
       searchable: true,
       itemSkip: (state, index) =>
-          !ChoiceSearch.match(sortedFilter[index], state.search?.value),
+          !ChoiceSearch.match(sortedFilterOptions[index], state.search?.value),
       anchorBuilder: (state, openModal) => IconButton(
           key: const Key('open-filter-button'),
           onPressed: openModal,
@@ -50,15 +51,17 @@ class _FilterChoiceState extends State<FilterChoice> {
         });
         widget.onFilterChanged(newFilterList);
       },
-      itemCount: sortedFilter.length,
+      itemCount: sortedFilterOptions.length,
       itemBuilder: (state, i) {
+        var item = sortedFilterOptions[i];
         return CheckboxListTile(
-          value: state.selected(sortedFilter[i]),
-          onChanged: state.onSelected(sortedFilter[i]),
+          value: state.selected(item),
+          onChanged: state.onSelected(item),
           title: ChoiceText(
-            sortedFilter[i],
+            item,
             highlight: state.search?.value,
           ),
+          secondary: Text('(${widget.filterOptions[item]})'),
         );
       },
       modalHeaderBuilder: ChoiceModal.createHeader(
@@ -70,8 +73,8 @@ class _FilterChoiceState extends State<FilterChoice> {
       ),
       modalFooterBuilder: (state) {
         return CheckboxListTile(
-          value: state.selectedMany(sortedFilter),
-          onChanged: state.onSelectedMany(sortedFilter),
+          value: state.selectedMany(sortedFilterOptions),
+          onChanged: state.onSelectedMany(sortedFilterOptions),
           tristate: true,
           title: const Text('Select All'),
         );

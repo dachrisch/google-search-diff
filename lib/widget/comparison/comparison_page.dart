@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/action/dispatcher.dart';
 import 'package:google_search_diff/dependencies.dart';
+import 'package:google_search_diff/filter/prompt.dart';
 import 'package:google_search_diff/model/comparison.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
 import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
@@ -27,14 +28,30 @@ class ComparisonPageProvider extends StatelessWidget {
   }
 }
 
-class ComparisonPage extends StatelessWidget {
+class ComparisonPage extends StatefulWidget {
   const ComparisonPage({super.key});
 
   @override
+  State<StatefulWidget> createState() => _ComparisonPageState();
+}
+
+class _ComparisonPageState extends State<ComparisonPage> {
+  final List<ComparedResult> filteredComparedResults = [];
+  late ComparisonViewModel comparisonViewModel;
+  final DateFormat dateFormat = DateFormat('dd.MM.yyyy HH:mm', 'de_DE');
+
+  @override
+  void initState() {
+    comparisonViewModel = context.read<ComparisonViewModel>();
+    setState(() {
+      filteredComparedResults
+          .addAll(comparisonViewModel.compareResult.compared);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var comparisonViewModel = context.read<ComparisonViewModel>();
-    var compareResult = comparisonViewModel.compareResult;
-    var dateFormat = DateFormat('dd.MM.yyyy HH:mm', 'de_DE');
     return Actions(
         actions: const <Type, Action<Intent>>{},
         dispatcher: LoggingActionDispatcher(),
@@ -50,10 +67,36 @@ class ComparisonPage extends StatelessWidget {
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () => context.pop(),
                           ),
+                          pinned: true,
                           title: Text(
                             'Run Comparison',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
+                          actions: [
+                            PromptFilterChoice(
+                              title: const Text('Filter Results'),
+                              filterOptions: comparisonViewModel
+                                  .compareResult.compared
+                                  .fold({}, (map, result) {
+                                map[result.source] =
+                                    (map[result.source] ?? 0) + 1;
+                                return map;
+                              }),
+                              onFilterChanged: (List<String> newFilterList) {
+                                setState(() {
+                                  filteredComparedResults.clear();
+                                  filteredComparedResults.addAll(
+                                      comparisonViewModel
+                                          .compareResult.compared
+                                          .where((element) => newFilterList
+                                              .contains(element.source)));
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            )
+                          ],
                         ),
                         SliverList.list(children: [
                           Center(
@@ -63,7 +106,7 @@ class ComparisonPage extends StatelessWidget {
                           ))
                         ]),
                         SliverGroupedListView<ComparedResult, String>(
-                          elements: compareResult.compared,
+                          elements: filteredComparedResults,
                           groupBy: (ComparedResult element) =>
                               ComparedResultViewProperties.of(element).name,
                           itemComparator: (element1, element2) =>

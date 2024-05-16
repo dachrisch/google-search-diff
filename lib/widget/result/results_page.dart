@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_search_diff/filter/prompt.dart';
 import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/widget/filter.dart';
 import 'package:google_search_diff/widget/header_listview.dart';
 import 'package:google_search_diff/widget/result/result_card.dart';
 import 'package:google_search_diff/widget/result/result_page_provider.dart';
@@ -53,10 +53,12 @@ class _ResultsPageScaffoldState extends State<ResultsPageScaffold> {
         itemBuilder: (context, index) =>
             ResultCard(result: filteredResults[index]),
         headerText: 'Results',
-        filterWidget: FilterChoice(
+        filterWidget: PromptFilterChoice(
           title: const Text('Filter Sources'),
-          initialFilterValues:
-              (run.results.map((r) => r.source).toSet().toList()),
+          filterOptions: run.results.fold({}, (map, result) {
+            map[result.source] = (map[result.source] ?? 0) + 1;
+            return map;
+          }),
           onFilterChanged: (newFilterList) {
             setState(() {
               filteredResults.clear();
