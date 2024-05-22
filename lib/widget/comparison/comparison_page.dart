@@ -1,3 +1,4 @@
+import 'package:choice/choice.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/action/dispatcher.dart';
@@ -37,6 +38,8 @@ class ComparisonPage extends StatefulWidget {
 
 class _ComparisonPageState extends State<ComparisonPage> {
   final List<ComparedResult> filteredComparedResults = [];
+  final List<String> filteredSources = [];
+  final List<String> filteredStates = [];
   late ComparisonViewModel comparisonViewModel;
   final DateFormat dateFormat = DateFormat('dd.MM.yyyy HH:mm', 'de_DE');
 
@@ -44,8 +47,13 @@ class _ComparisonPageState extends State<ComparisonPage> {
   void initState() {
     comparisonViewModel = context.read<ComparisonViewModel>();
     setState(() {
-      filteredComparedResults
-          .addAll(comparisonViewModel.compareResult.compared);
+      filteredStates.addAll(compareResultProperties.values.map((r) => r.name));
+      filteredSources.addAll(comparisonViewModel.compareResult.compared
+          .fold<Set<String>>(<String>{}, (Set<String> previousValue, element) {
+        previousValue.add(element.source);
+        return previousValue;
+      }));
+      updateComparisonFilter();
     });
     super.initState();
   }
@@ -84,13 +92,10 @@ class _ComparisonPageState extends State<ComparisonPage> {
                               }),
                               onFilterChanged: (List<String> newFilterList) {
                                 setState(() {
-                                  filteredComparedResults.clear();
-                                  filteredComparedResults.addAll(
-                                      comparisonViewModel
-                                          .compareResult.compared
-                                          .where((element) => newFilterList
-                                              .contains(element.source)));
+                                  filteredSources.clear();
+                                  filteredSources.addAll(newFilterList);
                                 });
+                                updateComparisonFilter();
                               },
                             ),
                             const SizedBox(
@@ -103,7 +108,39 @@ class _ComparisonPageState extends State<ComparisonPage> {
                               child: Text(
                             '${dateFormat.format(comparisonViewModel.base!.runDate)} <> ${dateFormat.format(comparisonViewModel.current!.runDate)}',
                             style: Theme.of(context).textTheme.titleMedium,
-                          ))
+                          )),
+                          Center(
+                            child: Choice<String>.inline(
+                              value: filteredStates,
+                              multiple: true,
+                              clearable: true,
+                              listBuilder: ChoiceList.createScrollable(
+                                spacing: 10,
+                                runSpacing: 10,
+                              ),
+                              onChanged: (newStates) {
+                                setState(() {
+                                  filteredStates.clear();
+                                  filteredStates.addAll(newStates);
+                                });
+                                updateComparisonFilter();
+                              },
+                              itemCount: compareResultProperties.values.length,
+                              itemBuilder: (state, index) => ChoiceChip(
+                                selected: state.selected(compareResultProperties
+                                    .values
+                                    .toList()[index]
+                                    .name),
+                                onSelected: state.onSelected(
+                                    compareResultProperties.values
+                                        .toList()[index]
+                                        .name),
+                                label: compareResultProperties.values
+                                    .toList()[index]
+                                    .icon,
+                              ),
+                            ),
+                          )
                         ]),
                         SliverGroupedListView<ComparedResult, String>(
                           elements: filteredComparedResults,
@@ -124,5 +161,17 @@ class _ComparisonPageState extends State<ComparisonPage> {
                     ),
                   ),
                 ))));
+  }
+
+  void updateComparisonFilter() {
+    setState(() {
+      filteredComparedResults.clear();
+      filteredComparedResults.addAll(comparisonViewModel.compareResult.compared
+          .where((element) => filteredSources.contains(element.source))
+          .where(
+            (element) => filteredStates
+                .contains(ComparedResultViewProperties.of(element).name),
+          ));
+    });
   }
 }
