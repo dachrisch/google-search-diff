@@ -34,7 +34,7 @@ jobs:
         run: flutter pub get
       - name: Run code generation
         run: dart run build_runner build --delete-conflicting-outputs
-      - run: flutter build ios --release --no-codesign
+      - run: flutter build ios --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release --no-codesign
       - run: mkdir Payload
         working-directory: build/ios/iphoneos
       - run: mv Runner.app/ Payload
