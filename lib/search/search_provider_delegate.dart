@@ -30,21 +30,27 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      IconButton(
-        key: const Key('clear-search-button'),
-        icon: const Icon(Icons.clear_outlined),
-        onPressed: () {
-          query = '';
-        },
+      Semantics(
+        label: 'clear search field',
+        child: IconButton(
+          key: const Key('clear-search-button'),
+          icon: const Icon(Icons.clear_outlined),
+          onPressed: () {
+            query = '';
+          },
+        ),
       ),
     ];
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () => Navigator.of(context).pop(),
+    return Semantics(
+      label: 'close search',
+      child: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
     );
   }
 
