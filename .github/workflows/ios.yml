@@ -1,0 +1,49 @@
+name: Build Apple IPA
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches:
+      - "*"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+env:
+  JAVA_VERSION: 19
+jobs:
+  build-ios:
+    name: 🎉 iOS Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version-file: pubspec.yaml # path to pubspec.yaml
+          cache: true
+      - name: Flutter infos
+        run: flutter doctor -v
+      - name: Get Flutter dependencies
+        run: flutter pub get
+      - name: Run code generation
+        run: dart run build_runner build --delete-conflicting-outputs
+      - run: flutter build ios --release --no-codesign
+      - run: mkdir Payload
+        working-directory: build/ios/iphoneos
+      - run: mv Runner.app/ Payload
+        working-directory: build/ios/iphoneos
+      - name: Zip output
+        run: zip -qq -r -9 FlutterIpaExport.ipa Payload
+        working-directory: build/ios/iphoneos
+      - name: Archive IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: google_search_diff-release
+          path: build/ios/iphoneos/FlutterIpaExport.ipa
