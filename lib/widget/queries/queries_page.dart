@@ -98,12 +98,15 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     children: [
-                                      InkWell(
-                                        key: const Key(
-                                            'no-queries-show-search-button'),
-                                        onTap: () => showSearchPage(context),
-                                        child: Image.asset('assets/logo.png',
-                                            fit: BoxFit.scaleDown),
+                                      Semantics(
+                                        label: 'open search page',
+                                        child: InkWell(
+                                          key: const Key(
+                                              'no-queries-show-search-button'),
+                                          onTap: () => showSearchPage(context),
+                                          child: Image.asset('assets/logo.png',
+                                              fit: BoxFit.scaleDown),
+                                        ),
                                       ),
                                       Text('No queries saved.',
                                           style: Theme.of(context)
@@ -126,11 +129,13 @@ class _SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        key: const Key('show-searchbar-button'),
-        tooltip: 'Open search page',
-        onPressed: () => showSearchPage(context),
-        icon: const Icon(Icons.search));
+    return Semantics(
+        label: 'open search page',
+        child: IconButton(
+            key: const Key('show-searchbar-button'),
+            tooltip: 'Open search page',
+            onPressed: () => showSearchPage(context),
+            icon: const Icon(Icons.search)));
   }
 }
 
