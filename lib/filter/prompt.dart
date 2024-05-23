@@ -24,7 +24,15 @@ class _PromptFilterChoiceState extends State<PromptFilterChoice> {
   @override
   void initState() {
     sortedFilterOptions.addAll(widget.filterOptions.keys);
-    sortedFilterOptions.sort();
+    sortedFilterOptions.sort((a, b) {
+      int valueComparison =
+          widget.filterOptions[b]!.compareTo(widget.filterOptions[a]!);
+      if (valueComparison != 0) {
+        return valueComparison;
+      } else {
+        return a.compareTo(b);
+      }
+    });
     selectedFilterValues.addAll(sortedFilterOptions);
 
     super.initState();
