@@ -28,7 +28,7 @@ jobs:
     needs: apk
     steps:
       - name: 🫲 Download APK
-        uses: actions/upload-artifact@v4
+        uses: actions/download-artifact@v4
         with:
           name: APK-release
       - name: Release
