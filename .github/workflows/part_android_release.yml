@@ -5,8 +5,13 @@ on:
     secrets:
       BASE64_KEYSTORE:
         required: true
+        description: The keystore for signing the build
       KEYSTORE_PASSWORD:
         required: true
+        description: Password to unlock the keystore
+      GOOGLE_API_KEY:
+        required: true
+        description: API key for SERP Endpoint
 
 env:
   JAVA_VERSION: 19

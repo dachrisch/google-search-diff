@@ -2,6 +2,10 @@ name: Builds for iOS
 
 on:
   workflow_call:
+    secrets:
+      GOOGLE_API_KEY:
+        required: true
+        description: API key for SERP Endpoint
 
 jobs:
   build-ios:
