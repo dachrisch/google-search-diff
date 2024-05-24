@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build project for different environments
 
 on:
   # Runs on pushes targeting the default branch
@@ -21,4 +21,7 @@ jobs:
     uses: ./.github/workflows/part_build_test.yml
   apk:
     uses: ./.github/workflows/part_android_release.yml
+    needs: build-test
+  ipa:
+    uses: ./.github/workflows/part_ios_release.yml
     needs: build-test
