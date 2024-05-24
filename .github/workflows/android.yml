@@ -18,36 +18,6 @@ env:
   JAVA_VERSION: 19
 jobs:
   build-test:
-    uses: ./.github/workflows/build_test.yml
+    uses: ./.github/workflows/part_build_test.yml
   apk:
-    runs-on: ubuntu-latest
-    needs: build-test
-    environment: apk-release
-    steps:
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: ${{ env.JAVA_VERSION }}
-          # noinspection YAMLIncompatibleTypes
-          cache: 'gradle'
-      - name: Save the keystore
-        env:
-          BASE64_KEYSTORE: ${{ secrets.BASE64_KEYSTORE }}
-        run: |
-          echo $BASE64_KEYSTORE | base64 --decode > keystore.jks
-      - name: Create local.properties
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: |
-          echo "# from github action" >> android/local.properties
-          echo "release.store.password=$KEYSTORE_PASSWORD" >> android/local.properties
-          echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
-          echo "release.key.alias=appsign" >> android/local.properties
-          echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
-      - name: Build APK
-        run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
-      - name: Archive APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: google_search_diff-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+    uses: ./.github/workflows/part_android_release.yml

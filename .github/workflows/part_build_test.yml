@@ -6,7 +6,6 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    environment: apk-release
     steps:
       - name: 📦 Clone repository
         uses: actions/checkout@v4
