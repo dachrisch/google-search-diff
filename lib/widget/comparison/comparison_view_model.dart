@@ -6,15 +6,15 @@ import 'package:google_search_diff/model/run_id.dart';
 
 Map<Type, ComparedResultViewProperties> compareResultProperties = {
   AddedResult: ComparedResultViewProperties(
-      name: 'Added result',
+      name: 'Added',
       iconData: Icons.keyboard_double_arrow_right_outlined,
       color: Colors.green),
   RemovedResult: ComparedResultViewProperties(
-      name: 'Removed result',
+      name: 'Removed',
       iconData: Icons.keyboard_double_arrow_left_outlined,
       color: Colors.red),
   ExistingResult: ComparedResultViewProperties(
-      name: 'Existing result',
+      name: 'Existing',
       iconData: Icons.compare_arrows_outlined,
       color: Colors.grey)
 };

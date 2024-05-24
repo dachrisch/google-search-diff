@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'result_id.dart';
+
 part 'result.g.dart';
 
 @JsonSerializable()
@@ -7,6 +9,7 @@ class Result {
   final String title;
   final String source;
   final String link;
+  final ResultId id;
   final String? snippet;
   final String? favicon;
 
@@ -15,7 +18,9 @@ class Result {
       this.source = '',
       this.link = '',
       this.snippet,
-      this.favicon});
+      this.favicon,
+      ResultId? id})
+      : id = id ?? ResultId.withUuid();
 
   Map<String, dynamic> toJson() => _$ResultToJson(this);
 

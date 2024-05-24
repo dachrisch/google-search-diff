@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/model/entity_id.dart';
+import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 
 extension RelativeGoRouter on BuildContext {
@@ -22,5 +23,9 @@ extension RelativeGoRouter on BuildContext {
     assert(compareModel.base != null);
     assert(compareModel.current != null);
     push('/compare/${compareModel.base!.id}/with/${compareModel.current!.id}');
+  }
+
+  void gotToRun(Run run) {
+    push('/queries/${run.query.id}/runs/${run.id}');
   }
 }

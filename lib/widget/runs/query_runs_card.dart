@@ -3,7 +3,7 @@ import 'package:google_search_diff/action/intent/remove_query_runs.dart';
 import 'package:google_search_diff/action/intent/search.dart';
 import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/query_runs.dart';
-import 'package:google_search_diff/routes/relative_route_extension.dart';
+import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:google_search_diff/widget/animated_icon_button.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';

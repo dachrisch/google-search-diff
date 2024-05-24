@@ -7,7 +7,7 @@ import 'package:google_search_diff/filter/prompt.dart';
 import 'package:google_search_diff/model/comparison.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
 import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
-import 'package:google_search_diff/widget/result/result_card.dart';
+import 'package:google_search_diff/widget/results/result_card.dart';
 import 'package:grouped_list/sliver_grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +60,8 @@ class _ComparisonPageState extends State<ComparisonPage> {
 
   @override
   Widget build(BuildContext context) {
+    var crpList = compareResultProperties.values.toList();
+
     return Actions(
         actions: const <Type, Action<Intent>>{},
         dispatcher: LoggingActionDispatcher(),
@@ -125,20 +127,15 @@ class _ComparisonPageState extends State<ComparisonPage> {
                                 });
                                 updateComparisonFilter();
                               },
-                              itemCount: compareResultProperties.values.length,
-                              itemBuilder: (state, index) => ChoiceChip(
-                                selected: state.selected(compareResultProperties
-                                    .values
-                                    .toList()[index]
-                                    .name),
-                                onSelected: state.onSelected(
-                                    compareResultProperties.values
-                                        .toList()[index]
-                                        .name),
-                                label: compareResultProperties.values
-                                    .toList()[index]
-                                    .icon,
-                              ),
+                              itemCount: crpList.length,
+                              itemBuilder: (state, index) {
+                                return ChoiceChip(
+                                  selected: state.selected(crpList[index].name),
+                                  onSelected:
+                                      state.onSelected(crpList[index].name),
+                                  label: crpList[index].icon,
+                                );
+                              },
                             ),
                           )
                         ]),

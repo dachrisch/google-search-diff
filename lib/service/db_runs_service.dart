@@ -24,5 +24,6 @@ class DbRunsService extends DbService<Run> {
                 itemToIdMap: runToIdMap,
               ));
 
-  runById(RunId runId) => itemToIdMap.keys.firstWhere((run) => run.id == runId);
+  Run runById(RunId runId) =>
+      itemToIdMap.keys.firstWhere((run) => run.id == runId);
 }

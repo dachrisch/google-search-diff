@@ -4,8 +4,8 @@ import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/widget/header_listview.dart';
-import 'package:google_search_diff/widget/result/result_card.dart';
-import 'package:google_search_diff/widget/result/result_page_provider.dart';
+import 'package:google_search_diff/widget/results/result_card.dart';
+import 'package:google_search_diff/widget/results/results_page_provider.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class _ResultsPageScaffoldState extends State<ResultsPageScaffold> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Result - ${run.query.term}'),
+        title: Text('Query run - ${run.query.term}'),
       ),
       body: ListViewWithHeader(
         items: filteredResults.length,

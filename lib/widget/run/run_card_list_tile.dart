@@ -3,7 +3,7 @@ import 'package:google_search_diff/action/intent/remove_run.dart';
 import 'package:google_search_diff/model/comparison.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/routes/relative_route_extension.dart';
+import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:relative_time/relative_time.dart';
 
 class RunCardListTile extends StatelessWidget {

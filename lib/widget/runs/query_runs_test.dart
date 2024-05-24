@@ -11,14 +11,14 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:provider/provider.dart';
 
-class RunComparisonPageTest extends StatefulWidget {
-  const RunComparisonPageTest({super.key});
+class RunComparisonTestPage extends StatefulWidget {
+  const RunComparisonTestPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _RunComparisonPageTestState();
+  State<StatefulWidget> createState() => _RunComparisonTestPageState();
 }
 
-class _RunComparisonPageTestState extends State<RunComparisonPageTest> {
+class _RunComparisonTestPageState extends State<RunComparisonTestPage> {
   late Run baseRun;
   late Run currentRun;
   late Query query;

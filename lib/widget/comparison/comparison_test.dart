@@ -7,20 +7,20 @@ import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/routes/relative_route_extension.dart';
+import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:provider/provider.dart';
 
-class ComparisonPageTest extends StatefulWidget {
-  const ComparisonPageTest({super.key});
+class ComparisonTestPage extends StatefulWidget {
+  const ComparisonTestPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ComparisonPageTestState();
+  State<StatefulWidget> createState() => _ComparisonTestPageState();
 }
 
-class _ComparisonPageTestState extends State<ComparisonPageTest> {
+class _ComparisonTestPageState extends State<ComparisonTestPage> {
   @override
   void initState() {
     super.initState();

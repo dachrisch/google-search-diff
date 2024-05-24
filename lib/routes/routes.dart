@@ -5,7 +5,8 @@ import 'package:google_search_diff/widget/comparison/comparison_page.dart';
 import 'package:google_search_diff/widget/comparison/comparison_test.dart';
 import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
-import 'package:google_search_diff/widget/result/results_page.dart';
+import 'package:google_search_diff/widget/results/result_test_page.dart';
+import 'package:google_search_diff/widget/results/results_page.dart';
 import 'package:google_search_diff/widget/runs/query_runs_page.dart';
 import 'package:google_search_diff/widget/runs/query_runs_test.dart';
 import 'package:provider/provider.dart';
@@ -45,10 +46,14 @@ class RouterConfigBuilder {
               ]),
           GoRoute(
               path: '/tests/comparison',
-              builder: (context, state) => const ComparisonPageTest()),
+              builder: (context, state) => const ComparisonTestPage()),
           GoRoute(
               path: '/tests/run/comparison',
-              builder: (context, state) => const RunComparisonPageTest()),
+              builder: (context, state) => const RunComparisonTestPage()),
+          GoRoute(
+            path: '/tests/result',
+            builder: (context, state) => ResultTestPage(),
+          ),
           GoRoute(
             path: '/compare/:baseId/with/:currentId',
             builder: (context, state) => MultiProvider(providers: [

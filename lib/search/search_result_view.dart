@@ -2,7 +2,7 @@ import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/widget/result/result_card.dart';
+import 'package:google_search_diff/widget/results/result_card.dart';
 import 'package:logger/logger.dart';
 
 class SearchResultsView extends StatefulWidget {
