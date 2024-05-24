@@ -28,7 +28,7 @@ jobs:
   android-release:
     name: Android Build
     runs-on: ubuntu-latest
-    environment: ${{ env.BUILD_ENVIRONMENT }}
+    environment: $BUILD_ENVIRONMENT
     steps:
       - name: 🫲 Download working directory
         uses: actions/download-artifact@v4
