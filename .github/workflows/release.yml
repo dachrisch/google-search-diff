@@ -16,10 +16,12 @@ env:
   SERVICE_ACCOUNT_PATH: service_account.json
 
 jobs:
+
   build-test:
     uses: ./.github/workflows/part_build_test.yml
   apk:
     uses: ./.github/workflows/part_android_release.yml
+    environment: apk-release
     secrets: inherit
     needs: build-test
   release-to-github:
