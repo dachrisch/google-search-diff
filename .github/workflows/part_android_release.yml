@@ -70,5 +70,5 @@ jobs:
       - name: 🏬 Archive {{ inputs.build_type }}
         uses: actions/upload-artifact@v4
         with:
-          name: {{ inputs.build_type }}-release
+          name: ${{ inputs.build_type }}-release
           path: build/app/outputs/flutter-apk/app-release.${{ inputs.build_type }}
