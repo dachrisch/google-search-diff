@@ -34,8 +34,9 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/app/outputs/flutter-apk/app-release.apk
+          files: app-release.apk
           generate_release_notes: true
+          fail_on_unmatched_files: true
 
   appbundle:
     uses: ./.github/workflows/part_appbundle_release.yml
@@ -69,9 +70,9 @@ jobs:
         with:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ steps.package.outputs.name }}
-          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          releaseFiles: outputs/bundle/release/app-release.aab
           track: internal
           status: draft
           #userFraction: 0.99
-          mappingFile: build/app/outputs/mapping/release/mapping.txt
-          debugSymbols: build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
+          mappingFile: outputs/mapping/release/mapping.txt
+          debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
