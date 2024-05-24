@@ -24,5 +24,5 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs
       - name: 🔎 Flutter analyze
         run: flutter analyze
-      - name: 🧪 Run Flutzter tests
+      - name: 🧪 Run Flutter tests
         run: flutter test
