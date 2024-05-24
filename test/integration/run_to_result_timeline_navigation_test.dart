@@ -5,7 +5,8 @@ import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/widget/results/result_card.dart';
-import 'package:google_search_diff/widget/results/results_page.dart';
+import 'package:google_search_diff/widget/results/timeline/result_timeline_page.dart';
+import 'package:google_search_diff/widget/results/timeline/result_timeline_tile.dart';
 import 'package:google_search_diff/widget/run/run_card.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 
@@ -19,7 +20,7 @@ class TestImageProvider extends ImageProvider {
 }
 
 void main() {
-  testWidgets('Transitions from Query to Result View',
+  testWidgets('Transitions Result View to Result Timeline',
       (WidgetTester tester) async {
     TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -31,12 +32,13 @@ void main() {
 
     expect(mocked.queriesStore.items, 1);
     expect(find.byType(QueryRunsCard), findsOne);
-
     await tester.tap(find.byType(QueryRunsCard));
     await tester.pumpAndSettle();
     await tester.tap(find.byType(RunCard));
     await tester.pumpAndSettle();
-    expect(find.byType(ResultsPage), findsOneWidget);
-    expect(find.byType(ResultCard), findsOneWidget);
+    await tester.tap(find.byType(ResultCard));
+    await tester.pumpAndSettle();
+    expect(find.byType(ResultTimelinePage), findsOneWidget);
+    expect(find.byType(ResultTimelineTile), findsOneWidget);
   });
 }

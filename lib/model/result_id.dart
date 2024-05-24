@@ -13,7 +13,7 @@ class ResultId extends EntityId {
   factory ResultId.withUuid() => ResultId(const Uuid().v4());
 
   factory ResultId.fromState(GoRouterState state) =>
-      ResultId(state.pathParameters['ResultId']!);
+      ResultId(state.pathParameters['resultId']!);
 
   factory ResultId.fromJson(Map<String, dynamic> json) =>
       _$ResultIdFromJson(json);

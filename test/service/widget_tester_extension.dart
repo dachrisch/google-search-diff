@@ -14,6 +14,7 @@ import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
 import 'package:google_search_diff/service/history_service.dart';
+import 'package:google_search_diff/service/result_service.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -25,12 +26,14 @@ class Mocked {
   final DbQueriesService dbQueriesService;
   final SearchService searchService;
   final HistoryService historyService;
+  late ResultService resultService;
 
   Mocked(
       {QueriesStore? queriesStore,
       DbRunsService? dbRunsService,
       DbQueriesService? dbQueriesService,
       HistoryService? historyService,
+      ResultService? resultService,
       SearchService? searchService})
       : dbRunsService = dbRunsService ?? MockDbRunsService(),
         historyService = historyService ?? MockHistoryService(),
@@ -40,6 +43,9 @@ class Mocked {
         QueriesStore(
             dbQueryService: this.dbQueriesService,
             dbRunsService: this.dbRunsService);
+    this.resultService = resultService ??
+        ResultService(
+            dbRunsService: this.dbRunsService, queriesStore: this.queriesStore);
   }
 }
 
@@ -48,6 +54,7 @@ extension MockedApp on WidgetTester {
     await initializeDateFormatting();
 
     getIt.registerSingleton<DbRunsService>(mocked.dbRunsService);
+    getIt.registerSingleton<ResultService>(mocked.resultService);
 
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
 

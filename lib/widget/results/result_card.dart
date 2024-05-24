@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/result.dart';
+import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ResultCard extends StatelessWidget {
@@ -12,39 +13,42 @@ class ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: icon,
-                title: Text(result.title),
-                subtitle: Text(result.source),
-                trailing: result.favicon == null
-                    ? null
-                    : Image.network(result.favicon!),
-              ),
-              Row(
-                children: result.snippet == null
-                    ? []
-                    : <Widget>[
-                        Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(result.snippet!)))
-                      ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextButton(
-                    child: const Text('Visit'),
-                    onPressed: () => launchUrl(Uri.parse(result.link)),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-              ),
-            ],
+        child: InkWell(
+          onTap: () => context.goRelativeWithId(result.id),
+          child: Card(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: icon,
+                  title: Text(result.title),
+                  subtitle: Text(result.source),
+                  trailing: result.favicon == null
+                      ? null
+                      : Image.network(result.favicon!),
+                ),
+                Row(
+                  children: result.snippet == null
+                      ? []
+                      : <Widget>[
+                          Expanded(
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(result.snippet!)))
+                        ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    TextButton(
+                      child: const Text('Visit'),
+                      onPressed: () => launchUrl(Uri.parse(result.link)),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+              ],
+            ),
           ),
         ));
   }
