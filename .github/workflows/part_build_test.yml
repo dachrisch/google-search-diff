@@ -25,3 +25,8 @@ jobs:
         run: flutter analyze
       - name: 🧪 Run Flutter tests
         run: flutter test
+      - name: 📦 Upload working directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: working-directory
+          path: .

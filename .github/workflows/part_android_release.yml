@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: apk-release
     steps:
+      - name: 📦 Download working directory
+        uses: actions/download-artifact@v4
+        with:
+          name: working-directory
       - name: 🫘 Setup Java ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
