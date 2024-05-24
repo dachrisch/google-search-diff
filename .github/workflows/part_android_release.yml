@@ -15,6 +15,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: working-directory
+      - name: 🫲 Download flutter
+        uses: actions/download-artifact@v4
+        with:
+          name: flutter
       - name: 🫘 Setup Java ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:

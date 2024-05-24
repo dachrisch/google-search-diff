@@ -15,7 +15,7 @@ jobs:
           channel: stable
           flutter-version-file: pubspec.yaml # path to pubspec.yaml
           cache: true
-      - name: ℹ️ Flutter infos
+      - name: 🛈 Flutter infos
         run: flutter doctor -v
       - name: 🫱🫲 Get Flutter dependencies
         run: flutter pub get
@@ -31,4 +31,9 @@ jobs:
           name: working-directory
           path: |
             .
+      - name: 🫱 Upload flutter
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter
+          path: |
             /opt/hostedtoolcache/flutter/
