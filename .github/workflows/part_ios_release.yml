@@ -13,6 +13,8 @@ jobs:
         with:
           name: working-directory
           path: .
+      - run: pwd
+      - run: find .
       - name: 🏗️ Set up Flutter
         uses: subosito/flutter-action@v2
         with:
