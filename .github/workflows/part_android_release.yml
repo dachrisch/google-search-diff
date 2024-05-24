@@ -2,6 +2,15 @@ name: Build for Android
 
 on:
   workflow_call:
+    inputs:
+      build_type:
+        description: The flutter build type
+        required: false
+        type: choice
+        default: apk
+        options:
+          - apk
+          - appbundle
     secrets:
       BASE64_KEYSTORE:
         required: true
@@ -56,10 +65,10 @@ jobs:
           echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.alias=appsign" >> android/local.properties
           echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
-      - name: 👷 Build APK
-        run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
-      - name: 🏬 Archive APK
+      - name: 👷 Build {{ inputs.build_type }}
+        run: flutter build ${{ inputs.build_type }} --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
+      - name: 🏬 Archive {{ inputs.build_type }}
         uses: actions/upload-artifact@v4
         with:
-          name: apk-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: {{ inputs.build_type }}-release
+          path: build/app/outputs/flutter-apk/app-release.${{ inputs.build_type }}
