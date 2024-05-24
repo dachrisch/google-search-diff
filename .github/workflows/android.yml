@@ -21,6 +21,7 @@ jobs:
     uses: ./.github/workflows/build_test.yml
   apk:
     runs-on: ubuntu-latest
+    needs: build-test
     environment: apk-release
     steps:
       - uses: actions/setup-java@v4
