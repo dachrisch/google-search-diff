@@ -25,9 +25,11 @@ env:
   BUILD_ARTEFACT: ${{ inputs.build_type == 'appbundle' && 'app' || 'apk' }}
 
 jobs:
-  android-release:
+  apk-release:
     name: Android Build
     runs-on: ubuntu-latest
+    environment: apk-release
+    if: ${{ env.BUILD_ARTEFACT == 'apk' }}
     steps:
       - name: 🫲 Download working directory
         uses: actions/download-artifact@v4
