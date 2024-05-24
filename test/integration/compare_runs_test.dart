@@ -4,7 +4,7 @@ import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/widget/comparison/comparison_page.dart';
-import 'package:google_search_diff/widget/result/result_card.dart';
+import 'package:google_search_diff/widget/results/result_card.dart';
 import 'package:google_search_diff/widget/run/run_card.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';

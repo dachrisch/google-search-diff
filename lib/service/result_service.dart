@@ -34,15 +34,21 @@ class ResultService {
     // Go through each run to determine the status of the result
     for (var run in runHistory) {
       bool isInCurrentRun = run.results.contains(result);
-      if (isInCurrentRun && !wasInPreviousRun) {
-        history
-            .add(ResultHistory(run: run, comparedResult: AddedResult(result)));
-      } else if (isInCurrentRun && wasInPreviousRun) {
-        history.add(
-            ResultHistory(run: run, comparedResult: ExistingResult(result)));
-      } else if (!isInCurrentRun && wasInPreviousRun) {
-        history.add(
-            ResultHistory(run: run, comparedResult: RemovedResult(result)));
+      if (isInCurrentRun) {
+        if (wasInPreviousRun) {
+          history.add(
+              ResultHistory(run: run, comparedResult: ExistingResult(result)));
+        } else {
+          history.add(
+              ResultHistory(run: run, comparedResult: AddedResult(result)));
+        }
+      } else {
+        if (wasInPreviousRun) {
+          history.add(
+              ResultHistory(run: run, comparedResult: RemovedResult(result)));
+        } else {
+          // not in current run, not in run before --> never seen before, skip
+        }
       }
 
       wasInPreviousRun = isInCurrentRun;
