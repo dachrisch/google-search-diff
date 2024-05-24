@@ -90,7 +90,7 @@ class SerapiSearchService implements SearchService {
                 .toList()))
         .onError((error, stackTrace) {
           l.e('Failed to $query', error: error, stackTrace: stackTrace);
-          throw error as Exception;
+          throw Exception(error);
         });
   }
 }
