@@ -8,6 +8,7 @@ env:
 
 jobs:
   android-release:
+    name: Android Build
     runs-on: ubuntu-latest
     environment: apk-release
     steps:
@@ -15,6 +16,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: working-directory
+          path: .
       - name: 🏗️ Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -23,7 +25,7 @@ jobs:
           cache: true
       - name: 🫱🫲 Get Flutter dependencies
         run: flutter pub get
-      - name: 🫘 Setup Java ${{ env.JAVA_VERSION }}
+      - name: 🫘 Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options

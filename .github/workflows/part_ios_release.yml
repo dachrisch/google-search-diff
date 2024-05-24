@@ -12,6 +12,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: working-directory
+          path: .
       - name: 🏗️ Set up Flutter
         uses: subosito/flutter-action@v2
         with:
