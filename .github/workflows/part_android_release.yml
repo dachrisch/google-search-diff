@@ -10,10 +10,10 @@ on:
         default: apk
     secrets:
       BASE64_KEYSTORE:
-        required: false
+        required: true
         description: The keystore for signing the build
       KEYSTORE_PASSWORD:
-        required: false
+        required: true
         description: Password to unlock the keystore
       GOOGLE_API_KEY:
         required: true
@@ -23,12 +23,12 @@ env:
   JAVA_VERSION: 19
   BUILD_TYPE: ${{ inputs.build_type == 'appbundle' && 'appbundle' || 'apk' }}
   BUILD_ARTEFACT: ${{ inputs.build_type == 'appbundle' && 'app' || 'apk' }}
-  BUILD_ENVIRONMENT: ${{ inputs.build_type == 'appbundle' && 'appbundle-release' || 'apk-release' }}
+
 jobs:
-  android-release:
+  apk-release:
     name: Android Build
     runs-on: ubuntu-latest
-    environment: ${{ vars.BUILD_ENVIRONMENT }}
+    environment: apk-release
     steps:
       - name: 🫲 Download working directory
         uses: actions/download-artifact@v4
@@ -50,14 +50,17 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           # noinspection YAMLIncompatibleTypes
           cache: 'gradle'
+      - name: Get Keystore
+        id: keystore
+        uses: ./.github/workflows/part_keystore_apk.yml
       - name: 🔐 Save the keystore
         env:
-          BASE64_KEYSTORE: ${{ secrets.BASE64_KEYSTORE }}
+          BASE64_KEYSTORE: ${{ steps.keystore.outputs.keystore }}
         run: |
           echo $BASE64_KEYSTORE | base64 --decode > keystore.jks
       - name: Create local.properties
         env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ steps.keystore.outputs.password }}
         run: |
           echo "# from github action" >> android/local.properties
           echo "release.store.password=$KEYSTORE_PASSWORD" >> android/local.properties
