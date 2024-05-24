@@ -46,6 +46,7 @@ jobs:
           echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.alias=appsign" >> android/local.properties
           echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
+          cat android/local.properties
       - name: 👷 Build APK
         run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
       - name: 🏬 Archive APK
