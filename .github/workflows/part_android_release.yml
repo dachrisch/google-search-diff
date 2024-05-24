@@ -2,6 +2,11 @@ name: Build for Android
 
 on:
   workflow_call:
+    secrets:
+      BASE64_KEYSTORE:
+        required: true
+      KEYSTORE_PASSWORD:
+        required: true
 
 env:
   JAVA_VERSION: 19
