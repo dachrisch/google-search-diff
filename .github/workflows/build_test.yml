@@ -2,13 +2,6 @@ name: Builds and tests the Flutter project
 
 on:
   workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
-    secrets:
-      token:
-        required: true
 
 jobs:
   build-test:
