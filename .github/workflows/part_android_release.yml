@@ -10,10 +10,10 @@ on:
         default: apk
     secrets:
       BASE64_KEYSTORE:
-        required: true
+        required: false
         description: The keystore for signing the build
       KEYSTORE_PASSWORD:
-        required: true
+        required: false
         description: Password to unlock the keystore
       GOOGLE_API_KEY:
         required: true
