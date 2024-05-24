@@ -2,12 +2,6 @@ name: Build for Android
 
 on:
   workflow_call:
-    inputs:
-      build_type:
-        description: The flutter build type
-        required: false
-        type: string
-        default: apk
     secrets:
       BASE64_KEYSTORE:
         required: true
@@ -21,15 +15,12 @@ on:
 
 env:
   JAVA_VERSION: 19
-  BUILD_TYPE: ${{ inputs.build_type == 'appbundle' && 'appbundle' || 'apk' }}
-  BUILD_ARTEFACT: ${{ inputs.build_type == 'appbundle' && 'app' || 'apk' }}
 
 jobs:
   apk-release:
-    name: Android Build
+    name: APK Build
     runs-on: ubuntu-latest
     environment: apk-release
-    if: ${{ env.BUILD_ARTEFACT == 'apk' }}
     steps:
       - name: 🫲 Download working directory
         uses: actions/download-artifact@v4
@@ -65,10 +56,10 @@ jobs:
           echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.alias=appsign" >> android/local.properties
           echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
-      - name: 👷 Build {{ env.BUILD_TYPE }}
-        run: flutter build ${{ env.BUILD_TYPE }} --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
-      - name: 🏬 Archive {{ env.BUILD_ARTEFACT }}
+      - name: 👷 Build APK
+        run: flutter build APK --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
+      - name: 🏬 Archive APK
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.BUILD_ARTEFACT }}-release
-          path: build/app/outputs/flutter-apk/app-release.${{ env.BUILD_ARTEFACT }}
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
