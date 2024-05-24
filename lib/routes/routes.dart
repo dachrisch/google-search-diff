@@ -95,7 +95,7 @@ class RouterConfigBuilder {
               builder: (context, state) => const RunComparisonTestPage()),
           GoRoute(
             path: '/tests/result',
-            builder: (context, state) => ResultTestPage(),
+            builder: (context, state) => const ResultTestPage(),
           ),
         ],
       );
