@@ -15,17 +15,17 @@ class ResultService {
 
   ResultService({required this.dbRunsService, required this.queriesStore});
 
-  Result resultById(ResultId resultId) => dbRunsService
+  Result byId(ResultId resultId) => dbRunsService
       .fetchAll()
       .expand((run) => run.results)
       .firstWhere((result) => result.id == resultId);
 
-  List<ResultHistory> resultHistory(Result result) {
+  Run latestRunOf(Result result) =>
+      dbRunsService.fetchAll().firstWhere((r) => r.results.contains(result));
+
+  List<ResultHistory> historyOf(Result result) {
     List<ResultHistory> history = [];
-    Query query = dbRunsService
-        .fetchAll()
-        .firstWhere((r) => r.results.contains(result))
-        .query;
+    Query query = latestRunOf(result).query;
     QueryRuns queryRuns = queriesStore.findById(query.id);
     List<Run> runHistory = List.from(queryRuns.runs);
     runHistory.sort((a, b) => a.runDate.compareTo(b.runDate));

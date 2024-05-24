@@ -14,7 +14,7 @@ class ResultCard extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: InkWell(
-          onTap: () => context.goRelativeWithId(result.id),
+          onTap: () => context.gotToResult(result),
           child: Card(
             child: Column(
               mainAxisSize: MainAxisSize.min,

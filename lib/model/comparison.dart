@@ -6,10 +6,12 @@ import 'result.dart';
 class ComparedResult extends Result {
   ComparedResult(Result result)
       : super(
+            id: result.id,
             title: result.title,
             snippet: result.snippet,
             source: result.source,
-            link: result.link);
+            link: result.link,
+            favicon: result.favicon);
 }
 
 class AddedResult extends ComparedResult {

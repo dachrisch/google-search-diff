@@ -16,7 +16,7 @@ class ResultTimelinePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var resultId = context.read<ResultId>();
     return Provider(
-      create: (context) => resultService.resultById(resultId),
+      create: (context) => resultService.byId(resultId),
       child: ResultTimelinePageScaffold(),
     );
   }
@@ -30,7 +30,7 @@ class ResultTimelinePageScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Result result = context.read<Result>();
-    List<ResultHistory> resultHistory = resultService.resultHistory(result);
+    List<ResultHistory> resultHistory = resultService.historyOf(result);
 
     return Scaffold(
       appBar: AppBar(
