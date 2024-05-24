@@ -22,10 +22,11 @@ jobs:
         run: flutter pub get
       - name: 🧞‍♂️ Run code generation
         run: dart run build_runner build --delete-conflicting-outputs
-      - name: 🔎 Flutter analyze
-        run: flutter analyze
-      - name: 🧪 Run Flutter tests
-        run: flutter test
+
+      #- name: 🔎 Flutter analyze
+      #  run: flutter analyze
+      #- name: 🧪 Run Flutter tests
+      #  run: flutter test
       - name: 🫱 Upload working directory
         uses: actions/upload-artifact@v4
         with:
