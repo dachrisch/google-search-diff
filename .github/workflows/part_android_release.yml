@@ -6,11 +6,8 @@ on:
       build_type:
         description: The flutter build type
         required: false
-        type: choice
+        type: string
         default: apk
-        options:
-          - apk
-          - appbundle
     secrets:
       BASE64_KEYSTORE:
         required: true
@@ -24,6 +21,8 @@ on:
 
 env:
   JAVA_VERSION: 19
+  BUILD_TYPE: ${{ inputs.build_type == 'appbundle' && 'appbundle' || 'apk' }}
+  BUILD_ARTEFACT: ${{ inputs.build_type == 'appbundle' && 'app' || 'apk' }}
 
 jobs:
   android-release:
@@ -65,10 +64,10 @@ jobs:
           echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
           echo "release.key.alias=appsign" >> android/local.properties
           echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
-      - name: 👷 Build {{ inputs.build_type }}
-        run: flutter build ${{ inputs.build_type }} --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
-      - name: 🏬 Archive {{ inputs.build_type }}
+      - name: 👷 Build {{ env.BUILD_TYPE }}
+        run: flutter build ${{ env.BUILD_TYPE }} --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
+      - name: 🏬 Archive {{ env.BUILD_ARTEFACT }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.build_type }}-release
-          path: build/app/outputs/flutter-apk/app-release.${{ inputs.build_type }}
+          name: ${{ env.BUILD_ARTEFACT }}-release
+          path: build/app/outputs/flutter-apk/app-release.${{ env.BUILD_ARTEFACT }}
