@@ -20,7 +20,7 @@ jobs:
   build-test:
     uses: ./.github/workflows/part_build_test.yml
   apk:
-    uses: ./.github/workflows/part_android_release.yml
+    uses: ./.github/workflows/part_apk_release.yml
     secrets: inherit
     needs: build-test
   release-to-github:
@@ -38,11 +38,9 @@ jobs:
           generate_release_notes: true
 
   appbundle:
-    uses: ./.github/workflows/part_android_release.yml
+    uses: ./.github/workflows/part_appbundle_release.yml
     secrets: inherit
     needs: build-test
-    with:
-      build_type: appbundle
   release-to-appstore:
     runs-on: ubuntu-latest
     environment: appbundle-release

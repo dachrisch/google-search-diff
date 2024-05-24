@@ -1,0 +1,65 @@
+name: Build for Android
+
+on:
+  workflow_call:
+    secrets:
+      BASE64_KEYSTORE:
+        required: true
+        description: The keystore for signing the build
+      KEYSTORE_PASSWORD:
+        required: true
+        description: Password to unlock the keystore
+      GOOGLE_API_KEY:
+        required: true
+        description: API key for SERP Endpoint
+
+env:
+  JAVA_VERSION: 19
+
+jobs:
+  apk-release:
+    name: Appbundle Build
+    runs-on: ubuntu-latest
+    environment: appbundle-release
+    steps:
+      - name: 🫲 Download working directory
+        uses: actions/download-artifact@v4
+        with:
+          name: working-directory
+          path: .
+      - name: 🏗️ Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version-file: pubspec.yaml # path to pubspec.yaml
+          cache: true
+      - name: 🫱🫲 Get Flutter dependencies
+        run: flutter pub get
+      - name: 🫘 Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: ${{ env.JAVA_VERSION }}
+          # noinspection YAMLIncompatibleTypes
+          cache: 'gradle'
+      - name: 🔐 Save the keystore
+        env:
+          BASE64_KEYSTORE: ${{ secrets.BASE64_KEYSTORE }}
+        run: |
+          echo $BASE64_KEYSTORE | base64 --decode > keystore.jks
+      - name: Create local.properties
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          echo "# from github action" >> android/local.properties
+          echo "release.store.password=$KEYSTORE_PASSWORD" >> android/local.properties
+          echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
+          echo "release.key.alias=appsign" >> android/local.properties
+          echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
+      - name: 👷 Build APP
+        run: flutter build appbundle --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
+      - name: 🏬 Archive APP
+        uses: actions/upload-artifact@v4
+        with:
+          name: appbundle-release
+          path: build/app/outputs/flutter-apk/app-release.app
