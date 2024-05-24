@@ -12,11 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: apk-release
     steps:
+      - run: ls
       - name: 🫲 Download working directory
         uses: actions/download-artifact@v4
         with:
           name: working-directory
           path: .
+      - run: ls
       - name: 🏗️ Set up Flutter
         uses: subosito/flutter-action@v2
         with:
