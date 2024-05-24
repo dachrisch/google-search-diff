@@ -32,7 +32,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   font_awesome_flutter: ^10.7.0
   flutter_linkify: ^6.0.0
   localstore: ^1.4.0
