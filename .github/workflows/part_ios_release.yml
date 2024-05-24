@@ -12,10 +12,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: working-directory
-      - name: 🫲 Download flutter
-        uses: actions/download-artifact@v4
+      - name: 🏗️ Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          name: flutter
+          channel: stable
+          flutter-version-file: pubspec.yaml # path to pubspec.yaml
+          cache: true
+      - name: 🫱🫲 Get Flutter dependencies
+        run: flutter pub get
       - run: mkdir Payload
         working-directory: build/ios/iphoneos
       - run: mv Runner.app/ Payload
