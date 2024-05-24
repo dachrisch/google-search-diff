@@ -16,100 +16,42 @@ env:
   SERVICE_ACCOUNT_PATH: service_account.json
 
 jobs:
+  build-test:
+    uses: ./.github/workflows/part_build_test.yml
+  apk:
+    uses: ./.github/workflows/part_android_release.yml
+    secrets: inherit
+    needs: build-test
   release-to-github:
     runs-on: ubuntu-latest
-    environment: apk-release
+    needs: apk
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: 🫲 Download APK
+        uses: actions/upload-artifact@v4
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version-file: pubspec.yaml # path to pubspec.yaml
-          # noinspection YAMLIncompatibleTypes
-          cache: true
-      - name: Get Flutter dependencies
-        run: flutter pub get
-      - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
-      - name: Save the keystore
-        env:
-          BASE64_KEYSTORE: ${{ secrets.BASE64_KEYSTORE }}
-        run: |
-          echo $BASE64_KEYSTORE | base64 --decode > keystore.jks
-      - name: Service Account json
-        env:
-          BASE64_SERVICE_ACCOUNT_JSON: ${{ secrets.BASE64_SERVICE_ACCOUNT_JSON}}
-          SERVICE_ACCOUNT_PATH: ${{ env.SERVICE_ACCOUNT_PATH }}
-        run: |
-          echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode > $SERVICE_ACCOUNT_PATH
-      - name: Create local.properties
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: |
-          echo "# from github action" >> android/local.properties
-          echo "release.store.password=$KEYSTORE_PASSWORD" >> android/local.properties
-          echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
-          echo "release.key.alias=appsign" >> android/local.properties
-          echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
-      - name: Build APK
-        run: flutter build apk --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release --build-number ${{github.run_number}}
+          name: APK-release
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: build/app/outputs/flutter-apk/app-release.apk
           generate_release_notes: true
 
+  appbundle:
+    uses: ./.github/workflows/part_android_release.yml
+    secrets: inherit
+    needs: build-test
+    with:
+      build_type: appbundle
   release-to-appstore:
     runs-on: ubuntu-latest
     environment: appbundle-release
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version-file: pubspec.yaml # path to pubspec.yaml
-          # noinspection YAMLIncompatibleTypes
-          cache: true
-      - name: Get Flutter dependencies
-        run: flutter pub get
-      - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
-      - name: Save the keystore
-        env:
-          BASE64_KEYSTORE: ${{ secrets.BASE64_KEYSTORE }}
-        run: |
-          echo $BASE64_KEYSTORE | base64 --decode > keystore.jks
       - name: Service Account json
         env:
           BASE64_SERVICE_ACCOUNT_JSON: ${{ secrets.BASE64_SERVICE_ACCOUNT_JSON}}
           SERVICE_ACCOUNT_PATH: ${{ env.SERVICE_ACCOUNT_PATH }}
         run: |
           echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode > $SERVICE_ACCOUNT_PATH
-      - name: Create local.properties
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: |
-          echo "# from github action" >> android/local.properties
-          echo "release.store.password=$KEYSTORE_PASSWORD" >> android/local.properties
-          echo "release.key.password=$KEYSTORE_PASSWORD" >> android/local.properties
-          echo "release.key.alias=upload" >> android/local.properties
-          echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
-      - name: Build AppBundle
-        run: flutter build appbundle --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release --build-number ${{github.run_number}}
       - name: Get package name
         id: package
         run: echo "name=$(grep applicationId android/app/build.gradle|cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
