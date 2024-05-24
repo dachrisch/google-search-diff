@@ -30,7 +30,7 @@ jobs:
       - name: 🫲 Download APK
         uses: actions/download-artifact@v4
         with:
-          name: APK-release
+          name: apk-release
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
@@ -46,6 +46,10 @@ jobs:
     environment: appbundle-release
     needs: appbundle
     steps:
+      - name: 🫲 Download working directory
+        uses: actions/download-artifact@v4
+        with:
+          name: working-directory
       - name: 🫲 Download Appbundle
         uses: actions/download-artifact@v4
         with:
