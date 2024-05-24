@@ -23,7 +23,7 @@ env:
   JAVA_VERSION: 19
   BUILD_TYPE: ${{ inputs.build_type == 'appbundle' && 'appbundle' || 'apk' }}
   BUILD_ARTEFACT: ${{ inputs.build_type == 'appbundle' && 'app' || 'apk' }}
-  BUILD_ENVIRONMENT: ${BUILD_ARTEFACT}-release
+  BUILD_ENVIRONMENT: ${{ inputs.build_type == 'appbundle' && 'appbundle-release' || 'apk-release' }}
 jobs:
   android-release:
     name: Android Build
