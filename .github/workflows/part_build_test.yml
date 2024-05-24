@@ -32,10 +32,3 @@ jobs:
           path: |
             .
           retention-days: 1
-      - name: 🫱 Upload flutter
-        uses: actions/upload-artifact@v4
-        with:
-          name: flutter
-          path: |
-            /opt/hostedtoolcache/flutter/
-          retention-days: 1
