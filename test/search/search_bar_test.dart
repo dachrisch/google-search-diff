@@ -8,6 +8,7 @@ import 'package:google_search_diff/service/history_service.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:provider/provider.dart';
 
+import '../service/widget_tester_extension.dart';
 import '../util/service_mocks.dart';
 import '../util/test_provider.dart';
 import '../widget/widget_tester_extension.dart';
@@ -34,13 +35,14 @@ void main() {
     var historyService =
         HistoryService(dbHistoryService: MockDbHistoryService());
     var testSearchService = TestSearchService();
+    var mocked = Mocked();
+    mocked.searchServiceProvider.usedService = testSearchService;
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
         ChangeNotifierProvider<QueriesStore>.value(value: searchQueriesStore),
         ChangeNotifierProvider<HistoryService>.value(value: historyService),
-        Provider<SearchService>.value(
-          value: testSearchService,
-        ),
+        ChangeNotifierProvider<SearchServiceProvider>.value(
+            value: mocked.searchServiceProvider),
       ],
       scaffoldUnderTest: const QueriesPage(),
     ));
@@ -80,9 +82,8 @@ void main() {
       providers: [
         ChangeNotifierProvider<QueriesStore>.value(value: searchQueriesStore),
         ChangeNotifierProvider<HistoryService>.value(value: historyService),
-        Provider<SearchService>.value(
-          value: testSearchService,
-        ),
+        ChangeNotifierProvider<SearchServiceProvider>.value(
+            value: Mocked().searchServiceProvider),
       ],
       scaffoldUnderTest: const QueriesPage(),
     ));

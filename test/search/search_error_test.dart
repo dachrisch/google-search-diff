@@ -24,10 +24,10 @@ class FailingSearchService extends SearchService {
 void main() {
   testWidgets('Alert dialog when search fails', (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
-
-    (await tester.pumpMockedApp(Mocked(
-        searchService:
-            FailingSearchService(e: ClientException('Test error')))));
+    var mocked = Mocked();
+    mocked.searchServiceProvider.usedService =
+        FailingSearchService(e: ClientException('Test error'));
+    (await tester.pumpMockedApp(mocked));
 
     expect(find.byType(QueryRunsCard), findsNothing);
     await tester.tapButtonByKey('show-searchbar-button');

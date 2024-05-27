@@ -12,13 +12,13 @@ import 'package:relative_time/relative_time.dart';
 class RouterApp extends StatelessWidget {
   final MaterialTheme theme;
   final QueriesStore queriesStore;
-  final SearchService searchService;
+  final SearchServiceProvider searchServiceProvider;
   final HistoryService historyService;
 
   RouterApp(
       {required this.theme,
       required this.queriesStore,
-      required this.searchService,
+      required this.searchServiceProvider,
       required this.historyService})
       : super(key: GlobalKey());
 
@@ -28,8 +28,8 @@ class RouterApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<QueriesStore>(
             create: (BuildContext context) => queriesStore),
-        Provider<SearchService>(
-          create: (BuildContext context) => searchService,
+        ChangeNotifierProvider<SearchServiceProvider>(
+          create: (BuildContext context) => searchServiceProvider,
         ),
         ChangeNotifierProvider<HistoryService>(
           create: (BuildContext context) => historyService,

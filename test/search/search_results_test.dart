@@ -5,12 +5,11 @@ import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/routes/router_app.dart';
-import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
-import '../util/service_mocks.dart';
+import '../service/widget_tester_extension.dart';
 import '../widget/widget_tester_extension.dart';
 
 void main() {
@@ -18,19 +17,19 @@ void main() {
       (WidgetTester tester) async {
     Provider.debugCheckInvalidValueType = null;
     var searchQueriesStore = QueriesStore(
-        dbQueryService: MockDbQueriesService(),
-        dbRunsService: MockDbRunsService());
+        dbQueryService: Mocked().dbQueriesService,
+        dbRunsService: Mocked().dbRunsService);
 
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
 
     getIt.registerFactoryParam<QueryRuns, Run, Null>(
-        (param1, param2) => QueryRuns.fromRun(param1, MockDbRunsService()));
+        (param1, param2) => QueryRuns.fromRun(param1, Mocked().dbRunsService));
 
     await tester.pumpWidget(RouterApp(
       theme: theme,
       queriesStore: searchQueriesStore,
-      searchService: LoremIpsumSearchService(),
-      historyService: MockHistoryService(),
+      searchServiceProvider: Mocked().searchServiceProvider,
+      historyService: Mocked().historyService,
     ));
 
     expect(find.byType(QueryRunsCard), findsNothing);
@@ -47,6 +46,7 @@ void main() {
     await tester.tapButtonByKey('add-search-query-button');
     await tester.pumpAndSettle();
     expect(searchQueriesStore.items, 1);
+    expect(searchQueriesStore.queryRuns.first.runs.length, 1);
     expect(find.byType(QueryRunsCard), findsOne);
   });
 }

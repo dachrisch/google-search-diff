@@ -31,7 +31,8 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
   @override
   Widget build(BuildContext context) {
     QueriesStore queriesStore = context.watch<QueriesStore>();
-    SearchService searchService = context.read<SearchService>();
+    SearchService searchService =
+        context.read<SearchServiceProvider>().usedService;
 
     return Actions(
         actions: <Type, Action<Intent>>{
@@ -144,7 +145,7 @@ void showSearchPage(BuildContext context) {
       context: context,
       delegate: SearchProviderSearchDelegate(
           textStyle: Theme.of(context).textTheme.titleMedium,
-          searchProvider: context.read<SearchService>(),
+          searchProvider: context.read<SearchServiceProvider>().usedService,
           onSave: (results) => (Actions.invoke<AddRunToQueryRunsIntent>(
                       context, AddRunToQueryRunsIntent(results)) as Future)
                   .then((_) {

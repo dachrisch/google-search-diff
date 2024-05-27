@@ -12,11 +12,9 @@ class QueryRuns extends ChangeNotifier {
   final DbRunsService dbRunsService;
 
   @factoryMethod
-  static QueryRuns fromRun(@factoryParam Run run, DbRunsService dbRunsService) {
-    var queryRuns = QueryRuns._(run.query, dbRunsService: dbRunsService);
-    queryRuns.addRun(run);
-    return queryRuns;
-  }
+  static QueryRuns fromRun(
+          @factoryParam Run run, DbRunsService dbRunsService) =>
+      QueryRuns.fromTransientRuns(run.query, [run], dbRunsService);
 
   factory QueryRuns.fromTransientRuns(
       Query query, List<Run> runs, DbRunsService dbRunsService) {

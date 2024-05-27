@@ -1,3 +1,4 @@
+import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/service/db_history_service.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
@@ -112,4 +113,12 @@ class MockDbRunsService extends DbRunsService {
 
 class MockHistoryService extends HistoryService {
   MockHistoryService() : super(dbHistoryService: MockDbHistoryService());
+}
+
+class MockApiKeyService extends ApiKeyService {
+  MockApiKeyService() : super(key: 'test-key');
+}
+
+class MockSerpApiSearchService extends SerpApiSearchService {
+  MockSerpApiSearchService() : super(MockApiKeyService());
 }

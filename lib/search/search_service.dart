@@ -10,12 +10,38 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
+@singleton
+class SearchServiceProvider extends ChangeNotifier {
+  final LoremIpsumSearchService trySearchService;
+  final SerpApiSearchService serpApiSearchService;
+  final Logger l = getLogger('search-provider');
+  SearchService usedService;
+
+  SearchServiceProvider(
+      {required this.trySearchService, required this.serpApiSearchService})
+      : usedService = trySearchService;
+
+  SearchService get useService {
+    l.d('Using $usedService for search');
+    return usedService;
+  }
+
+  void useTryService() {
+    usedService = trySearchService;
+    notifyListeners();
+  }
+
+  void useSerpService() {
+    usedService = serpApiSearchService;
+    notifyListeners();
+  }
+}
+
 abstract class SearchService {
   Future<Run> doSearch(Query query);
 }
 
-@Environment(Environment.test)
-@Singleton(as: SearchService)
+@singleton
 class LoremIpsumSearchService implements SearchService {
   @override
   Future<Run> doSearch(Query query) async {
@@ -24,7 +50,6 @@ class LoremIpsumSearchService implements SearchService {
   }
 }
 
-@Environment(Environment.prod)
 @singleton
 class ApiKeyService {
   final String key;
@@ -41,15 +66,14 @@ class ApiKeyService {
   ApiKeyService({required this.key});
 }
 
-@Environment(Environment.prod)
-@Singleton(as: SearchService)
-class SerapiSearchService implements SearchService {
-  final Logger l = getLogger('serapi');
+@singleton
+class SerpApiSearchService implements SearchService {
+  final Logger l = getLogger('serp-api');
   final String endpoint = 'serpapi.com';
   final String path = 'search';
   final ApiKeyService apiKeyService;
 
-  SerapiSearchService(this.apiKeyService);
+  SerpApiSearchService(this.apiKeyService);
 
   final Map<String, String> headers = {
     'Access-Control-Allow-Origin': '*',

@@ -24,7 +24,7 @@ class Mocked {
   late QueriesStore queriesStore;
   final DbRunsService dbRunsService;
   final DbQueriesService dbQueriesService;
-  final SearchService searchService;
+  final SearchServiceProvider searchServiceProvider;
   final HistoryService historyService;
   late ResultService resultService;
 
@@ -34,11 +34,14 @@ class Mocked {
       DbQueriesService? dbQueriesService,
       HistoryService? historyService,
       ResultService? resultService,
-      SearchService? searchService})
+      SearchServiceProvider? searchServiceProvider})
       : dbRunsService = dbRunsService ?? MockDbRunsService(),
         historyService = historyService ?? MockHistoryService(),
         dbQueriesService = dbQueriesService ?? MockDbQueriesService(),
-        searchService = searchService ?? LoremIpsumSearchService() {
+        searchServiceProvider = searchServiceProvider ??
+            SearchServiceProvider(
+                serpApiSearchService: MockSerpApiSearchService(),
+                trySearchService: LoremIpsumSearchService()) {
     this.queriesStore = queriesStore ??
         QueriesStore(
             dbQueryService: this.dbQueriesService,
@@ -63,7 +66,7 @@ extension MockedApp on WidgetTester {
       child: RouterApp(
         theme: theme,
         queriesStore: mocked.queriesStore,
-        searchService: mocked.searchService,
+        searchServiceProvider: mocked.searchServiceProvider,
         historyService: mocked.historyService,
       ),
     ));

@@ -42,7 +42,8 @@ class _QueryRunsPageScaffoldState extends State<QueryRunsPageScaffold>
   @override
   Widget build(BuildContext context) {
     QueryRuns queryRuns = context.watch<QueryRuns>();
-    SearchService searchService = context.read<SearchService>();
+    SearchService searchService =
+        context.read<SearchServiceProvider>().usedService;
     return Actions(
         actions: {
           SearchIntent:

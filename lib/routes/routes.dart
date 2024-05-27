@@ -5,6 +5,7 @@ import 'package:google_search_diff/routes/query_id.dart';
 import 'package:google_search_diff/widget/comparison/comparison_page.dart';
 import 'package:google_search_diff/widget/comparison/comparison_test.dart';
 import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
+import 'package:google_search_diff/widget/enter/enter_page.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:google_search_diff/widget/results/results_page.dart';
 import 'package:google_search_diff/widget/results/timeline/result_test_page.dart';
@@ -17,7 +18,11 @@ class RouterConfigBuilder {
   static build() => GoRouter(
         initialLocation: '/queries',
         routes: [
-          GoRoute(path: '/', redirect: (context, state) => '/queries'),
+          GoRoute(path: '/', redirect: (context, state) => '/enter'),
+          GoRoute(
+            path: '/enter',
+            builder: (context, state) => EnterPage(),
+          ),
           GoRoute(
               path: '/queries',
               builder: (context, state) => const QueriesPage(),

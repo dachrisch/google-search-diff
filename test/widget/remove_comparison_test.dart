@@ -12,6 +12,7 @@ import 'package:google_search_diff/widget/run/run_card.dart';
 import 'package:google_search_diff/widget/runs/query_runs_page.dart';
 import 'package:provider/provider.dart';
 
+import '../service/widget_tester_extension.dart';
 import '../util/localstore_helper.dart';
 import '../util/service_mocks.dart';
 import '../util/test_provider.dart';
@@ -40,7 +41,8 @@ void main() {
         providers: [
           Provider<QueryId>.value(value: queryId),
           ChangeNotifierProvider<QueriesStore>.value(value: queriesStore),
-          Provider<SearchService>.value(value: LoremIpsumSearchService())
+          ChangeNotifierProvider<SearchServiceProvider>.value(
+              value: Mocked().searchServiceProvider)
         ],
         scaffoldUnderTest: const QueryRunsPage(),
       ),
