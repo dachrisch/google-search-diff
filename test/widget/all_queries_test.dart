@@ -10,7 +10,6 @@ import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';
 
-import '../search/search_bar_test.dart';
 import '../service/widget_tester_extension.dart';
 import '../util/localstore_helper.dart';
 import '../util/service_mocks.dart';
@@ -32,7 +31,6 @@ void main() {
             [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
         MockDbRunsService());
     searchQueriesStore.addQueryRuns(queryRunsModel);
-    var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
         ChangeNotifierProvider.value(value: searchQueriesStore),
@@ -67,7 +65,6 @@ void main() {
             [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
         MockDbRunsService());
     searchQueriesStore.addQueryRuns(queryRunsModel);
-    var testSearchService = TestSearchService();
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
         ChangeNotifierProvider.value(value: searchQueriesStore),
