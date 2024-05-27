@@ -18,12 +18,15 @@ class QueryRuns extends ChangeNotifier {
     return queryRuns;
   }
 
-  static QueryRuns fromTransientRuns(
+  factory QueryRuns.fromTransientRuns(
       Query query, List<Run> runs, DbRunsService dbRunsService) {
     var queryRuns = QueryRuns._(query, dbRunsService: dbRunsService);
     queryRuns.runs.addAll(runs);
     return queryRuns;
   }
+
+  factory QueryRuns.clone(QueryRuns other) => QueryRuns._(other.query,
+      dbRunsService: other.dbRunsService, runs: List.from(other.runs));
 
   QueryRuns._(this.query, {required this.dbRunsService, List<Run>? runs})
       : runs = runs ?? [];

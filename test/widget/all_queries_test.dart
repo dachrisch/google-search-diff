@@ -55,4 +55,41 @@ void main() {
     expect(searchQueriesStore.items, 0);
     expect(find.byType(QueryRunsCard), findsNWidgets(0));
   });
+
+  testWidgets('Undo query remove', (WidgetTester tester) async {
+    var searchQueriesStore = QueriesStore(
+        dbQueryService: MockDbQueriesService(),
+        dbRunsService: MockDbRunsService());
+
+    var query = Query('Test query');
+    var queryRunsModel = QueryRuns.fromRun(
+        Run(query,
+            [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
+        MockDbRunsService());
+    searchQueriesStore.addQueryRuns(queryRunsModel);
+    var testSearchService = TestSearchService();
+    await tester.pumpWidget(ScaffoldMultiProviderTestApp(
+      providers: [
+        ChangeNotifierProvider.value(value: searchQueriesStore),
+        Provider<SearchService>.value(
+          value: testSearchService,
+        ),
+      ],
+      scaffoldUnderTest: const QueriesPage(),
+    ));
+
+    expect(searchQueriesStore.items, 1);
+    expect(find.byType(QueryRunsCard), findsNWidgets(1));
+    expect(find.widgetWithText(Row, '1'), findsOneWidget);
+
+    await tester.tapButtonByKey(
+        'delete-search-query-${searchQueriesStore.at(0).query.id}');
+    expect(searchQueriesStore.items, 0);
+    expect(find.byType(QueryRunsCard), findsNWidgets(0));
+
+    await tester.tapButtonByKey('snackbar-action-button');
+    expect(searchQueriesStore.items, 1);
+    expect(find.byType(QueryRunsCard), findsNWidgets(1));
+    expect(find.widgetWithText(Row, '1'), findsOneWidget);
+  });
 }

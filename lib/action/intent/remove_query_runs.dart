@@ -3,6 +3,8 @@ import 'package:google_search_diff/model/query_runs.dart';
 
 class RemoveQueryRunsIntent extends Intent {
   final QueryRuns queryRuns;
+  final QueryRuns restoreCopy;
 
-  const RemoveQueryRunsIntent({required this.queryRuns});
+  RemoveQueryRunsIntent({required this.queryRuns})
+      : restoreCopy = QueryRuns.clone(queryRuns);
 }

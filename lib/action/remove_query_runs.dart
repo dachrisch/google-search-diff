@@ -16,11 +16,11 @@ class RemoveQueryRunsAction extends Action<RemoveQueryRunsIntent> {
   @override
   Object? invoke(RemoveQueryRunsIntent intent) => queriesStore
       .removeQueryRuns(intent.queryRuns)
-      .then((value) => context.showSnackbar(
+      .then((_) => context.showSnackbar(
           title: 'Query "${intent.queryRuns.query.term}" removed',
           actionLabel: 'Undo',
           onPressed: () async {
-            l.d('Restore $intent.queryRuns');
-            queriesStore.addQueryRuns(intent.queryRuns);
+            l.d('Restore ${intent.restoreCopy}');
+            queriesStore.addQueryRuns(intent.restoreCopy);
           }));
 }

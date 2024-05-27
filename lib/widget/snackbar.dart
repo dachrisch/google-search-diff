@@ -14,6 +14,7 @@ extension Snackbar on BuildContext {
         content: Text(title),
         action: actionLabel != null
             ? SnackBarAction(
+                key: const Key('snackbar-action-button'),
                 label: actionLabel,
                 onPressed: onPressed!,
               )
