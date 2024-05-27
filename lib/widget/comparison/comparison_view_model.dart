@@ -15,7 +15,7 @@ Map<Type, ComparedResultViewProperties> compareResultProperties = {
       color: Colors.red),
   ExistingResult: ComparedResultViewProperties(
       name: 'Existing',
-      iconData: Icons.compare_arrows_outlined,
+      iconData: Icons.pause_circle_outline,
       color: Colors.grey)
 };
 

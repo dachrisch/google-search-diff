@@ -44,11 +44,7 @@ class ResultComparison {
     }
   }
 
-  int get added => compared.whereType<AddedResult>().length;
-
-  int get existing => compared.whereType<ExistingResult>().length;
-
-  int get removed => compared.whereType<RemovedResult>().length;
+  int  count<T extends ComparedResult>() => compared.whereType<T>().length;
 
   @override
   bool operator ==(Object other) =>

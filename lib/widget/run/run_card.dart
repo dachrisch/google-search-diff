@@ -10,7 +10,6 @@ import 'package:google_search_diff/widget/run/run_card_list_tile.dart';
 import 'package:google_search_diff/widget/timer_mixin.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:relative_time/relative_time.dart';
 
 class RunCard extends StatefulWidget {
   final void Function(bool isDragging) onDragChanged;
@@ -30,7 +29,6 @@ class _RunCardState extends State<RunCard> with TimerMixin {
     QueryRuns queryRuns = context.watch<QueryRuns>();
     ResultComparison resultComparison =
         queryRuns.nextRecentTo(run).compareTo(run);
-    var relativeTime = RelativeTime(context);
 
     return Actions(
       actions: {
@@ -69,7 +67,6 @@ class _RunCardState extends State<RunCard> with TimerMixin {
                     Actions.invoke(context, RemoveRunIntent(run: run)),
                 child: RunCardListTile(
                     run: run,
-                    relativeTime: relativeTime,
                     resultComparison: resultComparison,
                     queryRuns: queryRuns),
               ))),

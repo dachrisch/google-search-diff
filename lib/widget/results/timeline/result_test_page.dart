@@ -27,17 +27,22 @@ class ResultTestPage extends StatelessWidget {
     return FutureBuilder(
         future: store
             .addQueryRuns(getIt<QueryRuns>(param1: run))
-            .then((queryRuns) => queryRuns
-                .addRun(Run(query, [],
-                    runDate: DateTime.now().subtract(const Duration(hours: 3))))
-                .then((_) => queryRuns))
+            .then((queryRuns) =>
+                queryRuns.addRun(Run(query, [], runDate: DateTime.now().subtract(const Duration(hours: 36)))).then(
+                    (_) => queryRuns))
             .then((queryRuns) => queryRuns
                 .addRun(Run(query, [result],
-                    runDate: DateTime.now().subtract(const Duration(hours: 2))))
+                    runDate:
+                        DateTime.now().subtract(const Duration(hours: 26))))
                 .then((_) => queryRuns))
             .then((queryRuns) => queryRuns
-                .addRun(Run(query, [result], runDate: DateTime.now().subtract(const Duration(hours: 1))))
-                .then((_) => queryRuns)),
+                .addRun(
+                    Run(query, [], runDate: DateTime.now().subtract(const Duration(hours: 16))))
+                .then((_) => queryRuns))
+            .then((queryRuns) => queryRuns.addRun(Run(query, [result], runDate: DateTime.now().subtract(const Duration(hours: 8)))).then((_) => queryRuns))
+            .then((queryRuns) => queryRuns.addRun(Run(query, [result], runDate: DateTime.now().subtract(const Duration(hours: 3)))).then((_) => queryRuns))
+            .then((queryRuns) => queryRuns.addRun(Run(query, [result], runDate: DateTime.now().subtract(const Duration(hours: 2)))).then((_) => queryRuns))
+            .then((queryRuns) => queryRuns.addRun(Run(query, [result], runDate: DateTime.now().subtract(const Duration(hours: 1)))).then((_) => queryRuns)),
         builder: (context, snapshot) => snapshot.connectionState == ConnectionState.done
             ? Provider.value(value: result.id, child: ResultTimelinePage())
             : const Center(
