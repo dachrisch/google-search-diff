@@ -17,9 +17,9 @@ void main() {
     Provider.debugCheckInvalidValueType = null;
     var mocked = await tester.pumpMockedApp(Mocked());
     var query = Query('Saved query 1');
-    mocked.queriesStore.addQueryRuns(QueryRuns.fromRun(
+    await mocked.queriesStore.addQueryRuns(QueryRuns.fromRun(
         Run(query, [Result(title: 'result 1')]), mocked.dbRunsService));
-    mocked.queriesStore.queryRuns[0]
+    await mocked.queriesStore.queryRuns[0]
         .addRun(Run(query, [Result(title: 'result 2')]));
     await tester.pumpAndSettle();
     // goto runs

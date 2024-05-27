@@ -40,13 +40,13 @@ class QueryRuns extends ChangeNotifier {
           current.runDate.isAfter(next.runDate) ? current : next)
       : null;
 
+  void addRuns(List<Run> runs) => runs.forEach(addRun);
+
   Future<Run> addRun(Run run) => dbRunsService
       .save(run)
       .then((value) => runs.add(run))
       .then((value) => notifyListeners())
       .then((_) => run);
-
-  void addRuns(List<Run> runs) => runs.forEach(addRun);
 
   void removeAllRuns() => runs.forEach(removeRun);
 

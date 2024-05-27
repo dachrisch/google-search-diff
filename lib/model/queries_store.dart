@@ -26,8 +26,9 @@ class QueriesStore extends ChangeNotifier {
 
   Future<QueryRuns> addQueryRuns(QueryRuns runs) {
     return Future.sync(() => queryRuns.add(runs))
+        .then((_) => dbRunsService.saveAll(runs.runs))
         .then((_) => dbQueryService.save(runs.query))
-        .then((value) => notifyListeners())
+        .then((_) => notifyListeners())
         .then((_) => runs);
   }
 
@@ -35,7 +36,7 @@ class QueriesStore extends ChangeNotifier {
       Future.sync(() => queryRuns.remove(runs))
           .then((_) => runs.removeAllRuns())
           .then((_) => dbQueryService.remove(runs.query))
-          .then((value) => notifyListeners());
+          .then((_) => notifyListeners());
 
   QueryRuns at(int index) => queryRuns[index];
 

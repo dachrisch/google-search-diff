@@ -88,6 +88,7 @@ void main() {
     expect(find.byType(QueryRunsCard), findsNWidgets(0));
 
     await tester.tapButtonByKey('snackbar-action-button');
+    await tester.pumpAndSettle();
     expect(searchQueriesStore.items, 1);
     expect(find.byType(QueryRunsCard), findsNWidgets(1));
     expect(find.widgetWithText(Row, '1'), findsOneWidget);

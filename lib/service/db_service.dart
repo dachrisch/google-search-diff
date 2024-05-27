@@ -16,6 +16,9 @@ abstract class DbService<T extends HasToJson> {
       required this.collection})
       : l = getLogger('db-$T[$collection]');
 
+  Future<void> saveAll(List<T> items) =>
+      Future.forEach(items, (item) => save(item));
+
   Future<T> save(T item) {
     String id = localStore.collection(collection).doc().id;
     l.d('Saving $item with [$id]');
@@ -27,7 +30,7 @@ abstract class DbService<T extends HasToJson> {
         .then((_) => item);
   }
 
-  Future<void> removeAll(List<T> items) async =>
+  Future<void> removeAll(List<T> items) =>
       Future.forEach(items, (item) => remove(item));
 
   Future<void> remove(T item) async {
