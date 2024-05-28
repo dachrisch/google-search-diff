@@ -137,16 +137,13 @@ class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var searchServiceProvider = context.read<SearchServiceProvider>();
-    return Semantics(
-      label: 'Goto login page',
-      child: IconButton(
-        key: const Key('goto-login-button'),
-        tooltip: 'Back to login',
-        onPressed: () => searchServiceProvider.isTrying
-            ? context.goToEnter()
-            : _showConfirmationDialog(context),
-        icon: const Icon(Icons.login_outlined),
-      ),
+    return IconButton(
+      key: const Key('goto-login-button'),
+      tooltip: 'Back to login',
+      onPressed: () => searchServiceProvider.isTrying
+          ? context.goToEnter()
+          : _showConfirmationDialog(context),
+      icon: const Icon(Icons.login_outlined),
     );
   }
 
@@ -187,13 +184,11 @@ class _SearchButton extends StatelessWidget {
   const _SearchButton();
 
   @override
-  Widget build(BuildContext context) => Semantics(
-      label: 'open search page',
-      child: IconButton(
-          key: const Key('show-searchbar-button'),
-          tooltip: 'Open search page',
-          onPressed: () => showSearchPage(context),
-          icon: const Icon(Icons.search)));
+  Widget build(BuildContext context) => IconButton(
+      key: const Key('show-searchbar-button'),
+      tooltip: 'Open search page',
+      onPressed: () => showSearchPage(context),
+      icon: const Icon(Icons.search));
 }
 
 void showSearchPage(BuildContext context) {
