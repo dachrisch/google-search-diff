@@ -7,8 +7,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/dependencies.dart';
 import 'package:google_search_diff/model/queries_store.dart';
+import 'package:google_search_diff/model/query_runs.dart';
+import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/routes/router_app.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
@@ -58,6 +61,8 @@ extension MockedApp on WidgetTester {
 
     getIt.registerSingleton<DbRunsService>(mocked.dbRunsService);
     getIt.registerSingleton<ResultService>(mocked.resultService);
+    getIt.registerFactoryParam<QueryRuns, Run, Null>(
+        (param1, param2) => QueryRuns.fromRun(param1, Mocked().dbRunsService));
 
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
 
@@ -71,6 +76,9 @@ extension MockedApp on WidgetTester {
       ),
     ));
 
-    return mocked;
+    element(find.byType(Container)).go('/queries');
+    await pumpAndSettle();
+
+    return TestAsyncUtils.guard<Mocked>(() async => mocked);
   }
 }

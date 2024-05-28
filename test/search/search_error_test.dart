@@ -27,7 +27,7 @@ void main() {
     var mocked = Mocked();
     mocked.searchServiceProvider.usedService =
         FailingSearchService(e: ClientException('Test error'));
-    (await tester.pumpMockedApp(mocked));
+    await tester.pumpMockedApp(mocked);
 
     expect(find.byType(QueryRunsCard), findsNothing);
     await tester.tapButtonByKey('show-searchbar-button');

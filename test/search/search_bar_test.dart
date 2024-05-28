@@ -72,15 +72,12 @@ void main() {
   });
 
   testWidgets('Click the appbar will open search', (tester) async {
-    var searchQueriesStore = QueriesStore(
-        dbQueryService: MockDbQueriesService(),
-        dbRunsService: MockDbRunsService());
-    var historyService =
-        HistoryService(dbHistoryService: MockDbHistoryService());
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
-        ChangeNotifierProvider<QueriesStore>.value(value: searchQueriesStore),
-        ChangeNotifierProvider<HistoryService>.value(value: historyService),
+        ChangeNotifierProvider<QueriesStore>.value(
+            value: Mocked().queriesStore),
+        ChangeNotifierProvider<HistoryService>.value(
+            value: Mocked().historyService),
         ChangeNotifierProvider<SearchServiceProvider>.value(
             value: Mocked().searchServiceProvider),
       ],
