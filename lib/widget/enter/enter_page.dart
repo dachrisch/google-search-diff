@@ -56,8 +56,9 @@ class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.data!) {
-                        Future.delayed(
-                                Durations.short1, () => context.goToQueries())
+                        Future.delayed(Durations.short1,
+                                () => searchServiceProvider.useSerpService())
+                            .then((_) => context.goToQueries())
                             .then((_) => context.showSnackbar(
                                 title: 'API-Key detected.'));
                         return const Text('redirecting...');

@@ -59,6 +59,12 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                                   BorderRadius.all(Radius.circular(100))),
                           backgroundColor:
                               MaterialTheme.lightScheme().primaryContainer,
+                          flexibleSpace: Semantics(
+                            label: 'Open search page',
+                            child: GestureDetector(
+                              onTap: () => showSearchPage(context),
+                            ),
+                          ),
                           leading: Semantics(
                             label: 'Open search page',
                             child: InkWell(

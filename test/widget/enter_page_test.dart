@@ -47,6 +47,9 @@ void main() {
     await tester.pumpMockedApp(mocked, goto: null);
 
     expect(find.byType(QueriesPage), findsOneWidget);
+    expect(mocked.searchServiceProvider.usedService,
+        mocked.searchServiceProvider.serpApiSearchService);
+    expect(mocked.searchServiceProvider.isTrying, false);
   });
 
   testWidgets("Try has Login Button, Live needs confirmation", (tester) async {
