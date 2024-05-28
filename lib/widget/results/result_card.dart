@@ -6,15 +6,17 @@ import 'package:url_launcher/url_launcher.dart';
 class ResultCard extends StatelessWidget {
   final Result result;
   final Icon? icon;
+  final bool visitable;
 
-  const ResultCard({super.key, required this.result, this.icon});
+  const ResultCard(
+      {super.key, required this.result, this.icon, this.visitable = true});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: InkWell(
-          onTap: () => context.gotToResult(result),
+          onTap: visitable ? () => context.gotToResult(result) : null,
           child: Card(
             child: Column(
               mainAxisSize: MainAxisSize.min,

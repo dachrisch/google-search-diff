@@ -9,11 +9,12 @@ import 'package:timeline_tile/timeline_tile.dart';
 enum TilePosition {
   first,
   last,
+  single,
   between;
 
   factory TilePosition.fromIndex(int index, Iterable<dynamic> list) {
     if (index == 0) {
-      return TilePosition.first;
+      return list.length > 1 ? TilePosition.first : TilePosition.single;
     } else if (index == list.length - 1) {
       return TilePosition.last;
     } else {
@@ -42,8 +43,8 @@ class ResultTimelineTile extends StatelessWidget {
     RelativeTime format = RelativeTime(context);
     return TimelineTile(
       alignment: TimelineAlign.center,
-      isFirst: position == TilePosition.first,
-      isLast: position == TilePosition.last,
+      isFirst: [TilePosition.first, TilePosition.single].contains(position),
+      isLast: [TilePosition.last, TilePosition.single].contains(position),
       indicatorStyle: IndicatorStyle(
           height: 40,
           width: 40,

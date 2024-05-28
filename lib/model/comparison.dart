@@ -44,6 +44,10 @@ class ResultComparison {
     }
   }
 
+  ResultComparison.single(Run run) {
+    compared.addAll(run.results.map((r) => AddedResult(r)));
+  }
+
   int  count<T extends ComparedResult>() => compared.whereType<T>().length;
 
   @override

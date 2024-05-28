@@ -27,8 +27,9 @@ class _RunCardState extends State<RunCard> with TimerMixin {
   Widget build(BuildContext context) {
     Run run = context.read<Run>();
     QueryRuns queryRuns = context.watch<QueryRuns>();
-    ResultComparison resultComparison =
-        queryRuns.nextRecentTo(run).compareTo(run);
+    ResultComparison resultComparison = queryRuns.nextRecentTo(run) != run
+        ? queryRuns.nextRecentTo(run).compareTo(run)
+        : ResultComparison.single(run);
 
     return Actions(
       actions: {

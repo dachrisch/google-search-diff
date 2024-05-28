@@ -45,6 +45,7 @@ class ResultTimelinePageScaffold extends StatelessWidget {
           Center(
               child: ResultCard(
             result: result,
+            visitable: false,
           )),
           Expanded(
             child: ListView.builder(
