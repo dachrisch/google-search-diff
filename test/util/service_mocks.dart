@@ -116,7 +116,7 @@ class MockHistoryService extends HistoryService {
 }
 
 class MockApiKeyService extends ApiKeyService {
-  MockApiKeyService() : super(key: 'test-key');
+  MockApiKeyService();
 }
 
 class MockSerpApiSearchService extends SerpApiSearchService {

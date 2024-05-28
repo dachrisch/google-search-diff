@@ -1,9 +1,12 @@
+import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/dependencies.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/theme.dart';
+import 'package:google_search_diff/widget/snackbar.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EnterPage extends StatelessWidget {
@@ -22,27 +25,40 @@ class EnterApiKeyPage extends StatefulWidget {
 
 class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
   final TextEditingController _apiKeyController = TextEditingController();
+  late ApiKeyService apiKeyService;
   String? _errorText;
 
-  void _validateAndNavigate() {
-    String apiKey = _apiKeyController.text;
+  @override
+  void initState() {
+    super.initState();
+    apiKeyService = context
+        .read<SearchServiceProvider>()
+        .serpApiSearchService
+        .apiKeyService;
+  }
 
-    if (_isValidApiKey(apiKey)) {
-      context.go('/queries');
-    } else {
-      setState(() {
-        _errorText = 'Invalid API key';
-      });
-    }
+  Future<void> _validateAndNavigate(BuildContext context) async {
+    String apiKey = _apiKeyController.text;
+    await _isValidApiKey(apiKey).then((result) {
+      if (result) {
+        getIt<SearchServiceProvider>().useSerpService();
+        context.showSnackbar(title: 'API-Key accepted.');
+        context.go('/queries');
+      } else {
+        setState(() {
+          _errorText = 'Invalid API key';
+        });
+      }
+    });
   }
 
   void _tryAndNavigate() {
-    getIt.registerSingleton<SearchService>(LoremIpsumSearchService());
+    getIt<SearchServiceProvider>().useTryService();
     context.go('/queries');
   }
 
-  bool _isValidApiKey(String apiKey) {
-    return apiKey.isNotEmpty;
+  Future<bool> _isValidApiKey(String apiKey) {
+    return apiKeyService.validateAndAccept(apiKey);
   }
 
   @override
@@ -118,16 +134,35 @@ class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
                     labelText: 'API Key',
                     errorText: _errorText,
                   ),
-                  obscureText: true, // If you want to obscure the API key
+                  obscureText: true,
                 ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: _validateAndNavigate,
-                      child: const Text('Submit'),
-                    ),
+                    AsyncButtonBuilder(
+                        child: const Icon(Icons.login),
+                        onPressed: () => _validateAndNavigate(context),
+                        builder: (context, child, callback, buttonState) {
+                          return AnimatedSwitcher(
+                            switchInCurve: Curves.easeInOut,
+                            switchOutCurve: Curves.fastOutSlowIn,
+                            duration: Durations.extralong4,
+                            transitionBuilder: (child, animation) =>
+                                SlideTransition(
+                              position: Tween<Offset>(
+                                      begin: const Offset(10, 0),
+                                      end: const Offset(0, 0))
+                                  .animate(animation),
+                              child: child,
+                            ),
+                            child: ElevatedButton.icon(
+                              onPressed: callback,
+                              label: Text('Login'),
+                              icon: child,
+                            ),
+                          );
+                        }),
                     const SizedBox(width: 20),
                     ElevatedButton(
                       onPressed: _tryAndNavigate,

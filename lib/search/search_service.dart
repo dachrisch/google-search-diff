@@ -52,18 +52,26 @@ class LoremIpsumSearchService implements SearchService {
 
 @singleton
 class ApiKeyService {
-  final String key;
+  final String endpoint = 'serpapi.com';
+  final Logger l = getLogger('api-key');
+  String key = '';
 
-  @factoryMethod
-  static fromEnvKey() {
-    String apiKey = const String.fromEnvironment('GOOGLE_API_KEY');
-    if (apiKey.isEmpty) {
-      throw ArgumentError('"GOOGLE_API_KEY" not set');
-    }
-    return ApiKeyService(key: apiKey);
+  ApiKeyService();
+
+  Future<bool> validateAndAccept(String key) async {
+    var uri = Uri.https(
+        endpoint, '/search', {'output': 'json', 'api_key': key, 'q': 'test'});
+    l.d(uri);
+    return http
+        .get(uri)
+        .then((response) => response.statusCode == 200)
+        .then((result) {
+      this.key = key;
+      return result;
+    }).onError(
+      (error, stackTrace) => false,
+    );
   }
-
-  ApiKeyService({required this.key});
 }
 
 @singleton

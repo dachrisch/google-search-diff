@@ -16,12 +16,12 @@ import 'package:provider/provider.dart';
 
 class RouterConfigBuilder {
   static build() => GoRouter(
-        initialLocation: '/queries',
+        initialLocation: '/enter',
         routes: [
-          GoRoute(path: '/', redirect: (context, state) => '/enter'),
+          GoRoute(path: '/', redirect: (context, state) => '/queries'),
           GoRoute(
             path: '/enter',
-            builder: (context, state) => EnterPage(),
+            builder: (context, state) => const EnterPage(),
           ),
           GoRoute(
               path: '/queries',
