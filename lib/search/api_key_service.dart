@@ -24,8 +24,7 @@ class ApiKeyService {
     if (key.isEmpty || key.length != 64) {
       return Future.value(false);
     }
-    var uri = Uri.https(
-        endpoint, '/search', {'output': 'json', 'api_key': key, 'q': 'test'});
+    var uri = Uri.https(endpoint, '/account', {'api_key': key});
     l.d('validating api key using: $uri');
     return http.get(uri).then((response) => response.statusCode == 200).onError(
           (error, stackTrace) => false,
