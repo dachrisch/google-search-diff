@@ -1,7 +1,7 @@
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:google_search_diff/widget/snackbar.dart';
@@ -33,44 +33,46 @@ class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
-        child: Scaffold(
-          appBar: AppBar(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(100))),
-            backgroundColor: MaterialTheme.lightScheme().primaryContainer,
-            leading: Image.asset('assets/logo.png', fit: BoxFit.scaleDown),
-            automaticallyImplyLeading: false,
-            title: Text(
-              'SearchFlux - Welcome',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FutureBuilder(
-              future: searchServiceProvider.serpApiSearchService.apiKeyService
-                  .validateStoredKey(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data!) {
-                    Future.delayed(
-                            Durations.short1, () => context.go('/queries'))
-                        .then((_) =>
-                            context.showSnackbar(title: 'API-Key detected.'));
-                    return const Text('redirecting...');
-                  } else {
-                    return _EnterApiKeyBody();
-                  }
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100))),
+                backgroundColor: MaterialTheme.lightScheme().primaryContainer,
+                leading: Image.asset('assets/logo.png', fit: BoxFit.scaleDown),
+                automaticallyImplyLeading: false,
+                title: Text(
+                  'SearchFlux - Welcome',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              SliverFillRemaining(
+                child: FutureBuilder(
+                  future: searchServiceProvider.validateStoredKey(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.data!) {
+                        Future.delayed(
+                                Durations.short1, () => context.goToQueries())
+                            .then((_) => context.showSnackbar(
+                                title: 'API-Key detected.'));
+                        return const Text('redirecting...');
+                      } else {
+                        return _EnterApiKeyBody();
+                      }
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -96,12 +98,11 @@ class __EnterApiKeyBodyState extends State<_EnterApiKeyBody> {
 
   void _tryAndNavigate() {
     searchServiceProvider.useTryService();
-    context.go('/queries');
+    context.goToQueries();
   }
 
   Future<bool> _isValidApiKey(String apiKey) {
-    return searchServiceProvider.serpApiSearchService.apiKeyService
-        .validateAndAccept(apiKey);
+    return searchServiceProvider.validateAndAccept(apiKey);
   }
 
   Future<void> _validateAndNavigate(BuildContext context) async {
@@ -110,7 +111,7 @@ class __EnterApiKeyBodyState extends State<_EnterApiKeyBody> {
       if (result) {
         searchServiceProvider.useSerpService();
         context.showSnackbar(title: 'API-Key accepted.');
-        context.go('/queries');
+        context.goToQueries();
       } else {
         setState(() {
           _errorText = 'Invalid API key';

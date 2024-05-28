@@ -138,6 +138,10 @@ class MockSharedProperties implements SharedPreferences {
 
   @override
   String? getString(String key) => props[key];
+
+  @override
+  Future<bool> remove(String key) =>
+      Future.value(props.remove(key)).then((_) => true);
 }
 
 class MockPropertiesApiKeyService extends PropertiesApiKeyService {

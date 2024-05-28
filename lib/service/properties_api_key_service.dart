@@ -21,4 +21,6 @@ class PropertiesApiKeyService {
   ApiKey fetch() => preferences.containsKey(preferencesKey)
       ? ApiKey(key: preferences.getString(preferencesKey)!)
       : EmptyApiKey();
+
+  Future<bool> clear() => preferences.remove(preferencesKey);
 }

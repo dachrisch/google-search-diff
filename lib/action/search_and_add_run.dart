@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/action/intent/search.dart';
+import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/widget/snackbar.dart';
 
@@ -23,8 +23,7 @@ class SearchAndAddRunAction extends Action<SearchIntent> {
         (run) => context.showSnackbar(
           title: 'New run finished with [${run.items}] results',
           actionLabel: 'Visit',
-          onPressed: () =>
-              context.go('/queries/${run.query.id}/runs/${run.id}'),
+          onPressed: () => context.gotToRun(run),
         ),
       );
 }

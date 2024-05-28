@@ -11,9 +11,9 @@ class SearchServiceProvider extends ChangeNotifier {
   final Logger l = getLogger('search-provider');
   SearchService usedService;
 
-  SearchServiceProvider(
-      {required this.trySearchService,
-      required this.serpApiSearchService,
+  SearchServiceProvider({
+    required this.trySearchService,
+    required this.serpApiSearchService,
   }) : usedService = trySearchService;
 
   SearchService get useService {
@@ -30,4 +30,15 @@ class SearchServiceProvider extends ChangeNotifier {
     usedService = serpApiSearchService;
     notifyListeners();
   }
+
+  bool get isTrying => usedService == trySearchService;
+
+  Future<void> resetStoredKey() =>
+      serpApiSearchService.apiKeyService.clearKey();
+
+  Future<bool> validateAndAccept(String key) =>
+      serpApiSearchService.apiKeyService.validateAndAccept(key);
+
+  Future<bool> validateStoredKey() =>
+      serpApiSearchService.apiKeyService.validateStoredKey();
 }

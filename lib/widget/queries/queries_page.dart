@@ -9,6 +9,7 @@ import 'package:google_search_diff/action/remove_query_runs.dart';
 import 'package:google_search_diff/action/search_and_add_run.dart';
 import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/queries_store.dart';
+import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:google_search_diff/search/search_provider_delegate.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
@@ -77,7 +78,11 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                               ),
                             ),
                           ),
-                          actions: const [_SearchButton(), SizedBox(width: 16)],
+                          actions: const [
+                            _LoginButton(),
+                            _SearchButton(),
+                            SizedBox(width: 16)
+                          ],
                         ),
                         SliverList.list(children: [
                           Center(
@@ -126,19 +131,69 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
   }
 }
 
+class _LoginButton extends StatelessWidget {
+  const _LoginButton();
+
+  @override
+  Widget build(BuildContext context) {
+    var searchServiceProvider = context.read<SearchServiceProvider>();
+    return Semantics(
+      label: 'Goto login page',
+      child: IconButton(
+        key: const Key('goto-login-button'),
+        tooltip: 'Back to login',
+        onPressed: () => searchServiceProvider.isTrying
+            ? context.goToEnter()
+            : _showConfirmationDialog(context),
+        icon: const Icon(Icons.login_outlined),
+      ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var searchServiceProvider = context.read<SearchServiceProvider>();
+
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Do you really want to enter a new API key?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              key: Key('confirm-api-key-delete-button'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                searchServiceProvider
+                    .resetStoredKey()
+                    .then((_) => context.goToEnter());
+              },
+              child: const Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
 class _SearchButton extends StatelessWidget {
   const _SearchButton();
 
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-        label: 'open search page',
-        child: IconButton(
-            key: const Key('show-searchbar-button'),
-            tooltip: 'Open search page',
-            onPressed: () => showSearchPage(context),
-            icon: const Icon(Icons.search)));
-  }
+  Widget build(BuildContext context) => Semantics(
+      label: 'open search page',
+      child: IconButton(
+          key: const Key('show-searchbar-button'),
+          tooltip: 'Open search page',
+          onPressed: () => showSearchPage(context),
+          icon: const Icon(Icons.search)));
 }
 
 void showSearchPage(BuildContext context) {

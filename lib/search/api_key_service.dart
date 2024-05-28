@@ -33,4 +33,6 @@ class ApiKeyService {
   }
 
   ApiKey get apiKey => propertiesApiKeyService.fetch();
+
+  Future<bool> clearKey() => propertiesApiKeyService.clear();
 }

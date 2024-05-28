@@ -37,4 +37,12 @@ extension RelativeGoRouter on BuildContext {
     Run run = resultService.latestRunOf(result);
     push('/queries/${run.query.id}/runs/${run.id}/results/${result.id}');
   }
+
+  void goToEnter() {
+    push('/enter');
+  }
+
+  void goToQueries() {
+    push('/queries');
+  }
 }
