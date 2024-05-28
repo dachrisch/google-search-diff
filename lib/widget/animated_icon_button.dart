@@ -7,9 +7,13 @@ import 'package:logger/logger.dart';
 class AnimatedRefreshIconButton extends StatefulWidget {
   final void Function() onPressed;
   final Key buttonKey;
+  final String tooltip;
 
   const AnimatedRefreshIconButton(
-      {super.key, required this.onPressed, required this.buttonKey});
+      {super.key,
+      required this.onPressed,
+      required this.buttonKey,
+      required this.tooltip});
 
   @override
   State<StatefulWidget> createState() => _AnimatedRefreshIconButtonState();
@@ -35,6 +39,7 @@ class _AnimatedRefreshIconButtonState extends State<AnimatedRefreshIconButton>
       buttonKey: widget.buttonKey,
       animation: rotateAnimation,
       controller: controller,
+      tooltip: widget.tooltip,
       onPressed: widget.onPressed,
     );
   }
@@ -46,12 +51,14 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
   final AnimationController controller;
 
   final Key buttonKey;
+  final String tooltip;
   final Logger l = getLogger('button');
 
   _AnimatedRefreshIconButton(
       {required this.buttonKey,
       required this.onPressed,
       required this.animation,
+      required this.tooltip,
       required this.controller})
       : super(listenable: animation);
 
@@ -62,6 +69,7 @@ class _AnimatedRefreshIconButton extends AnimatedWidget {
         child: IconButton(
           key: buttonKey,
           icon: const Icon(Icons.refresh_outlined),
+          tooltip: tooltip,
           onPressed: controller.isAnimating
               ? null
               : () async {

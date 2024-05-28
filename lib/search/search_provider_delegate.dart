@@ -44,6 +44,7 @@ class SearchProviderSearchDelegate extends SearchDelegate<Query> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
+      key: Key('back-button'),
       icon: const Icon(Icons.arrow_back),
       tooltip: 'Close search',
       onPressed: () => Navigator.of(context).pop(),

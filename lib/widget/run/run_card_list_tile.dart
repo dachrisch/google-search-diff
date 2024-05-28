@@ -53,6 +53,7 @@ class RunCardListTile extends StatelessWidget {
                         left: BorderSide(width: 1.0, color: Colors.white))),
                 child: IconButton(
                   key: Key('delete-query-results-${run.id}'),
+                  tooltip: 'Delete this run',
                   icon: const Icon(Icons.delete),
                   onPressed: () =>
                       Actions.invoke(context, RemoveRunIntent(run: run)),

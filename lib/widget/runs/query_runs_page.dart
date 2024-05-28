@@ -71,6 +71,7 @@ class _QueryRunsPageScaffoldState extends State<QueryRunsPageScaffold>
                                       pinned: true,
                                       leading: IconButton(
                                         icon: const Icon(Icons.arrow_back),
+                                        tooltip: 'Back to queries',
                                         onPressed: () => context.pop(),
                                       ),
                                       title: Text(

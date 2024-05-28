@@ -44,6 +44,7 @@ class _ResultsPageScaffoldState extends State<ResultsPageScaffold> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
+          tooltip: 'Back to all runs',
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text('Query run - ${run.query.term}'),

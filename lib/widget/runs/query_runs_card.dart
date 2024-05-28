@@ -79,6 +79,7 @@ class _SingleQueryCard extends State<QueryRunsCard>
                         child: AnimatedRefreshIconButton(
                             buttonKey: Key(
                                 'refresh-query-results-outside-button-${queryRuns.query.id.id}'),
+                            tooltip: 'Perform new search run',
                             onPressed: () => (Actions.invoke(
                                     context, SearchIntent(queryRuns)) as Future)
                                 .then((value) =>
@@ -116,6 +117,7 @@ class _SingleQueryCard extends State<QueryRunsCard>
                             key: Key(
                                 'delete-search-query-${queryRuns.query.id}'),
                             icon: const Icon(Icons.delete),
+                            tooltip: 'Delete search query',
                             onPressed: () => Actions.invoke(context,
                                 RemoveQueryRunsIntent(queryRuns: queryRuns))),
                       ))),
