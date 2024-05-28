@@ -1,4 +1,6 @@
+import 'package:google_search_diff/search/api_key_service.dart';
 import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/service/db_api_key_service.dart';
 import 'package:google_search_diff/service/db_history_service.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
@@ -115,8 +117,26 @@ class MockHistoryService extends HistoryService {
   MockHistoryService() : super(dbHistoryService: MockDbHistoryService());
 }
 
+class MockDbApiKeyService extends DbApiKeyService {
+  MockDbApiKeyService()
+      : super(
+            collection: 'test-keys',
+            localStore: MockLocalStore(),
+            itemToIdMap: {});
+}
+
 class MockApiKeyService extends ApiKeyService {
+  bool shouldValidate = false;
+
   MockApiKeyService();
+
+  @override
+  Future<bool> validateAndAccept(String key) {
+    if (shouldValidate) {
+      this.key = key;
+    }
+    return Future.value(shouldValidate);
+  }
 }
 
 class MockSerpApiSearchService extends SerpApiSearchService {

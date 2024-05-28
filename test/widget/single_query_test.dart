@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
-import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/widget/comparison/comparison_view_model.dart';
 import 'package:google_search_diff/widget/run/run_card.dart';
 import 'package:google_search_diff/widget/runs/query_runs_page.dart';

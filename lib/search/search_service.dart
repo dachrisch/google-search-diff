@@ -5,37 +5,13 @@ import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
+import 'package:google_search_diff/search/api_key_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
-@singleton
-class SearchServiceProvider extends ChangeNotifier {
-  final LoremIpsumSearchService trySearchService;
-  final SerpApiSearchService serpApiSearchService;
-  final Logger l = getLogger('search-provider');
-  SearchService usedService;
 
-  SearchServiceProvider(
-      {required this.trySearchService, required this.serpApiSearchService})
-      : usedService = trySearchService;
-
-  SearchService get useService {
-    l.d('Using $usedService for search');
-    return usedService;
-  }
-
-  void useTryService() {
-    usedService = trySearchService;
-    notifyListeners();
-  }
-
-  void useSerpService() {
-    usedService = serpApiSearchService;
-    notifyListeners();
-  }
-}
 
 abstract class SearchService {
   Future<Run> doSearch(Query query);
@@ -50,29 +26,6 @@ class LoremIpsumSearchService implements SearchService {
   }
 }
 
-@singleton
-class ApiKeyService {
-  final String endpoint = 'serpapi.com';
-  final Logger l = getLogger('api-key');
-  String key = '';
-
-  ApiKeyService();
-
-  Future<bool> validateAndAccept(String key) async {
-    var uri = Uri.https(
-        endpoint, '/search', {'output': 'json', 'api_key': key, 'q': 'test'});
-    l.d(uri);
-    return http
-        .get(uri)
-        .then((response) => response.statusCode == 200)
-        .then((result) {
-      this.key = key;
-      return result;
-    }).onError(
-      (error, stackTrace) => false,
-    );
-  }
-}
 
 @singleton
 class SerpApiSearchService implements SearchService {

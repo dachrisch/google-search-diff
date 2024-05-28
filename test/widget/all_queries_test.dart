@@ -5,7 +5,7 @@ import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
-import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';

@@ -11,6 +11,7 @@ import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/search/search_provider_delegate.dart';
 import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:google_search_diff/widget/time_grouped_list_view.dart';

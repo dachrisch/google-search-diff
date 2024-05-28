@@ -14,6 +14,7 @@ import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/routes/router_app.dart';
 import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
 import 'package:google_search_diff/service/history_service.dart';
@@ -44,7 +45,8 @@ class Mocked {
         searchServiceProvider = searchServiceProvider ??
             SearchServiceProvider(
                 serpApiSearchService: MockSerpApiSearchService(),
-                trySearchService: LoremIpsumSearchService()) {
+                trySearchService: LoremIpsumSearchService(),
+                dbApiKeyService: MockDbApiKeyService()) {
     this.queriesStore = queriesStore ??
         QueriesStore(
             dbQueryService: this.dbQueriesService,
@@ -56,13 +58,21 @@ class Mocked {
 }
 
 extension MockedApp on WidgetTester {
-  Future<Mocked> pumpMockedApp(Mocked mocked) async {
+  Future<Mocked> pumpMockedApp(Mocked mocked,
+      {String? goto = '/queries'}) async {
     await initializeDateFormatting();
 
-    getIt.registerSingleton<DbRunsService>(mocked.dbRunsService);
-    getIt.registerSingleton<ResultService>(mocked.resultService);
-    getIt.registerFactoryParam<QueryRuns, Run, Null>(
-        (param1, param2) => QueryRuns.fromRun(param1, Mocked().dbRunsService));
+    if (!getIt.isRegistered<DbRunsService>()) {
+      getIt.registerSingleton<DbRunsService>(mocked.dbRunsService);
+    }
+    if (!getIt.isRegistered<ResultService>()) {
+      getIt.registerSingleton<ResultService>(mocked.resultService);
+    }
+
+    if (!getIt.isRegistered<QueryRuns>()) {
+      getIt.registerFactoryParam<QueryRuns, Run, Null>((param1, param2) =>
+          QueryRuns.fromRun(param1, Mocked().dbRunsService));
+    }
 
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
 
@@ -76,8 +86,10 @@ extension MockedApp on WidgetTester {
       ),
     ));
 
-    element(find.byType(Container)).go('/queries');
-    await pumpAndSettle();
+    if (goto != null) {
+      element(find.byType(Container)).go(goto);
+      await pumpAndSettle();
+    }
 
     return TestAsyncUtils.guard<Mocked>(() async => mocked);
   }

@@ -2,8 +2,7 @@ import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_search_diff/dependencies.dart';
-import 'package:google_search_diff/search/search_service.dart';
+import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:google_search_diff/widget/snackbar.dart';
 import 'package:provider/provider.dart';
@@ -25,23 +24,20 @@ class EnterApiKeyPage extends StatefulWidget {
 
 class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
   final TextEditingController _apiKeyController = TextEditingController();
-  late ApiKeyService apiKeyService;
+  late SearchServiceProvider searchServiceProvider;
   String? _errorText;
 
   @override
   void initState() {
     super.initState();
-    apiKeyService = context
-        .read<SearchServiceProvider>()
-        .serpApiSearchService
-        .apiKeyService;
+    searchServiceProvider = context.read<SearchServiceProvider>();
   }
 
   Future<void> _validateAndNavigate(BuildContext context) async {
     String apiKey = _apiKeyController.text;
     await _isValidApiKey(apiKey).then((result) {
       if (result) {
-        getIt<SearchServiceProvider>().useSerpService();
+        searchServiceProvider.useSerpService();
         context.showSnackbar(title: 'API-Key accepted.');
         context.go('/queries');
       } else {
@@ -53,12 +49,13 @@ class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
   }
 
   void _tryAndNavigate() {
-    getIt<SearchServiceProvider>().useTryService();
+    searchServiceProvider.useTryService();
     context.go('/queries');
   }
 
   Future<bool> _isValidApiKey(String apiKey) {
-    return apiKeyService.validateAndAccept(apiKey);
+    return searchServiceProvider.serpApiSearchService.apiKeyService
+        .validateAndAccept(apiKey);
   }
 
   @override
@@ -129,6 +126,7 @@ class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
                   height: 20,
                 ),
                 TextField(
+                  key: const Key('api-key-text-field'),
                   controller: _apiKeyController,
                   decoration: InputDecoration(
                     labelText: 'API Key',
@@ -157,14 +155,16 @@ class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
                               child: child,
                             ),
                             child: ElevatedButton.icon(
+                              key: const Key('login-with-key-button'),
                               onPressed: callback,
-                              label: Text('Login'),
+                              label: const Text('Login'),
                               icon: child,
                             ),
                           );
                         }),
                     const SizedBox(width: 20),
                     ElevatedButton(
+                      key: const Key('try-it-button'),
                       onPressed: _tryAndNavigate,
                       child: const Text('Try it'),
                     ),
