@@ -88,8 +88,8 @@ extension MockedApp on WidgetTester {
 
     if (goto != null) {
       element(find.byType(Container)).go(goto);
-      await pumpAndSettle();
     }
+    await pumpAndSettle();
 
     return TestAsyncUtils.guard<Mocked>(() async => mocked);
   }

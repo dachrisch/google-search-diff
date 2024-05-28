@@ -13,16 +13,21 @@ class ApiKeyService {
 
   ApiKeyService({required this.propertiesApiKeyService});
 
+  Future<bool> validateStoredKey() => validateKey(apiKey.key);
+
   Future<bool> validateAndAccept(String key) async {
+    return validateKey(key).then((result) =>
+        propertiesApiKeyService.save(ApiKey(key: key)).then((_) => result));
+  }
+
+  Future<bool> validateKey(String key) {
+    if (key.isEmpty || key.length != 64) {
+      return Future.value(false);
+    }
     var uri = Uri.https(
         endpoint, '/search', {'output': 'json', 'api_key': key, 'q': 'test'});
-    l.d(uri);
-    return http
-        .get(uri)
-        .then((response) => response.statusCode == 200)
-        .then((result) =>
-            propertiesApiKeyService.save(ApiKey(key: key)).then((_) => result))
-        .onError(
+    l.d('validating api key using: $uri');
+    return http.get(uri).then((response) => response.statusCode == 200).onError(
           (error, stackTrace) => false,
         );
   }

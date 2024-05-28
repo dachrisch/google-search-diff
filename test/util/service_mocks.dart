@@ -1,4 +1,3 @@
-import 'package:google_search_diff/model/api_key.dart';
 import 'package:google_search_diff/search/api_key_service.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/service/db_history_service.dart';
@@ -152,12 +151,7 @@ class MockApiKeyService extends ApiKeyService {
       : super(propertiesApiKeyService: MockPropertiesApiKeyService());
 
   @override
-  Future<bool> validateAndAccept(String key) {
-    if (shouldValidate) {
-      return propertiesApiKeyService.save(ApiKey(key: key)).then((_) => true);
-    }
-    return Future.value(shouldValidate);
-  }
+  Future<bool> validateKey(String key) => Future.value(shouldValidate);
 }
 
 class MockSerpApiSearchService extends SerpApiSearchService {

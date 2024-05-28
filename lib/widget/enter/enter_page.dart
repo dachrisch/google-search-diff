@@ -23,39 +23,12 @@ class EnterApiKeyPage extends StatefulWidget {
 }
 
 class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
-  final TextEditingController _apiKeyController = TextEditingController();
   late SearchServiceProvider searchServiceProvider;
-  String? _errorText;
 
   @override
   void initState() {
     super.initState();
     searchServiceProvider = context.read<SearchServiceProvider>();
-  }
-
-  Future<void> _validateAndNavigate(BuildContext context) async {
-    String apiKey = _apiKeyController.text;
-    await _isValidApiKey(apiKey).then((result) {
-      if (result) {
-        searchServiceProvider.useSerpService();
-        context.showSnackbar(title: 'API-Key accepted.');
-        context.go('/queries');
-      } else {
-        setState(() {
-          _errorText = 'Invalid API key';
-        });
-      }
-    });
-  }
-
-  void _tryAndNavigate() {
-    searchServiceProvider.useTryService();
-    context.go('/queries');
-  }
-
-  Future<bool> _isValidApiKey(String apiKey) {
-    return searchServiceProvider.serpApiSearchService.apiKeyService
-        .validateAndAccept(apiKey);
   }
 
   @override
@@ -77,104 +50,170 @@ class _EnterApiKeyPageState extends State<EnterApiKeyPage> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12.0),
-                  margin: const EdgeInsets.only(bottom: 20.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50],
-                    border: Border.all(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.info_outline, color: Colors.blue),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              const TextSpan(
-                                text: 'An API key from ',
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                              TextSpan(
-                                text: 'serpapi.com',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => launchUrl(
-                                      Uri.parse('https://serpapi.com')),
-                              ),
-                              const TextSpan(
-                                text:
-                                    ' is needed to continue. Please enter your API key below.',
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  key: const Key('api-key-text-field'),
-                  controller: _apiKeyController,
-                  decoration: InputDecoration(
-                    labelText: 'API Key',
-                    errorText: _errorText,
-                  ),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AsyncButtonBuilder(
-                        child: const Icon(Icons.login),
-                        onPressed: () => _validateAndNavigate(context),
-                        builder: (context, child, callback, buttonState) {
-                          return AnimatedSwitcher(
-                            switchInCurve: Curves.easeInOut,
-                            switchOutCurve: Curves.fastOutSlowIn,
-                            duration: Durations.extralong4,
-                            transitionBuilder: (child, animation) =>
-                                SlideTransition(
-                              position: Tween<Offset>(
-                                      begin: const Offset(10, 0),
-                                      end: const Offset(0, 0))
-                                  .animate(animation),
-                              child: child,
-                            ),
-                            child: ElevatedButton.icon(
-                              key: const Key('login-with-key-button'),
-                              onPressed: callback,
-                              label: const Text('Login'),
-                              icon: child,
-                            ),
-                          );
-                        }),
-                    const SizedBox(width: 20),
-                    ElevatedButton(
-                      key: const Key('try-it-button'),
-                      onPressed: _tryAndNavigate,
-                      child: const Text('Try it'),
-                    ),
-                  ],
-                ),
-              ],
+            child: FutureBuilder(
+              future: searchServiceProvider.serpApiSearchService.apiKeyService
+                  .validateStoredKey(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data!) {
+                    Future.delayed(
+                            Durations.short1, () => context.go('/queries'))
+                        .then((_) =>
+                            context.showSnackbar(title: 'API-Key detected.'));
+                    return const Text('redirecting...');
+                  } else {
+                    return _EnterApiKeyBody();
+                  }
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _EnterApiKeyBody extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => __EnterApiKeyBodyState();
+}
+
+class __EnterApiKeyBodyState extends State<_EnterApiKeyBody> {
+  final TextEditingController _apiKeyController = TextEditingController();
+  late SearchServiceProvider searchServiceProvider;
+  String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    searchServiceProvider = context.read<SearchServiceProvider>();
+  }
+
+  void _tryAndNavigate() {
+    searchServiceProvider.useTryService();
+    context.go('/queries');
+  }
+
+  Future<bool> _isValidApiKey(String apiKey) {
+    return searchServiceProvider.serpApiSearchService.apiKeyService
+        .validateAndAccept(apiKey);
+  }
+
+  Future<void> _validateAndNavigate(BuildContext context) async {
+    String apiKey = _apiKeyController.text;
+    await _isValidApiKey(apiKey).then((result) {
+      if (result) {
+        searchServiceProvider.useSerpService();
+        context.showSnackbar(title: 'API-Key accepted.');
+        context.go('/queries');
+      } else {
+        setState(() {
+          _errorText = 'Invalid API key';
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12.0),
+          margin: const EdgeInsets.only(bottom: 20.0),
+          decoration: BoxDecoration(
+            color: Colors.blue[50],
+            border: Border.all(color: Colors.blue),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.info_outline, color: Colors.blue),
+              const SizedBox(width: 10),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: 'An API key from ',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                      TextSpan(
+                        text: 'serpapi.com',
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap =
+                              () => launchUrl(Uri.parse('https://serpapi.com')),
+                      ),
+                      const TextSpan(
+                        text:
+                            ' is needed to continue. Please enter your API key below.',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        TextField(
+          key: const Key('api-key-text-field'),
+          controller: _apiKeyController,
+          decoration: InputDecoration(
+            labelText: 'API Key',
+            errorText: _errorText,
+          ),
+          obscureText: true,
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AsyncButtonBuilder(
+                child: const Icon(Icons.login),
+                onPressed: () => _validateAndNavigate(context),
+                builder: (context, child, callback, buttonState) {
+                  return AnimatedSwitcher(
+                    switchInCurve: Curves.easeInOut,
+                    switchOutCurve: Curves.fastOutSlowIn,
+                    duration: Durations.extralong4,
+                    transitionBuilder: (child, animation) => SlideTransition(
+                      position: Tween<Offset>(
+                              begin: const Offset(10, 0),
+                              end: const Offset(0, 0))
+                          .animate(animation),
+                      child: child,
+                    ),
+                    child: ElevatedButton.icon(
+                      key: const Key('login-with-key-button'),
+                      onPressed: callback,
+                      label: const Text('Login'),
+                      icon: child,
+                    ),
+                  );
+                }),
+            const SizedBox(width: 20),
+            ElevatedButton(
+              key: const Key('try-it-button'),
+              onPressed: _tryAndNavigate,
+              child: const Text('Try it'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

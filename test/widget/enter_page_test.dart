@@ -9,9 +9,7 @@ import 'widget_tester_extension.dart';
 
 void main() {
   testWidgets('Enter in try mode', (tester) async {
-    var mocked = Mocked();
-
-    await tester.pumpMockedApp(mocked, goto: null);
+    var mocked = await tester.pumpMockedApp(Mocked(), goto: null);
 
     await tester.tapButtonByKey('try-it-button');
     await tester.pumpAndSettle();
@@ -39,5 +37,14 @@ void main() {
             .propertiesApiKeyService
             .fetch(),
         ApiKey(key: '1234'));
+  });
+  testWidgets('Proceed with stored key', (tester) async {
+    var mocked = Mocked();
+    (mocked.searchServiceProvider.serpApiSearchService.apiKeyService
+            as MockApiKeyService)
+        .shouldValidate = true;
+    await tester.pumpMockedApp(mocked, goto: null);
+
+    expect(find.byType(QueriesPage), findsOneWidget);
   });
 }
