@@ -72,7 +72,7 @@ jobs:
           packageName: ${{ steps.package.outputs.name }}
           releaseFiles: outputs/bundle/release/app-release.aab
           track: internal
-          status: draft
+          status: completed
           #userFraction: 0.99
           mappingFile: outputs/mapping/release/mapping.txt
           debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
