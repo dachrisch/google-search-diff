@@ -167,7 +167,7 @@ class _LoginButton extends StatelessWidget {
               child: const Text('Cancel'),
             ),
             TextButton(
-              key: Key('confirm-api-key-delete-button'),
+              key: const Key('confirm-api-key-delete-button'),
               onPressed: () {
                 Navigator.of(context).pop();
                 searchServiceProvider
