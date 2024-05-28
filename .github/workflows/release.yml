@@ -76,3 +76,8 @@ jobs:
           #userFraction: 0.99
           mappingFile: outputs/mapping/release/mapping.txt
           debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
+
+  ios:
+    uses: ./.github/workflows/part_ios_release.yml
+    secrets: inherit
+    needs: build-test

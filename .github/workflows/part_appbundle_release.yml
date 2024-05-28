@@ -9,9 +9,6 @@ on:
       KEYSTORE_PASSWORD:
         required: true
         description: Password to unlock the keystore
-      GOOGLE_API_KEY:
-        required: true
-        description: API key for SERP Endpoint
 
 env:
   JAVA_VERSION: 19
@@ -57,7 +54,7 @@ jobs:
           echo "release.key.alias=upload" >> android/local.properties
           echo "release.store.file=$GITHUB_WORKSPACE/keystore.jks" >> android/local.properties
       - name: 👷 Build APP
-        run: flutter build appbundle --dart-define GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY}} --release -v --build-number ${{github.run_number}}
+        run: flutter build appbundle --release -v --build-number ${{github.run_number}}
       - name: 🏬 Archive APP
         uses: actions/upload-artifact@v4
         with:
