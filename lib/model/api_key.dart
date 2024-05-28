@@ -10,7 +10,19 @@ class ApiKey implements HasToJson {
   ApiKey({required this.key});
 
   @override
+  bool operator ==(Object other) {
+    return other is ApiKey && key == other.key;
+  }
+
+  @override
+  int get hashCode => key.hashCode;
+
+  @override
   Map<String, dynamic> toJson() => _$ApiKeyToJson(this);
 
   factory ApiKey.fromJson(Map<String, dynamic> json) => _$ApiKeyFromJson(json);
+}
+
+class EmptyApiKey extends ApiKey {
+  EmptyApiKey() : super(key: '');
 }

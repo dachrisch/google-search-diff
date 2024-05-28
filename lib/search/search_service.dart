@@ -45,7 +45,7 @@ class SerpApiSearchService implements SearchService {
   @override
   Future<Run> doSearch(Query query) {
     Map<String, String>? queryParameter = {
-      'api_key': apiKeyService.key,
+      'api_key': apiKeyService.apiKey.key,
       'engine': 'google',
       'gl': 'de',
       'hl': 'de',

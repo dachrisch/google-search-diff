@@ -1,12 +1,14 @@
+import 'package:google_search_diff/model/api_key.dart';
 import 'package:google_search_diff/search/api_key_service.dart';
 import 'package:google_search_diff/search/search_service.dart';
-import 'package:google_search_diff/service/db_api_key_service.dart';
 import 'package:google_search_diff/service/db_history_service.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
 import 'package:google_search_diff/service/history_service.dart';
 import 'package:google_search_diff/service/localstore.dart';
+import 'package:google_search_diff/service/properties_api_key_service.dart';
 import 'package:localstore/localstore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DocumentMock implements DocumentRef {
   Map<String, dynamic>? json;
@@ -117,23 +119,42 @@ class MockHistoryService extends HistoryService {
   MockHistoryService() : super(dbHistoryService: MockDbHistoryService());
 }
 
-class MockDbApiKeyService extends DbApiKeyService {
-  MockDbApiKeyService()
-      : super(
-            collection: 'test-keys',
-            localStore: MockLocalStore(),
-            itemToIdMap: {});
+class MockSharedProperties implements SharedPreferences {
+  final Map<String, String> props = {};
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+
+  @override
+  Future<bool> setString(String key, String value) {
+    props.putIfAbsent(
+      key,
+      () => value,
+    );
+    return Future.value(true);
+  }
+
+  @override
+  bool containsKey(String key) => props.containsKey(key);
+
+  @override
+  String? getString(String key) => props[key];
+}
+
+class MockPropertiesApiKeyService extends PropertiesApiKeyService {
+  MockPropertiesApiKeyService() : super(preferences: MockSharedProperties());
 }
 
 class MockApiKeyService extends ApiKeyService {
   bool shouldValidate = false;
 
-  MockApiKeyService();
+  MockApiKeyService()
+      : super(propertiesApiKeyService: MockPropertiesApiKeyService());
 
   @override
   Future<bool> validateAndAccept(String key) {
     if (shouldValidate) {
-      this.key = key;
+      return propertiesApiKeyService.save(ApiKey(key: key)).then((_) => true);
     }
     return Future.value(shouldValidate);
   }

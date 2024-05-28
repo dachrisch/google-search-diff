@@ -46,7 +46,7 @@ class Mocked {
             SearchServiceProvider(
                 serpApiSearchService: MockSerpApiSearchService(),
                 trySearchService: LoremIpsumSearchService(),
-                dbApiKeyService: MockDbApiKeyService()) {
+            ) {
     this.queriesStore = queriesStore ??
         QueriesStore(
             dbQueryService: this.dbQueriesService,

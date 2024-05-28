@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_search_diff/model/api_key.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
 
 import '../service/widget_tester_extension.dart';
@@ -30,7 +31,13 @@ void main() {
     expect(find.byType(QueriesPage), findsOneWidget);
     expect(mocked.searchServiceProvider.usedService,
         mocked.searchServiceProvider.serpApiSearchService);
-    expect(mocked.searchServiceProvider.serpApiSearchService.apiKeyService.key,
-        '1234');
+    expect(
+        mocked.searchServiceProvider.serpApiSearchService.apiKeyService.apiKey,
+        ApiKey(key: '1234'));
+    expect(
+        mocked.searchServiceProvider.serpApiSearchService.apiKeyService
+            .propertiesApiKeyService
+            .fetch(),
+        ApiKey(key: '1234'));
   });
 }
