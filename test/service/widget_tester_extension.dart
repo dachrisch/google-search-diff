@@ -18,6 +18,7 @@ import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
 import 'package:google_search_diff/service/history_service.dart';
+import 'package:google_search_diff/service/queries_store_export_service.dart';
 import 'package:google_search_diff/service/result_service.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -72,6 +73,11 @@ extension MockedApp on WidgetTester {
     if (!getIt.isRegistered<QueryRuns>()) {
       getIt.registerFactoryParam<QueryRuns, Run, Null>((param1, param2) =>
           QueryRuns.fromRun(param1, Mocked().dbRunsService));
+    }
+
+    if (!getIt.isRegistered<QueriesStoreExportService>()) {
+      getIt.registerSingleton(
+          QueriesStoreExportService(queriesStore: mocked.queriesStore));
     }
 
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
