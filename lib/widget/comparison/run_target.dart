@@ -41,7 +41,6 @@ class _RunDragTargetState extends State<RunDragTarget> {
         return !hasRun && widget.willAcceptRun(details.data);
       },
       builder: (context, candidateData, rejectedData) {
-        l.d('Drop has already ${widget.acceptedRun} and is receiving $candidateData, $rejectedData');
         return hasRun
             ? TargetWithRun(
                 run: widget.acceptedRun!,

@@ -55,6 +55,9 @@ dependencies:
   injectable:
   intl:
   timeline_tile: ^2.0.0
+  share_plus: ^9.0.0
+  crypto: ^3.0.3
+  file_saver: ^0.2.13
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

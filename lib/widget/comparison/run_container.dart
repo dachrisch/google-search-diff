@@ -44,9 +44,7 @@ class _RunComparisonContainerState extends State<RunComparisonContainer>
   Widget build(BuildContext context) {
     if (widget.isActive || compareModel.isNotEmpty) {
       _controller.forward();
-      l.d('Drop Container opened');
     } else if (compareModel.isEmpty) {
-      l.d('Drop Container closed');
       _controller.stop();
       _controller.reset();
     }

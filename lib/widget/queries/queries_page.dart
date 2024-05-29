@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/action/add_query_runs.dart';
 import 'package:google_search_diff/action/dispatcher.dart';
 import 'package:google_search_diff/action/intent/add_run_to_query_runs.dart';
@@ -9,11 +8,12 @@ import 'package:google_search_diff/action/remove_query_runs.dart';
 import 'package:google_search_diff/action/search_and_add_run.dart';
 import 'package:google_search_diff/logger.dart';
 import 'package:google_search_diff/model/queries_store.dart';
-import 'package:google_search_diff/routes/route_navigate_extension.dart';
-import 'package:google_search_diff/search/search_provider_delegate.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/theme.dart';
+import 'package:google_search_diff/widget/queries/buttons/export.dart';
+import 'package:google_search_diff/widget/queries/buttons/login.dart';
+import 'package:google_search_diff/widget/queries/buttons/search.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:google_search_diff/widget/time_grouped_list_view.dart';
 import 'package:google_search_diff/widget/timer_mixin.dart';
@@ -85,8 +85,9 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
                             ),
                           ),
                           actions: const [
-                            _LoginButton(),
-                            _SearchButton(),
+                            ExportButton(),
+                            LoginButton(),
+                            SearchButton(),
                             SizedBox(width: 16)
                           ],
                         ),
@@ -137,78 +138,5 @@ class _QueriesPageState extends State<QueriesPage> with TimerMixin {
   }
 }
 
-class _LoginButton extends StatelessWidget {
-  const _LoginButton();
 
-  @override
-  Widget build(BuildContext context) {
-    var searchServiceProvider = context.read<SearchServiceProvider>();
-    return IconButton(
-      key: const Key('goto-login-button'),
-      tooltip: 'Back to login',
-      onPressed: () => searchServiceProvider.isTrying
-          ? context.goToEnter()
-          : _showConfirmationDialog(context),
-      icon: const Icon(Icons.login_outlined),
-    );
-  }
 
-  void _showConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        var searchServiceProvider = context.read<SearchServiceProvider>();
-
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Do you really want to enter a new API key?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              key: const Key('confirm-api-key-delete-button'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                searchServiceProvider
-                    .resetStoredKey()
-                    .then((_) => context.goToEnter());
-              },
-              child: const Text('Confirm'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _SearchButton extends StatelessWidget {
-  const _SearchButton();
-
-  @override
-  Widget build(BuildContext context) => IconButton(
-      key: const Key('show-searchbar-button'),
-      tooltip: 'Open search page',
-      onPressed: () => showSearchPage(context),
-      icon: const Icon(Icons.search));
-}
-
-void showSearchPage(BuildContext context) {
-  showSearch(
-      context: context,
-      delegate: SearchProviderSearchDelegate(
-          textStyle: Theme.of(context).textTheme.titleMedium,
-          searchProvider: context.read<SearchServiceProvider>().usedService,
-          onSave: (results) => (Actions.invoke<AddRunToQueryRunsIntent>(
-                      context, AddRunToQueryRunsIntent(results)) as Future)
-                  .then((_) {
-                if (GoRouter.maybeOf(context) != null) {
-                  // avoid context pop when used standalone (in tests)
-                  context.pop();
-                }
-              })));
-}
