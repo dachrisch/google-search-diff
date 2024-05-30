@@ -40,9 +40,15 @@ class TimeGroupedListView<T extends ChangeNotifier> extends StatelessWidget {
       }
     }
 
-    Widget groupSeparatorBuilder(TimeUnit value) => Center(
-        child: Text(TimeGroups.map[value]!,
-            style: Theme.of(context).textTheme.titleSmall));
+    Widget groupSeparatorBuilder(TimeUnit value) {
+      if (TimeGroups.map[value] == null) {
+        print(value);
+      }
+      return Center(
+          child: Text(TimeGroups.map[value]!,
+              style: Theme.of(context).textTheme.titleSmall));
+    }
+
     itemBuilder(BuildContext context, T element) =>
         ChangeNotifierProvider.value(
             value: element, child: childWidgetBuilder());

@@ -5,7 +5,8 @@ class TimeGroups {
     TimeUnit.second: 'Now',
     TimeUnit.minute: 'Recently',
     TimeUnit.hour: 'Today',
-    TimeUnit.day: 'Couple Days',
+    TimeUnit.day: 'This week',
+    TimeUnit.week: 'This month',
     TimeUnit.month: 'Older',
     TimeUnit.year: 'Older'
   };
