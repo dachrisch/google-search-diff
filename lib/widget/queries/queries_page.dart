@@ -12,6 +12,7 @@ import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:google_search_diff/widget/queries/buttons/export.dart';
+import 'package:google_search_diff/widget/queries/buttons/import.dart';
 import 'package:google_search_diff/widget/queries/buttons/login.dart';
 import 'package:google_search_diff/widget/queries/buttons/search.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
@@ -154,6 +155,7 @@ class _QueriesSliverAppBar extends StatelessWidget {
             builder: (context) => const Wrap(
               children: [
                 ExportListTile(),
+                ImportListTile(),
                 LoginListTile(),
               ],
             ),

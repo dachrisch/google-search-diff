@@ -1,11 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:google_search_diff/model/queries_store_export.dart';
 import 'package:google_search_diff/search/api_key_service.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/service/db_history_service.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
+import 'package:google_search_diff/service/file_picker_service.dart';
 import 'package:google_search_diff/service/history_service.dart';
 import 'package:google_search_diff/service/localstore.dart';
 import 'package:google_search_diff/service/properties_api_key_service.dart';
+import 'package:google_search_diff/service/queries_store_share_service.dart';
 import 'package:localstore/localstore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -160,4 +167,28 @@ class MockApiKeyService extends ApiKeyService {
 
 class MockSerpApiSearchService extends SerpApiSearchService {
   MockSerpApiSearchService() : super(MockApiKeyService());
+}
+
+class MockQueriesStoreExportService extends QueriesStoreShareService {
+  QueriesStoreExport? exported;
+
+  MockQueriesStoreExportService(
+      {required super.queriesStore,
+      required super.dbRunsService,
+      required super.dbQueriesService});
+
+  @override
+  QueriesStoreExport export() {
+    return exported = super.export();
+  }
+}
+
+class MockFilePickerService extends FilePickerService {
+  @override
+  Future<Map<String, dynamic>?> pickFilesJson(
+      {required List<String> allowedExtensions}) {
+    final Uri basedir = (goldenFileComparator as LocalFileComparator).basedir;
+    return Future.value(
+        jsonDecode(File('${basedir.path}/test-file.json').readAsStringSync()));
+  }
 }

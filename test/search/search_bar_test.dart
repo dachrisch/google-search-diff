@@ -7,7 +7,7 @@ import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/service/history_service.dart';
-import 'package:google_search_diff/service/queries_store_export_service.dart';
+import 'package:google_search_diff/service/queries_store_share_service.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:provider/provider.dart';
 
@@ -33,8 +33,10 @@ void main() {
 
   setUpAll(
     () {
-      getIt.registerSingleton(
-          QueriesStoreExportService(queriesStore: mocked.queriesStore));
+      getIt.registerSingleton(QueriesStoreShareService(
+          queriesStore: mocked.queriesStore,
+          dbRunsService: mocked.dbRunsService,
+          dbQueriesService: mocked.dbQueriesService));
     },
   );
   testWidgets('Search bar history is added, retrieved and deleted',

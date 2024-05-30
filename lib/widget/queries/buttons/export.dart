@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_search_diff/dependencies.dart';
 import 'package:google_search_diff/model/queries_store_export.dart';
-import 'package:google_search_diff/service/queries_store_export_service.dart';
+import 'package:google_search_diff/service/queries_store_share_service.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ExportListTile extends StatefulWidget {
@@ -14,11 +14,11 @@ class ExportListTile extends StatefulWidget {
 }
 
 class _ExportListTileState extends State<ExportListTile> {
-  late QueriesStoreExportService exportService;
+  late QueriesStoreShareService exportService;
 
   @override
   void initState() {
-    exportService = getIt<QueriesStoreExportService>();
+    exportService = getIt<QueriesStoreShareService>();
     super.initState();
   }
 
@@ -37,7 +37,7 @@ class _ExportListTileState extends State<ExportListTile> {
 
     QueriesStoreExport export = exportService.export();
 
-    if (kIsWeb) {
+    if (kIsWeb || kDebugMode) {
       await FileSaver.instance.saveFile(
         name: export.fileName,
         bytes: export.bytes,

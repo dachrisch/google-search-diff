@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:google_search_diff/model/has_to_json.dart';
+import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,6 +20,8 @@ class QueriesStoreExport implements HasToJson {
   Digest get digest => sha256.convert(bytes);
 
   String get fileName => 'Queries-Export_$digest';
+
+  Iterable<Query> get queries => runs.map((run) => run.query).toSet();
 
   @override
   Map<String, dynamic> toJson() => _$QueriesStoreExportToJson(this);

@@ -16,8 +16,8 @@ class QueryRuns extends ChangeNotifier {
           @factoryParam Run run, DbRunsService dbRunsService) =>
       QueryRuns.fromTransientRuns(run.query, [run], dbRunsService);
 
-  factory QueryRuns.fromTransientRuns(
-      Query query, List<Run> runs, DbRunsService dbRunsService) {
+  factory QueryRuns.fromTransientRuns(Query query, Iterable<Run> runs,
+      DbRunsService dbRunsService) {
     var queryRuns = QueryRuns._(query, dbRunsService: dbRunsService);
     queryRuns.runs.addAll(runs);
     return queryRuns;

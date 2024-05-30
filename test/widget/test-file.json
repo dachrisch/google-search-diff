@@ -1,0 +1,54 @@
+{
+  "runs": [
+    {
+      "runDate": "2024-05-29T12:51:06.547",
+      "id": {
+        "id": "a4f7105a-846c-4776-bd2e-7732cc41d4a2"
+      },
+      "query": {
+        "term": "test-1",
+        "id": {
+          "id": "0fdad1cb-534e-41a8-9a27-5f8ee6a0a755"
+        },
+        "createdDate": "2024-05-29T12:51:05.639"
+      },
+      "results": [
+        {
+          "title": "Exigo, neco de. Qui purus.",
+          "source": "",
+          "link": "",
+          "id": {
+            "id": "0e451d29-98a4-46da-902c-799b9381f088"
+          },
+          "snippet": null,
+          "favicon": null
+        }
+      ]
+    },
+    {
+      "runDate": "2024-05-29T13:51:06.547",
+      "id": {
+        "id": "a4f7105a-846c-4676-bd2e-7732cc41d4a2"
+      },
+      "query": {
+        "term": "test-2",
+        "id": {
+          "id": "0fdad1cb-534e-51a8-9a27-5f8ee6a0a755"
+        },
+        "createdDate": "2024-05-29T12:51:05.639"
+      },
+      "results": [
+        {
+          "title": "Exigo, neco de. Qui purus.",
+          "source": "",
+          "link": "",
+          "id": {
+            "id": "0e451d29-98a4-46da-902c-799b9381f088"
+          },
+          "snippet": null,
+          "favicon": null
+        }
+      ]
+    }
+  ]
+}

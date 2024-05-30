@@ -32,7 +32,7 @@ void main() {
     getIt.registerSingleton(mocked.filePickerService);
   });
 
-  testWidgets('Exports all queries', (WidgetTester tester) async {
+  testWidgets('Import queries', (WidgetTester tester) async {
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
         ChangeNotifierProvider.value(value: mocked.queriesStore),
@@ -46,12 +46,9 @@ void main() {
     expect(find.byType(QueryRunsCard), findsNWidgets(1));
 
     await tester.tapButtonByKey('open-menu-button');
-    await tester.tapButtonByKey('export-queries-button');
-    expect(
-        (mocked.queriesStoreExportService as MockQueriesStoreExportService)
-            .exported!
-            .runs,
-        mocked.queriesStore.queryRuns.single.runs);
+    await tester.tapButtonByKey('import-queries-button');
     await tester.pumpAndSettle();
+    expect(mocked.queriesStore.items, 2);
+    expect(find.byType(QueryRunsCard), findsNWidgets(2));
   });
 }

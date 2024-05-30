@@ -8,7 +8,7 @@ import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/service/history_service.dart';
-import 'package:google_search_diff/service/queries_store_export_service.dart';
+import 'package:google_search_diff/service/queries_store_share_service.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +33,10 @@ void main() {
   });
 
   setUpAll(() {
-    getIt.registerSingleton(
-        QueriesStoreExportService(queriesStore: mocked.queriesStore));
+    getIt.registerSingleton(QueriesStoreShareService(
+        queriesStore: mocked.queriesStore,
+        dbRunsService: mocked.dbRunsService,
+        dbQueriesService: mocked.dbQueriesService));
   });
 
   testWidgets('Adds a single query and removes it',

@@ -17,8 +17,9 @@ import 'package:google_search_diff/search/search_service.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:google_search_diff/service/db_queries_service.dart';
 import 'package:google_search_diff/service/db_runs_service.dart';
+import 'package:google_search_diff/service/file_picker_service.dart';
 import 'package:google_search_diff/service/history_service.dart';
-import 'package:google_search_diff/service/queries_store_export_service.dart';
+import 'package:google_search_diff/service/queries_store_share_service.dart';
 import 'package:google_search_diff/service/result_service.dart';
 import 'package:google_search_diff/theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -31,7 +32,10 @@ class Mocked {
   final DbQueriesService dbQueriesService;
   final SearchServiceProvider searchServiceProvider;
   final HistoryService historyService;
+  late QueriesStoreShareService queriesStoreExportService;
   late ResultService resultService;
+
+  final FilePickerService filePickerService;
 
   Mocked(
       {QueriesStore? queriesStore,
@@ -39,14 +43,17 @@ class Mocked {
       DbQueriesService? dbQueriesService,
       HistoryService? historyService,
       ResultService? resultService,
+      FilePickerService? filePickerService,
+      QueriesStoreShareService? queriesStoreExportService,
       SearchServiceProvider? searchServiceProvider})
       : dbRunsService = dbRunsService ?? MockDbRunsService(),
         historyService = historyService ?? MockHistoryService(),
+        filePickerService = filePickerService ?? MockFilePickerService(),
         dbQueriesService = dbQueriesService ?? MockDbQueriesService(),
         searchServiceProvider = searchServiceProvider ??
             SearchServiceProvider(
-                serpApiSearchService: MockSerpApiSearchService(),
-                trySearchService: LoremIpsumSearchService(),
+              serpApiSearchService: MockSerpApiSearchService(),
+              trySearchService: LoremIpsumSearchService(),
             ) {
     this.queriesStore = queriesStore ??
         QueriesStore(
@@ -55,6 +62,11 @@ class Mocked {
     this.resultService = resultService ??
         ResultService(
             dbRunsService: this.dbRunsService, queriesStore: this.queriesStore);
+    this.queriesStoreExportService = queriesStoreExportService ??
+        MockQueriesStoreExportService(
+            queriesStore: this.queriesStore,
+            dbRunsService: this.dbRunsService,
+            dbQueriesService: this.dbQueriesService);
   }
 }
 
@@ -70,14 +82,20 @@ extension MockedApp on WidgetTester {
       getIt.registerSingleton<ResultService>(mocked.resultService);
     }
 
+    if (!getIt.isRegistered<FilePickerService>()) {
+      getIt.registerSingleton<FilePickerService>(mocked.filePickerService);
+    }
+
     if (!getIt.isRegistered<QueryRuns>()) {
       getIt.registerFactoryParam<QueryRuns, Run, Null>((param1, param2) =>
           QueryRuns.fromRun(param1, Mocked().dbRunsService));
     }
 
-    if (!getIt.isRegistered<QueriesStoreExportService>()) {
-      getIt.registerSingleton(
-          QueriesStoreExportService(queriesStore: mocked.queriesStore));
+    if (!getIt.isRegistered<QueriesStoreShareService>()) {
+      getIt.registerSingleton(QueriesStoreShareService(
+          queriesStore: mocked.queriesStore,
+          dbRunsService: mocked.dbRunsService,
+          dbQueriesService: mocked.dbQueriesService));
     }
 
     var theme = MaterialTheme(ThemeData.light().primaryTextTheme);
