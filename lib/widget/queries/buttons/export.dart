@@ -6,14 +6,14 @@ import 'package:google_search_diff/model/queries_store_export.dart';
 import 'package:google_search_diff/service/queries_store_export_service.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ExportButton extends StatefulWidget {
-  const ExportButton({super.key});
+class ExportListTile extends StatefulWidget {
+  const ExportListTile({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ExportButtonState();
+  State<StatefulWidget> createState() => _ExportListTileState();
 }
 
-class _ExportButtonState extends State<ExportButton> {
+class _ExportListTileState extends State<ExportListTile> {
   late QueriesStoreExportService exportService;
 
   @override
@@ -24,12 +24,11 @@ class _ExportButtonState extends State<ExportButton> {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      key: const Key('export-queries-button'),
-      tooltip: 'Export queries',
-      onPressed: () => _onExportQueries(context),
-      icon: const Icon(Icons.share_outlined),
-    );
+    return ListTile(
+        key: const Key('export-queries-button'),
+        title: const Text('Export Queries to JSON'),
+        onTap: () => _onExportQueries(context),
+        leading: const Icon(Icons.share_outlined));
   }
 
   void _onExportQueries(BuildContext context) async {

@@ -3,19 +3,19 @@ import 'package:google_search_diff/routes/route_navigate_extension.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:provider/provider.dart';
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
+class LoginListTile extends StatelessWidget {
+  const LoginListTile({super.key});
 
   @override
   Widget build(BuildContext context) {
     var searchServiceProvider = context.read<SearchServiceProvider>();
-    return IconButton(
+    return ListTile(
       key: const Key('goto-login-button'),
-      tooltip: 'Back to login',
-      onPressed: () => searchServiceProvider.isTrying
+      title: const Text('Back to login'),
+      onTap: () => searchServiceProvider.isTrying
           ? context.goToEnter()
           : _showConfirmationDialog(context),
-      icon: const Icon(Icons.login_outlined),
+      leading: const Icon(Icons.login_outlined),
     );
   }
 

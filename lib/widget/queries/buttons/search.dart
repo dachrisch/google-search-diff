@@ -6,7 +6,7 @@ import 'package:google_search_diff/search/search_service_provider.dart';
 import 'package:provider/provider.dart';
 
 class SearchButton extends StatelessWidget {
-  const SearchButton();
+  const SearchButton({super.key});
 
   @override
   Widget build(BuildContext context) => IconButton(

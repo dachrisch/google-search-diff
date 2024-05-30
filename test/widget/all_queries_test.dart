@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/dependencies.dart';
+import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/search/search_service_provider.dart';
+import 'package:google_search_diff/service/history_service.dart';
 import 'package:google_search_diff/service/queries_store_export_service.dart';
 import 'package:google_search_diff/widget/queries/queries_page.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
@@ -27,6 +29,7 @@ void main() {
             [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
         MockDbRunsService());
     mocked.queriesStore.addQueryRuns(queryRunsModel);
+    Provider.debugCheckInvalidValueType = null;
   });
 
   setUpAll(() {
@@ -38,9 +41,11 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
-        ChangeNotifierProvider.value(value: mocked.queriesStore),
+        ChangeNotifierProvider<QueriesStore>.value(value: mocked.queriesStore),
+        ChangeNotifierProvider<HistoryService>.value(
+            value: mocked.historyService),
         ChangeNotifierProvider<SearchServiceProvider>.value(
-            value: Mocked().searchServiceProvider),
+            value: mocked.searchServiceProvider),
       ],
       scaffoldUnderTest: const QueriesPage(),
     ));

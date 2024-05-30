@@ -15,10 +15,10 @@ import 'package:google_search_diff/widget/comparison/run_target.dart';
 import 'package:logger/logger.dart';
 
 extension ButtonTap on WidgetTester {
-  Future<int> tapButtonByKey(String key) async {
+  Future<int> tapButtonByKey(String key, {bool ignoreMiss = false}) async {
     final Logger l = getLogger('ButtonTap');
     l.d('Tapping key $key');
-    await tap(find.byKey(Key(key)));
+    await tap(find.byKey(Key(key)), warnIfMissed: !ignoreMiss);
     return pumpAndSettle(); // https://stackoverflow.com/questions/49542389/flutter-get-a-popupmenubuttons-popupmenuitem-text-in-unit-tests
   }
 }

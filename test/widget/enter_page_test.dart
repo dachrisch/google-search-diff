@@ -60,6 +60,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(QueriesPage), findsOneWidget);
 
+    await tester.tapButtonByKey('open-menu-button');
     await tester.tapButtonByKey('goto-login-button');
     expect(find.byType(EnterPage), findsOneWidget);
 
@@ -70,6 +71,7 @@ void main() {
     await tester.tapButtonByKey('login-with-key-button');
     await tester.pumpAndSettle();
     expect(find.byType(QueriesPage), findsOneWidget);
+    await tester.tapButtonByKey('open-menu-button');
     await tester.tapButtonByKey('goto-login-button');
     expect(find.byType(AlertDialog), findsOneWidget);
     (mocked.searchServiceProvider.serpApiSearchService.apiKeyService
