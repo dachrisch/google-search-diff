@@ -41,7 +41,6 @@ class _ComparisonPageState extends State<ComparisonPage> {
   final List<String> filteredSources = [];
   final List<String> filteredStates = [];
   late ComparisonViewModel comparisonViewModel;
-  final DateFormat dateFormat = DateFormat('dd.MM.yyyy HH:mm', 'de_DE');
 
   @override
   void initState() {
@@ -60,8 +59,6 @@ class _ComparisonPageState extends State<ComparisonPage> {
 
   @override
   Widget build(BuildContext context) {
-    var crpList = compareResultProperties.values.toList();
-
     return Actions(
         actions: const <Type, Action<Intent>>{},
         dispatcher: LoggingActionDispatcher(),
@@ -105,40 +102,21 @@ class _ComparisonPageState extends State<ComparisonPage> {
                             )
                           ],
                         ),
-                        SliverList.list(children: [
-                          Center(
-                              child: Text(
-                            '${dateFormat.format(comparisonViewModel.base!.runDate)} <> ${dateFormat.format(comparisonViewModel.current!.runDate)}',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          )),
-                          Center(
-                            child: Choice<String>.inline(
-                              value: filteredStates,
-                              multiple: true,
-                              clearable: true,
-                              listBuilder: ChoiceList.createScrollable(
-                                spacing: 10,
-                                runSpacing: 10,
-                              ),
-                              onChanged: (newStates) {
-                                setState(() {
-                                  filteredStates.clear();
-                                  filteredStates.addAll(newStates);
-                                });
-                                updateComparisonFilter();
-                              },
-                              itemCount: crpList.length,
-                              itemBuilder: (state, index) {
-                                return ChoiceChip(
-                                  selected: state.selected(crpList[index].name),
-                                  onSelected:
-                                      state.onSelected(crpList[index].name),
-                                  label: crpList[index].icon,
-                                );
-                              },
-                            ),
-                          )
-                        ]),
+                        SliverPersistentHeader(
+                            pinned: true,
+                            delegate: RunComparisonHeaderDelegate(
+                                comparison: comparisonViewModel)),
+                        SliverPersistentHeader(
+                            pinned: true,
+                            delegate: StateFilterHeaderDelegate(
+                                filteredStates: filteredStates,
+                                onChanged: (List<String> newStates) {
+                                  setState(() {
+                                    filteredStates.clear();
+                                    filteredStates.addAll(newStates);
+                                  });
+                                  updateComparisonFilter();
+                                })),
                         SliverGroupedListView<ComparedResult, String>(
                           elements: filteredComparedResults,
                           groupBy: (ComparedResult element) =>
@@ -171,4 +149,83 @@ class _ComparisonPageState extends State<ComparisonPage> {
           ));
     });
   }
+}
+
+class RunComparisonHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final ComparisonViewModel comparison;
+  final double height;
+  final DateFormat dateFormat = DateFormat('dd.MM.yyyy HH:mm', 'de_DE');
+
+  RunComparisonHeaderDelegate({required this.comparison, this.height = 50});
+
+  @override
+  Widget build(context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Theme.of(context).cardColor,
+      alignment: Alignment.center,
+      child: Text(
+        '${dateFormat.format(comparison.base!.runDate)} <> ${dateFormat.format(comparison.current!.runDate)}',
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
+}
+
+class StateFilterHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final List<String> filteredStates;
+  final double height;
+  final void Function(List<String> newStates) onChanged;
+  final List<ComparedResultViewProperties> crpList =
+      compareResultProperties.values.toList();
+
+  StateFilterHeaderDelegate(
+      {required this.filteredStates,
+      this.height = 50,
+      required this.onChanged});
+
+  @override
+  Widget build(context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Theme.of(context).cardColor,
+      alignment: Alignment.center,
+      child: Choice<String>.inline(
+        value: filteredStates,
+        multiple: true,
+        clearable: true,
+        listBuilder: ChoiceList.createScrollable(
+          spacing: 10,
+          runSpacing: 10,
+        ),
+        onChanged: (newStates) {
+          onChanged(newStates);
+        },
+        itemCount: crpList.length,
+        itemBuilder: (state, index) {
+          return ChoiceChip(
+            selected: state.selected(crpList[index].name),
+            onSelected: state.onSelected(crpList[index].name),
+            label: crpList[index].icon,
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
 }

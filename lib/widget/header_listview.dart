@@ -19,12 +19,7 @@ class ListViewWithHeader<T extends Object> extends StatelessWidget {
     return Column(children: [
       Row(children: [
         const SizedBox(width: 20),
-        Expanded(
-            child: Text(headerText,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w100,
-                  fontSize: 16,
-                ))),
+        Expanded(child: Text(headerText)),
         const SizedBox(),
         filterWidget,
         const SizedBox(
