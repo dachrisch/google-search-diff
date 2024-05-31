@@ -1,9 +1,11 @@
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_search_diff/dependencies.dart';
 import 'package:google_search_diff/model/queries_store_export.dart';
 import 'package:google_search_diff/service/queries_store_share_service.dart';
+import 'package:google_search_diff/widget/snackbar.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ExportListTile extends StatefulWidget {
@@ -33,7 +35,6 @@ class _ExportListTileState extends State<ExportListTile> {
 
   void _onExportQueries(BuildContext context) async {
     final box = context.findRenderObject() as RenderBox?;
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     QueriesStoreExport export = exportService.export();
 
@@ -45,7 +46,7 @@ class _ExportListTileState extends State<ExportListTile> {
         mimeType: MimeType.json,
       );
     } else {
-      final shareResult = await Share.shareXFiles(
+      await Share.shareXFiles(
         [
           XFile.fromData(
             export.bytes,
@@ -55,9 +56,9 @@ class _ExportListTileState extends State<ExportListTile> {
         ],
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
-
-      scaffoldMessenger.showSnackBar(getResultSnackBar(shareResult));
     }
+    context.showSnackbar(title: 'Queries exported to ${export.fileName}');
+    context.pop();
   }
 
   SnackBar getResultSnackBar(ShareResult result) {
