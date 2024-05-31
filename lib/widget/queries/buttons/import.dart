@@ -32,10 +32,8 @@ class _ImportListTileState extends State<ImportListTile> {
         leading: const Icon(Icons.upload_outlined));
   }
 
-  void _onImportQueries(BuildContext context) async {
-    filePickerService.pickFilesJson(allowedExtensions: ['json']).then((json) =>
-        json != null
+  void _onImportQueries(BuildContext context) async => filePickerService
+      .pickFilesJson(allowedExtensions: ['json']).then((json) => json != null
             ? exportService.import(QueriesStoreExport.fromJson(json))
             : null);
-  }
 }

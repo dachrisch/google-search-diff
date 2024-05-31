@@ -22,7 +22,8 @@ class QueriesStoreShareService {
   Future<void> import(QueriesStoreExport queriesStoreExport) {
     dbQueriesService.removeAll(queriesStoreExport.queries);
     dbRunsService.removeAll(queriesStoreExport.runs);
-    queriesStore.queryRuns.clear();
+    queriesStore.queryRuns
+        .removeWhere((r) => queriesStoreExport.queries.contains(r.query));
     return Future.forEach(
         queriesStoreExport.queries.map((query) => QueryRuns.fromTransientRuns(
             query,

@@ -36,13 +36,15 @@ abstract class DbService<T extends HasToJson> {
   Future<void> remove(T item) async {
     var id = itemToIdMap.remove(item);
     l.d('Deleting $item with [$id]');
-    return localStore
-        .collection(collection)
-        .doc(id)
-        .delete()
-        .then((_) => l.d('Deleted [$id]'))
-        .onError((error, stackTrace) =>
-            l.e('Error deleting $id', error: error, stackTrace: stackTrace));
+    return id != null
+        ? localStore
+            .collection(collection)
+            .doc(id)
+            .delete()
+            .then((_) => l.d('Deleted [$id]'))
+            .onError((error, stackTrace) =>
+                l.e('Error deleting $id', error: error, stackTrace: stackTrace))
+        : null;
   }
 
   List<T> fetchAll() => itemToIdMap.keys.toList();
