@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_search_diff/dependencies.dart';
+import 'package:google_search_diff/model/queries_store_export.dart';
 import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
@@ -11,7 +15,6 @@ import 'package:provider/provider.dart';
 
 import '../service/widget_tester_extension.dart';
 import '../util/localstore_helper.dart';
-import '../util/service_mocks.dart';
 import '../util/test_provider.dart';
 import 'widget_tester_extension.dart';
 
@@ -19,11 +22,12 @@ void main() {
   final Mocked mocked = Mocked();
   setUp(() {
     cleanupBefore(['.runs', '.queries']);
+    mocked.queriesStore.queryRuns.clear();
     var query = Query('Test query');
     var queryRunsModel = QueryRuns.fromRun(
         Run(query,
             [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
-        MockDbRunsService());
+        mocked.dbRunsService);
     mocked.queriesStore.addQueryRuns(queryRunsModel);
   });
 
@@ -32,7 +36,8 @@ void main() {
     getIt.registerSingleton(mocked.filePickerService);
   });
 
-  testWidgets('Import queries', (WidgetTester tester) async {
+  testWidgets('Import queries (will retain existing)',
+      (WidgetTester tester) async {
     await tester.pumpWidget(ScaffoldMultiProviderTestApp(
       providers: [
         ChangeNotifierProvider.value(value: mocked.queriesStore),
@@ -48,7 +53,35 @@ void main() {
     await tester.tapButtonByKey('open-menu-button');
     await tester.tapButtonByKey('import-queries-button');
     await tester.pumpAndSettle();
+    expect(mocked.queriesStore.items, 3);
+    expect(find.byType(QueryRunsCard), findsNWidgets(3));
+  });
+
+  testWidgets('Import queries (will overwrite same query)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(ScaffoldMultiProviderTestApp(
+      providers: [
+        ChangeNotifierProvider.value(value: mocked.queriesStore),
+        ChangeNotifierProvider<SearchServiceProvider>.value(
+            value: Mocked().searchServiceProvider),
+      ],
+      scaffoldUnderTest: const QueriesPage(),
+    ));
+
+    expect(mocked.queriesStore.items, 1);
+
+    final Uri basedir = (goldenFileComparator as LocalFileComparator).basedir;
+    var export = QueriesStoreExport.fromJson(jsonDecode(
+        File('${basedir.toFilePath()}/test-file.json').readAsStringSync()));
+    mocked.queriesStore.addQueryRuns(QueryRuns.fromTransientRuns(
+        export.queries.first, export.runs, mocked.dbRunsService));
+
     expect(mocked.queriesStore.items, 2);
-    expect(find.byType(QueryRunsCard), findsNWidgets(2));
+
+    await tester.tapButtonByKey('open-menu-button');
+    await tester.tapButtonByKey('import-queries-button');
+    await tester.pumpAndSettle();
+    expect(mocked.queriesStore.items, 3);
+    expect(find.byType(QueryRunsCard), findsNWidgets(3));
   });
 }
