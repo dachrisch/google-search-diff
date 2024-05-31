@@ -19,16 +19,18 @@ import '../util/test_provider.dart';
 import 'widget_tester_extension.dart';
 
 void main() {
-  final Mocked mocked = Mocked();
-  setUp(() {
+  Mocked mocked = Mocked();
+  setUp(() async {
     cleanupBefore(['.runs', '.queries']);
-    mocked.queriesStore.queryRuns.clear();
+    for (var qr in List.from(mocked.queriesStore.queryRuns)) {
+      await mocked.queriesStore.removeQueryRuns(qr);
+    }
     var query = Query('Test query');
     var queryRunsModel = QueryRuns.fromRun(
         Run(query,
             [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
         mocked.dbRunsService);
-    mocked.queriesStore.addQueryRuns(queryRunsModel);
+    await mocked.queriesStore.addQueryRuns(queryRunsModel);
   });
 
   setUpAll(() {
@@ -69,19 +71,24 @@ void main() {
     ));
 
     expect(mocked.queriesStore.items, 1);
+    expect(mocked.dbRunsService.fetchAll().length, 1);
 
     final Uri basedir = (goldenFileComparator as LocalFileComparator).basedir;
     var export = QueriesStoreExport.fromJson(jsonDecode(
         File('${basedir.toFilePath()}/test-file.json').readAsStringSync()));
-    mocked.queriesStore.addQueryRuns(QueryRuns.fromTransientRuns(
-        export.queries.first, export.runs, mocked.dbRunsService));
+    await mocked.queriesStore.addQueryRuns(QueryRuns.fromTransientRuns(
+        export.queries.first,
+        export.runs.where((r) => r.query == export.queries.first),
+        mocked.dbRunsService));
 
     expect(mocked.queriesStore.items, 2);
+    expect(mocked.dbRunsService.fetchAll().length, 2);
 
     await tester.tapButtonByKey('open-menu-button');
     await tester.tapButtonByKey('import-queries-button');
     await tester.pumpAndSettle();
     expect(mocked.queriesStore.items, 3);
+    expect(mocked.dbRunsService.fetchAll().length, 3);
     expect(find.byType(QueryRunsCard), findsNWidgets(3));
   });
 }

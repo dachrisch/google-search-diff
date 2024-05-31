@@ -28,12 +28,51 @@ class _ImportListTileState extends State<ImportListTile> {
     return ListTile(
         key: const Key('import-queries-button'),
         title: const Text('Import Queries from JSON'),
-        onTap: () => _onImportQueries(context),
+        onTap: () =>
+            _onImportQueries(context).then((_) => Navigator.of(context).pop()),
         leading: const Icon(Icons.upload_outlined));
   }
 
-  void _onImportQueries(BuildContext context) async => filePickerService
+  void _onImportQueries1(BuildContext context) async => filePickerService
       .pickFilesJson(allowedExtensions: ['json']).then((json) => json != null
-            ? exportService.import(QueriesStoreExport.fromJson(json))
-            : null);
+          ? exportService.import(QueriesStoreExport.fromJson(json))
+          : null);
+
+  Future<void> _onImportQueries(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            content: FutureBuilder(
+                future: filePickerService.pickFilesJson(allowedExtensions: [
+                  'json'
+                ]).then((json) => json != null
+                    ? exportService.import(QueriesStoreExport.fromJson(json))
+                    : null),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.check_circle, color: Colors.green),
+                        const SizedBox(height: 20),
+                        const Text("Import completed successfully."),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Row(
+                      children: [
+                        CircularProgressIndicator(
+                          semanticsLabel: 'Importing queries...',
+                        ),
+                        SizedBox(width: 20),
+                        Text("Importing..."),
+                      ],
+                    );
+                  }
+                })));
+  }
 }

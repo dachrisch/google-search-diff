@@ -19,16 +19,15 @@ class QueriesStoreShareService {
   QueriesStoreExport export() => QueriesStoreExport(
       runs: queriesStore.queryRuns.expand((queryRun) => queryRun.runs));
 
-  Future<void> import(QueriesStoreExport queriesStoreExport) {
-    dbQueriesService.removeAll(queriesStoreExport.queries);
-    dbRunsService.removeAll(queriesStoreExport.runs);
-    queriesStore.queryRuns
-        .removeWhere((r) => queriesStoreExport.queries.contains(r.query));
-    return Future.forEach(
-        queriesStoreExport.queries.map((query) => QueryRuns.fromTransientRuns(
-            query,
-            queriesStoreExport.runs.where((r) => r.query == query),
-            dbRunsService)),
-        (queryRuns) => queriesStore.addQueryRuns(queryRuns));
-  }
+  Future<void> import(QueriesStoreExport queriesStoreExport) => dbQueriesService
+      .removeAll(queriesStoreExport.queries)
+      .then((_) => dbRunsService.removeAll(queriesStoreExport.runs))
+      .then((_) => queriesStore.queryRuns
+          .removeWhere((r) => queriesStoreExport.queries.contains(r.query)))
+      .then((_) => Future.forEach(
+          queriesStoreExport.queries.map((query) => QueryRuns.fromTransientRuns(
+              query,
+              queriesStoreExport.runs.where((r) => r.query == query),
+              dbRunsService)),
+          (queryRuns) => queriesStore.addQueryRuns(queryRuns)));
 }

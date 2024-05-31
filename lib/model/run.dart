@@ -31,6 +31,19 @@ class Run extends ChangeNotifier implements HasToJson {
     return results[index];
   }
 
+  ResultComparison compareTo(Run run) => ResultComparison(this, run);
+
+  @override
+  int get hashCode => Object.hashAll([runDate, id, query]);
+
+  @override
+  bool operator ==(Object other) {
+    return other is Run &&
+        other.runDate == runDate &&
+        other.id == id &&
+        other.query == query;
+  }
+
   @override
   String toString() => 'Run(id: $id, date: $runDate)';
 
@@ -38,6 +51,4 @@ class Run extends ChangeNotifier implements HasToJson {
 
   @override
   Map<String, dynamic> toJson() => _$RunToJson(this);
-
-  ResultComparison compareTo(Run run) => ResultComparison(this, run);
 }
