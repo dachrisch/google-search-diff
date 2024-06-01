@@ -17,14 +17,14 @@ import 'widget_tester_extension.dart';
 
 void main() {
   final Mocked mocked = Mocked();
-  setUp(() {
+  setUp(() async {
     cleanupBefore(['.runs', '.queries']);
     var query = Query('Test query');
     var queryRunsModel = QueryRuns.fromRun(
         Run(query,
             [Result(title: 'Test', source: 'T', link: 'http://example.com')]),
         MockDbRunsService());
-    mocked.queriesStore.addQueryRuns(queryRunsModel);
+    await mocked.queriesStore.addQueryRuns(queryRunsModel);
   });
 
   setUpAll(() {
