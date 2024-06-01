@@ -44,7 +44,7 @@ abstract class DbService<T extends HasToJson> {
             .then((_) => l.d('Deleted [$id]'))
             .onError((error, stackTrace) =>
                 l.e('Error deleting $id', error: error, stackTrace: stackTrace))
-        : null;
+        : Future.value(null);
   }
 
   List<T> fetchAll() => itemToIdMap.keys.toList();

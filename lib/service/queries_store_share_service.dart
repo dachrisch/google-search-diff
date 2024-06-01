@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:google_search_diff/model/queries_store.dart';
 import 'package:google_search_diff/model/queries_store_export.dart';
 import 'package:google_search_diff/model/query_runs.dart';
@@ -19,15 +20,24 @@ class QueriesStoreShareService {
   QueriesStoreExport export() => QueriesStoreExport(
       runs: queriesStore.queryRuns.expand((queryRun) => queryRun.runs));
 
-  Future<void> import(QueriesStoreExport queriesStoreExport) => dbQueriesService
-      .removeAll(queriesStoreExport.queries)
-      .then((_) => dbRunsService.removeAll(queriesStoreExport.runs))
-      .then((_) => queriesStore.queryRuns
-          .removeWhere((r) => queriesStoreExport.queries.contains(r.query)))
-      .then((_) => Future.forEach(
-          queriesStoreExport.queries.map((query) => QueryRuns.fromTransientRuns(
-              query,
-              queriesStoreExport.runs.where((r) => r.query == query),
-              dbRunsService)),
-          (queryRuns) => queriesStore.addQueryRuns(queryRuns)));
+  Future<QueriesStoreExport?> importFrom(Map<String, dynamic>? json) {
+    if (json != null) {
+      var queriesStoreExport = QueriesStoreExport.fromJson(json);
+      return Future.delayed(Durations.short1)
+          .then((_) => dbQueriesService.removeAll(queriesStoreExport.queries))
+          .then((_) => dbRunsService.removeAll(queriesStoreExport.runs))
+          .then((_) => queriesStore.queryRuns
+              .removeWhere((r) => queriesStoreExport.queries.contains(r.query)))
+          .then((_) => Future.forEach(
+              queriesStoreExport.queries.map((query) =>
+                  QueryRuns.fromTransientRuns(
+                      query,
+                      queriesStoreExport.runs.where((r) => r.query == query),
+                      dbRunsService)),
+              (queryRuns) => queriesStore.addQueryRuns(queryRuns)))
+          .then((_) => queriesStoreExport);
+    } else {
+      return Future.value(null);
+    }
+  }
 }
