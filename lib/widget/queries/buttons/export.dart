@@ -29,24 +29,25 @@ class _ExportListTileState extends State<ExportListTile> {
     return ListTile(
         key: const Key('export-queries-button'),
         title: const Text('Export Queries to JSON'),
-        onTap: () => _onExportQueries(context),
+        onTap: () => _onExportQueries(context)
+            .then((result) => context.showSnackbar(title: result))
+            .then((_) => context.pop()),
         leading: const Icon(Icons.share_outlined));
   }
 
-  void _onExportQueries(BuildContext context) async {
-    final box = context.findRenderObject() as RenderBox?;
-
+  Future<String> _onExportQueries(BuildContext context) async {
     QueriesStoreExport export = exportService.export();
-
+    Future f;
     if (kIsWeb || kDebugMode) {
-      await FileSaver.instance.saveFile(
+      f = FileSaver.instance.saveFile(
         name: export.fileName,
         bytes: export.bytes,
         ext: 'json',
         mimeType: MimeType.json,
       );
     } else {
-      await Share.shareXFiles(
+      final box = context.findRenderObject() as RenderBox?;
+      f = Share.shareXFiles(
         [
           XFile.fromData(
             export.bytes,
@@ -57,8 +58,8 @@ class _ExportListTileState extends State<ExportListTile> {
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
     }
-    context.showSnackbar(title: 'Queries exported to ${export.fileName}');
-    context.pop();
+    return f.then((_) =>
+        'Exported ${export.queries.length} Queries with ${export.runs.length} Runs');
   }
 
   SnackBar getResultSnackBar(ShareResult result) {

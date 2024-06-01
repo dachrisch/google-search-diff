@@ -13,7 +13,7 @@ class RunCardListTile extends StatefulWidget {
   final Run previousRun;
   final QueryRuns queryRuns;
 
-  RunCardListTile({
+  const RunCardListTile({
     super.key,
     required this.run,
     required this.queryRuns,
