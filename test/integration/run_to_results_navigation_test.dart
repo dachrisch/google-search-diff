@@ -4,8 +4,8 @@ import 'package:google_search_diff/model/query.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/result.dart';
 import 'package:google_search_diff/model/run.dart';
+import 'package:google_search_diff/widget/comparison/comparison_page.dart';
 import 'package:google_search_diff/widget/results/result_card.dart';
-import 'package:google_search_diff/widget/results/results_page.dart';
 import 'package:google_search_diff/widget/run/run_card.dart';
 import 'package:google_search_diff/widget/runs/query_runs_card.dart';
 
@@ -19,7 +19,7 @@ class TestImageProvider extends ImageProvider {
 }
 
 void main() {
-  testWidgets('Transitions from Query to Result View',
+  testWidgets('Transitions from Query to Result Comparison',
       (WidgetTester tester) async {
     TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -36,7 +36,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byType(RunCard));
     await tester.pumpAndSettle();
-    expect(find.byType(ResultsPage), findsOneWidget);
+    expect(find.byType(ComparisonPage), findsOneWidget);
     expect(find.byType(ResultCard), findsOneWidget);
   });
 }

@@ -30,22 +30,22 @@ class ResultComparison {
   final List<ComparedResult> compared = [];
 
   ResultComparison(Run base, Run current) {
-    for (var result in current.results) {
-      if (base.results.contains(result)) {
-        compared.add(ExistingResult(result));
-      } else {
-        compared.add(AddedResult(result));
+    if (base == current) {
+      compared.addAll(base.results.map((r) => AddedResult(r)));
+    } else {
+      for (var result in current.results) {
+        if (base.results.contains(result)) {
+          compared.add(ExistingResult(result));
+        } else {
+          compared.add(AddedResult(result));
+        }
+      }
+      for (var result in base.results) {
+        if (!current.results.contains(result)) {
+          compared.add(RemovedResult(result));
+        }
       }
     }
-    for (var result in base.results) {
-      if (!current.results.contains(result)) {
-        compared.add(RemovedResult(result));
-      }
-    }
-  }
-
-  ResultComparison.single(Run run) {
-    compared.addAll(run.results.map((r) => AddedResult(r)));
   }
 
   int  count<T extends ComparedResult>() => compared.whereType<T>().length;

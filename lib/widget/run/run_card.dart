@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_search_diff/action/intent/remove_run.dart';
 import 'package:google_search_diff/action/remove_run.dart';
 import 'package:google_search_diff/logger.dart';
-import 'package:google_search_diff/model/comparison.dart';
 import 'package:google_search_diff/model/query_runs.dart';
 import 'package:google_search_diff/model/run.dart';
 import 'package:google_search_diff/widget/comparison/run_feedback_card.dart';
@@ -27,9 +26,7 @@ class _RunCardState extends State<RunCard> with TimerMixin {
   Widget build(BuildContext context) {
     Run run = context.read<Run>();
     QueryRuns queryRuns = context.watch<QueryRuns>();
-    ResultComparison resultComparison = queryRuns.nextRecentTo(run) != run
-        ? queryRuns.nextRecentTo(run).compareTo(run)
-        : ResultComparison.single(run);
+    Run previousRun = queryRuns.nextRecentTo(run);
 
     return Actions(
       actions: {
@@ -67,9 +64,7 @@ class _RunCardState extends State<RunCard> with TimerMixin {
                 onDismissed: (direction) =>
                     Actions.invoke(context, RemoveRunIntent(run: run)),
                 child: RunCardListTile(
-                    run: run,
-                    resultComparison: resultComparison,
-                    queryRuns: queryRuns),
+                    run: run, previousRun: previousRun, queryRuns: queryRuns),
               ))),
     );
   }
