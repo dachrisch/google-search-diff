@@ -84,7 +84,7 @@ jobs:
           mappingFile: outputs/mapping/release/mapping.txt
           debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
       - name: Promote release
-        uses: kevin-david/promote-play-release@v1
+        uses: kevin-david/promote-play-release@v1.1.0
         with:
           service-account-json-raw: ${{ steps.service_account.outputs.json }}
           package-name: ${{ steps.package.outputs.name }}
