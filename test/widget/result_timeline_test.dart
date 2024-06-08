@@ -23,13 +23,13 @@ void main() {
     var queriesStore = mocked.queriesStore;
 
     var query = Query('Test query');
-    var result = Result(title: 'Test', source: 'T', link: 'http://example.com');
+    var result = Result(title: 'Test');
     var run = Run(query, [result]);
     var queryRunsModel = QueryRuns.fromRun(run, mocked.dbRunsService);
     await queriesStore
         .addQueryRuns(queryRunsModel)
         .then((queryRuns) => queryRuns
-            .addRun(Run(query, [result],
+            .addRun(Run(query, [Result(title: 'Test')],
                 runDate: DateTime.now().subtract(const Duration(hours: 1))))
             .then((_) => queryRuns))
         .then((queryRuns) => queryRuns
@@ -37,7 +37,7 @@ void main() {
                 runDate: DateTime.now().subtract(const Duration(hours: 2))))
             .then((_) => queryRuns))
         .then((queryRuns) => queryRuns
-            .addRun(Run(query, [result],
+            .addRun(Run(query, [Result(title: 'Test')],
                 runDate: DateTime.now().subtract(const Duration(hours: 3))))
             .then((_) => queryRuns));
 

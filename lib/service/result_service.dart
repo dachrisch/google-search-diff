@@ -20,12 +20,16 @@ class ResultService {
       .expand((run) => run.results)
       .firstWhere((result) => result.id == resultId);
 
-  Run latestRunOf(Result result) =>
-      dbRunsService.fetchAll().firstWhere((r) => r.results.contains(result));
+  Run runOf(Result result) => dbRunsService
+      .fetchAll()
+      .where((r) => r.results.any(
+            (element) => element.id == result.id,
+          ))
+      .single;
 
   List<ResultHistory> historyOf(Result result) {
     List<ResultHistory> history = [];
-    Query query = latestRunOf(result).query;
+    Query query = runOf(result).query;
     QueryRuns queryRuns = queriesStore.findById(query.id);
     List<Run> runHistory = List.from(queryRuns.runs);
     runHistory.sort((a, b) => a.runDate.compareTo(b.runDate));

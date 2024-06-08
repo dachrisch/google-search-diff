@@ -34,7 +34,7 @@ extension RelativeGoRouter on BuildContext {
 
   void gotToResult(Result result) {
     ResultService resultService = getIt<ResultService>();
-    Run run = resultService.latestRunOf(result);
+    Run run = resultService.runOf(result);
     push('/queries/${run.query.id}/runs/${run.id}/results/${result.id}');
   }
 
