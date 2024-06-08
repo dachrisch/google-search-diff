@@ -15,8 +15,12 @@ env:
   JAVA_VERSION: 19
   SERVICE_ACCOUNT_PATH: service_account.json
 
-jobs:
+# https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
   build-test:
     uses: ./.github/workflows/part_build_test.yml
   apk:
