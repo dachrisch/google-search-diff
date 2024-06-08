@@ -11,7 +11,6 @@ on:
         description: Password to unlock the keystore
 
 env:
-  JAVA_VERSION: 19
   SERVICE_ACCOUNT_PATH: service_account.json
 
 jobs:
@@ -55,7 +54,7 @@ jobs:
       - name: Promote release
         uses: kevin-david/promote-play-release@v1.1.0
         with:
-          service-account-json-raw: ${{ steps.service_account.outputs.json }}
+          service-account-json-raw: ${{ steps.service-account.outputs.json }}
           package-name: ${{ steps.package.outputs.name }}
           from-track: internal
           to-track: beta

@@ -20,8 +20,6 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  JAVA_VERSION: 19
 jobs:
   build-test:
     uses: ./.github/workflows/part_build_test.yml

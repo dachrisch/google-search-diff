@@ -2,6 +2,11 @@ name: Build for Android (Appbundle)
 
 on:
   workflow_call:
+    inputs:
+      JAVA_VERSION:
+        required: false
+        type: string
+        default: 19
     secrets:
       BASE64_KEYSTORE:
         required: true
@@ -10,8 +15,6 @@ on:
         required: true
         description: Password to unlock the keystore
 
-env:
-  JAVA_VERSION: 19
 
 jobs:
   apk-release:
@@ -36,7 +39,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: ${{ inputs.JAVA_VERSION }}
           # noinspection YAMLIncompatibleTypes
           cache: 'gradle'
       - name: 🔐 Save the keystore

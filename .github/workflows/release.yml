@@ -11,9 +11,6 @@ permissions:
   pages: write
   id-token: write
 
-env:
-  JAVA_VERSION: 19
-
 # https://docs.github.com/en/actions/using-jobs/using-concurrency
 concurrency:
   group: ci-${{ github.ref }}
@@ -45,7 +42,7 @@ jobs:
     uses: ./.github/workflows/part_appbundle_release.yml
     secrets: inherit
     needs: build-test
-  release-to-appstore-internal:
+  appstore:
     uses: ./.github/workflows/part_deploy_playstore.yml
     needs: appbundle
     secrets: inherit
