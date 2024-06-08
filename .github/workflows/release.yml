@@ -71,9 +71,16 @@ jobs:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ steps.package.outputs.name }}
           releaseFiles: outputs/bundle/release/app-release.aab
+          track: internal
+          mappingFile: outputs/mapping/release/mapping.txt
+          debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
+      - name: Deploy to Play Store (Beta)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
+          packageName: ${{ steps.package.outputs.name }}
+          releaseFiles: outputs/bundle/release/app-release.aab
           track: beta
-          status: completed
-          #userFraction: 0.99
           mappingFile: outputs/mapping/release/mapping.txt
           debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
 
