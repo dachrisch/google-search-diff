@@ -30,7 +30,7 @@ jobs:
           name: appbundle-release
       - name: Service Account JSON
         id: service-account
-        run: echo "json=$(echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode)" >> "$GITHUB_OUTPUT"
+        run: echo "json=$(echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode | tr -d '\n')" >> "$GITHUB_OUTPUT"
         env:
           BASE64_SERVICE_ACCOUNT_JSON: ${{ secrets.BASE64_SERVICE_ACCOUNT_JSON}}
       - name: Service Account File
