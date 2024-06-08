@@ -42,7 +42,7 @@ jobs:
     uses: ./.github/workflows/part_appbundle_release.yml
     secrets: inherit
     needs: build-test
-  release-to-appstore:
+  release-to-appstore-internal:
     runs-on: ubuntu-latest
     environment: appbundle-release
     needs: appbundle
@@ -74,6 +74,29 @@ jobs:
           track: internal
           mappingFile: outputs/mapping/release/mapping.txt
           debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
+  release-to-appstore-beta:
+    runs-on: ubuntu-latest
+    environment: appbundle-release
+    needs: appbundle
+    steps:
+      - name: 🫲 Download working directory
+        uses: actions/download-artifact@v4
+        with:
+          name: working-directory
+      - name: 🫲 Download Appbundle
+        uses: actions/download-artifact@v4
+        with:
+          name: appbundle-release
+      - name: Service Account json
+        env:
+          BASE64_SERVICE_ACCOUNT_JSON: ${{ secrets.BASE64_SERVICE_ACCOUNT_JSON}}
+          SERVICE_ACCOUNT_PATH: ${{ env.SERVICE_ACCOUNT_PATH }}
+        run: |
+          echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode > $SERVICE_ACCOUNT_PATH
+      - name: Get package name
+        id: package
+        run: echo "name=$(grep applicationId android/app/build.gradle|cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
+        # https://medium.com/lodgify-technology-blog/deploy-your-flutter-app-to-google-play-with-github-actions-f13a11c4492e
       - name: Deploy to Play Store (Beta)
         uses: r0adkll/upload-google-play@v1
         with:
