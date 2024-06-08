@@ -59,12 +59,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: appbundle-release
-      - name: Service Account json
+      - name: Service Account JSON
+        id: service_account
+        run: echo "json=$(echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode)" >> $GITHUB_OUTPUT
         env:
           BASE64_SERVICE_ACCOUNT_JSON: ${{ secrets.BASE64_SERVICE_ACCOUNT_JSON}}
+      - name: Service Account File
+        env:
+          SERVICE_ACCOUNT_JSON: ${{ steps.service_account.outputs.json }}
           SERVICE_ACCOUNT_PATH: ${{ env.SERVICE_ACCOUNT_PATH }}
         run: |
-          echo $BASE64_SERVICE_ACCOUNT_JSON | base64 --decode > $SERVICE_ACCOUNT_PATH
+          echo $SERVICE_ACCOUNT_JSON > $SERVICE_ACCOUNT_PATH
       - name: Get package name
         id: package
         run: echo "name=$(grep applicationId android/app/build.gradle|cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
@@ -78,15 +83,13 @@ jobs:
           track: internal
           mappingFile: outputs/mapping/release/mapping.txt
           debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
-      - name: Deploy to Play Store (Beta)
-        uses: r0adkll/upload-google-play@v1
+      - name: Promote release
+        uses: kevin-david/promote-play-release@v1
         with:
-          serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
-          packageName: ${{ steps.package.outputs.name }}
-          releaseFiles: outputs/bundle/release/app-release.aab
-          track: beta
-          mappingFile: outputs/mapping/release/mapping.txt
-          debugSymbols: intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/
+          service-account-json-raw: ${{ steps.service_account.outputs.json }}
+          package-name: ${{ steps.package.outputs.name }}
+          from-track: internal
+          to-track: beta
 
   ios:
     uses: ./.github/workflows/part_ios_release.yml
